@@ -1,2 +1,7 @@
 /** @format */
+@import url("https://fonts.googleapis.com/css2?family=Marmelad&display=swap");
 @import "tailwindcss";
+
+@theme {
+  --font-marmelad: "Marmelad", sans-serif;
+}
