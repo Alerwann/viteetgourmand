@@ -1,10 +1,11 @@
 /** @format */
 import logo from "../assets/logo.webp";
+import Navigation_composant from "./Navigation";
 
 export default function Header_Componant() {
   return (
-    <header className="flex-3 p-5 flex flex-col bg-[RGBA(105,230,140,1)] gap-2">
-      <div className="flex flex-col md:flex-row items-center content-center gap-2">
+    <header className="flex-3 pt-5 flex flex-col bg-[RGBA(105,230,140,1)] gap-2">
+      <div className="  flex flex-col ps-2 md:flex-row items-center content-center gap-2">
         <img
           src={logo}
           alt="logo de l'entreprise vite et gourmand"
@@ -16,7 +17,7 @@ export default function Header_Componant() {
           Vite & Gourmand
         </h1>
       </div>
-      <div>ICI sera le composant navigation</div>
+      <Navigation_composant />
     </header>
   );
 }
