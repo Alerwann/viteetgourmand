@@ -2,6 +2,7 @@
 
 import { Outlet } from "react-router-dom";
 import Header_composant from "./composant/Header";
+import Footer_composant from "./composant/Footer";
 
 export default function RootLayout() {
   return (
