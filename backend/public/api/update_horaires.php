@@ -10,31 +10,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
-
-$host = 'mysql';
-$db_name = getenv('MYSQL_DATABASE') ?: 'vite_gourmand';
-$username = getenv('MYSQL_USER');
-$password = getenv('MYSQL_PASSWORD');
-
-
+require_once __DIR__ . '/db_init.php';
 
 $data = json_decode(file_get_contents("php://input"));
 
 if (!empty($data->jour) && isset($data->heure_ouverture) && isset($data->heure_fermeture)) {
     try {
        
-        $db = new PDO("mysql:host=$host;dbname=$db_name;charset=utf8", $username, $password);
-        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-   
-        $queryCheck = "SELECT horaire_id FROM horaire WHERE jour = :jour";
-        $stmtCheck = $db->prepare($queryCheck);
+  
+    $queryCheck = "SELECT horaire_id FROM horaire WHERE jour = :jour";
+        $stmtCheck = $pdo->prepare($queryCheck);
         $stmtCheck->execute([':jour' => $data->jour]);
         $existing = $stmtCheck->fetch(PDO::FETCH_ASSOC);
 
         if ($existing) {
             $query = "UPDATE horaire SET heure_ouverture = :ouverture, heure_fermeture = :fermeture WHERE jour = :jour";
-            $stmt = $db->prepare($query);
+            $stmt = $pdo->prepare($query);
             $stmt->execute([
                 ':ouverture' => $data->heure_ouverture,
                 ':fermeture' => $data->heure_fermeture,
@@ -44,7 +35,7 @@ if (!empty($data->jour) && isset($data->heure_ouverture) && isset($data->heure_f
             echo json_encode(["message" => "Horaire mis à jour avec succès !"]);
         } else {
             $query = "INSERT INTO horaire (jour, heure_ouverture, heure_fermeture) VALUES (:jour, :ouverture, :fermeture)";
-            $stmt = $db->prepare($query);
+            $stmt = $pdo->prepare($query);
             $stmt->execute([
                 ':jour' => $data->jour,
                 ':ouverture' => $data->heure_ouverture,
