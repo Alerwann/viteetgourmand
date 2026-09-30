@@ -8,6 +8,8 @@ export default function convertType(choiceType: string) {
       return "Se connecter";
     case "contact":
       return "Contacts";
+    case "dashboard":
+      return "Gestion";
     default:
       return "Accueil";
   }
