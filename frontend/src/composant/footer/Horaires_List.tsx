@@ -16,12 +16,12 @@ export default function HorairesList() {
       .catch((err) => console.error("Erreur fetch horaires:", err));
   }, []);
   return (
-    <div>
-      <h3>Nos Horaires d'ouverture</h3>
+    <div className="p-3 text-center">
+      <h3 className="pb-4">Nos Horaires d'ouverture : </h3>
       <ul>
         {horaires.map((item) => (
           <li key={item.jour}>
-            <span className="capitalize">{item.jour} : </span>
+            <span className="capitalize ">{item.jour} : </span>
             {item.heure_ouverture === -1 ? (
               <span>Fermé</span>
             ) : (
