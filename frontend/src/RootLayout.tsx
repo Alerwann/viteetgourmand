@@ -1,8 +1,8 @@
 /** @format */
 
 import { Outlet } from "react-router-dom";
-import Header_composant from "./composant/Header";
-import Footer_composant from "./composant/Footer";
+import Header_composant from "./composant/header/Header";
+import Footer_composant from "./composant/footer/Footer";
 
 export default function RootLayout() {
   return (

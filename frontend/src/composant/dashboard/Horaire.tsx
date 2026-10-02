@@ -1,7 +1,7 @@
 /** @format */
 
 import { useState, useEffect } from "react";
-import creat_hour_array from "../utils/init_array";
+import creat_hour_array from "../../utils/init_array";
 
 export default function Horaires() {
   const [daysChoice, setDaysChoice] = useState<string>("");

@@ -1,8 +1,8 @@
 /** @format */
 
-import Header_composant from "./composant/Header";
-import Footer_composant from "./composant/Footer";
-import Horaires from "./composant/Horaire";
+import Header_composant from "./composant/header/Header";
+import Footer_composant from "./composant/footer/Footer";
+import Horaires from "./composant/dashboard/Horaire";
 
 export default function DashboardLayout() {
   return (
