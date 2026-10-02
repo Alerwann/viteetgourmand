@@ -3,7 +3,7 @@
 "use client";
 
 import { useState } from "react";
-import convertType from "../utils/convert_type";
+import convertType from "../../utils/convert_type";
 
 export default function Navigation_composant() {
   const [isOpen, setIsOpen] = useState(false);

@@ -1,5 +1,5 @@
 /** @format */
-import logo from "../assets/logo.webp";
+import logo from "../../assets/logo.webp";
 import Navigation_composant from "./Navigation";
 
 export default function Header_Componant() {

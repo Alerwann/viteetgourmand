@@ -16,7 +16,7 @@ export default function HorairesList() {
       .catch((err) => console.error("Erreur fetch horaires:", err));
   }, []);
   return (
-    <>
+    <div>
       <h3>Nos Horaires d'ouverture</h3>
       <ul>
         {horaires.map((item) => (
@@ -32,6 +32,6 @@ export default function HorairesList() {
           </li>
         ))}
       </ul>
-    </>
+    </div>
   );
 }
