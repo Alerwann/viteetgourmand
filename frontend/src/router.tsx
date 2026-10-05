@@ -14,11 +14,11 @@ const router = createBrowserRouter([
         index: true,
         element: <Accueil_coposant />,
       },
+      {
+        path: "dashboard",
+        element: <DashboardLayout />,
+      },
     ],
-  },
-  {
-    path: "dashboard",
-    element: <DashboardLayout />,
   },
 ]);
 
