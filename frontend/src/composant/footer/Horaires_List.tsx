@@ -1,5 +1,4 @@
 /** @format */
-
 import { useEffect, useState } from "react";
 
 interface HoraireData {
@@ -7,8 +6,7 @@ interface HoraireData {
   heure_ouverture: number;
   heure_fermeture: number;
 }
-
-export default function Footer_composant() {
+export default function HorairesList() {
   const [horaires, setHoraires] = useState<HoraireData[]>([]);
 
   useEffect(() => {
@@ -17,14 +15,13 @@ export default function Footer_composant() {
       .then((data) => setHoraires(data))
       .catch((err) => console.error("Erreur fetch horaires:", err));
   }, []);
-
   return (
-    <footer>
-      <h3>Nos Horaires d'ouverture</h3>
+    <div className="p-3 text-center">
+      <h3 className="pb-4">Nos Horaires d'ouverture : </h3>
       <ul>
         {horaires.map((item) => (
           <li key={item.jour}>
-            <span className="capitalize">{item.jour} : </span>
+            <span className="capitalize ">{item.jour} : </span>
             {item.heure_ouverture === -1 ? (
               <span>Fermé</span>
             ) : (
@@ -35,6 +32,6 @@ export default function Footer_composant() {
           </li>
         ))}
       </ul>
-    </footer>
+    </div>
   );
 }

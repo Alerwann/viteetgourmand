@@ -2,7 +2,7 @@
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import RootLayout from "./RootLayout";
-import Accueil_coposant from "./composant/Accueil";
+import Accueil_coposant from "./composant/accueil/Accueil";
 import DashboardLayout from "./DashboardLayout";
 
 const router = createBrowserRouter([
@@ -14,11 +14,11 @@ const router = createBrowserRouter([
         index: true,
         element: <Accueil_coposant />,
       },
+      {
+        path: "dashboard",
+        element: <DashboardLayout />,
+      },
     ],
-  },
-  {
-    path: "dashboard",
-    element: <DashboardLayout />,
   },
 ]);
 
