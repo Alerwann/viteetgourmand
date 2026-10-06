@@ -1,9 +1,13 @@
+
 FROM node:20-alpine
+RUN apk update && apk upgrade --available
 
 WORKDIR /app
 
 COPY package*.json ./
 RUN npm install
+
+
 
 COPY . .
 

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import creat_hour_array from "../../utils/init_array";
+import type { Horaire } from "../../interfaces/horaires";
 
 export default function Horaires() {
   const [daysChoice, setDaysChoice] = useState<string>("");
@@ -9,6 +10,7 @@ export default function Horaires() {
   const [closeHour, setCloseHour] = useState<number>(18);
   const [isClose, setIsClose] = useState<boolean>(false);
   const [arrayClose, setArrayClose] = useState<number[]>([]);
+  const [horaireList, setHorairesList] = useState<Horaire[]>([]);
 
   const heuresOptions = Array.from({ length: 24 }, (_, index) => index);
 
@@ -21,6 +23,13 @@ export default function Horaires() {
     "Samedi",
     "Dimanche",
   ];
+
+  useEffect(() => {
+    fetch("http://localhost:8000/api/horaires.php")
+      .then((res) => res.json())
+      .then((data) => setHorairesList(data))
+      .catch((err) => console.error("Erreur chargement :", err));
+  }, []);
 
   useEffect(() => {
     const newCloseArray = creat_hour_array(openHour + 1);
@@ -46,23 +55,23 @@ export default function Horaires() {
       return;
     }
 
+    const existingHoraire = horaireList.find((h) => h.jour === daysChoice);
+
     const formData = {
+      horaire_id: existingHoraire ? existingHoraire.horaire_id : null,
       jour: daysChoice,
       heure_ouverture: openHour,
       heure_fermeture: closeHour,
     };
 
     try {
-      const response = await fetch(
-        "http://localhost:8000/api/update_horaires.php",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
+      const response = await fetch("http://localhost:8000/api/horaires.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify(formData),
+      });
 
       const result = await response.json();
 
