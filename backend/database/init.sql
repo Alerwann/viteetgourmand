@@ -56,9 +56,10 @@ INSERT INTO role(libelle) VALUES
 -- Initialisation de la Table avis
 CREATE TABLE IF NOT EXISTS avis(
     avis_id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(50) NOT NULL,
     note VARCHAR(50) NOT NULL,
     description VARCHAR(50) NOT NULL,
-    statut VARCHAR(50) NOT NULL
+    status VARCHAR(50) NOT NULL
 );
 
 
