@@ -1,7 +1,7 @@
 -- Initialisation de la Table Horaire 
 CREATE TABLE IF NOT EXISTS horaire (
     horaire_id INT AUTO_INCREMENT PRIMARY KEY,
-    jour VARCHAR(50) NOT NULL,
+    jour VARCHAR(50) NOT NULL UNIQUE,
     heure_ouverture VARCHAR(50) NOT NULL,
     heure_fermeture VARCHAR(50) NOT NULL
 );
