@@ -66,7 +66,7 @@ export default function Horaires() {
 
     try {
       const response = await fetch("http://localhost:8000/api/horaires.php", {
-        method: "POST",
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
