@@ -22,20 +22,22 @@ $controller = new AvisController($pdo);
 $method = $_SERVER['REQUEST_METHOD'];
 
 switch ($method) {
-    case 'GET':      
+    case 'GET':
         if (isset($_GET['limite'])) {
             $controller->getSelectAvis();
+        } else if (isset($_GET['status'])) {
+            $controller->getAvisbyStatus();
         } else {
             $controller->getAllAvis();
         }
-            break;
+        break;
 
-   case 'POST':
-        $controller->createAvis();          
+    case 'POST':
+        $controller->createAvis();
         break;
 
     default:
- 
+
         http_response_code(405);
         echo json_encode(["message" => "Méthode non autorisée."]);
         break;

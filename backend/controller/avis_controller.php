@@ -39,7 +39,7 @@ class AvisController
 
             http_response_code(200);
             echo json_encode($listAvis);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             http_response_code(500);
             echo json_encode(["message" => "Erreur : " . $e->getMessage()]);
         }
@@ -71,13 +71,48 @@ class AvisController
 
             http_response_code(200);
             echo json_encode($listAvis);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             http_response_code(500);
             echo json_encode(["message" => "Erreur : " . $e->getMessage()]);
         }
     }
 
-    public function createAvis()
+    public function getAvisbyStatus(): void
+    {
+        $statusIN = isset($_GET['status']) ? $_GET['status'] : 'cree';
+
+        $statusEnum = StatusAvis::tryFrom($statusIN);
+
+        if ($statusEnum === null) {
+            throw new \InvalidArgumentException("Statut invalide : " . $statusIN);
+        }
+
+        try {
+            $stmt = $this->pdo->prepare("SELECT description,note FROM avis WHERE status= :status");
+            $stmt->bindValue(':status', $statusEnum->value, PDO::PARAM_STR);
+            $stmt->execute();
+
+            $listAvis = [];
+
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+
+                $avisTab = [
+                    "description" => $row['description'],
+                    "note" => $row['note']
+                ];
+
+                $listAvis[] = $avisTab;
+            }
+
+            http_response_code(200);
+            echo json_encode($listAvis);
+        } catch (\Exception $e) {
+            http_response_code(500);
+            echo json_encode(["message" => "Erreur : " . $e->getMessage()]);
+        }
+    }
+
+    public function createAvis(): void
     {
         $data = json_decode(file_get_contents("php://input"), true);
 
@@ -85,6 +120,14 @@ class AvisController
             http_response_code(400);
             echo json_encode(["message" => "Données incomplètes ( description, status, note)."]);
             return;
+        }
+
+        $statusString = $data['status'] ?? 'cree';
+
+        $statusEnum = StatusAvis::tryFrom($statusString);
+
+        if ($statusEnum === null) {
+            throw new \InvalidArgumentException("Statut invalide : " . $statusString);
         }
 
         try {
@@ -95,7 +138,7 @@ class AvisController
                 "message" => "Avis créé avec succès !",
                 "id" => (int) $this->pdo->lastInsertId()
             ]);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             http_response_code(500);
             echo json_encode(["message" => "Erreur : " . $e->getMessage()]);
         }

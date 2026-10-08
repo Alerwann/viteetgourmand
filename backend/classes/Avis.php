@@ -1,15 +1,16 @@
 <?php
+require_once __DIR__ . '/Enum_Avis.php';
 
 class Avis
 {
     private ?int $avis_id;
     private string $note;
     private string $description;
-    private string $status;
+    private StatusAvis $status;
     public ?string $created_at = null;
 
 
-    public function __construct(string $description, string $status, string $note, ?int $avis_id = null, ?string $created_at = null)
+    public function __construct(string $description, StatusAvis $status, string $note, ?int $avis_id = null, ?string $created_at = null)
     {
         $this->avis_id = $avis_id;
         $this->description = $description;
@@ -30,7 +31,7 @@ class Avis
 
     public function getStatus(): string
     {
-        return $this->status;
+        return $this->status->value;
     }
 
     public function getNote(): string

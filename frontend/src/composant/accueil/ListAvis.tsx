@@ -9,7 +9,7 @@ export default function ListAvisComposant() {
   const [listeAvis, setListAvis] = useState<Avis[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/avis.php")
+    fetch("http://localhost:8000/api/avis.php?status=publie")
       .then((res) => res.json())
       .then((data) => setListAvis(data))
       .catch((err) => console.error("Erreur fetch horaires:", err));

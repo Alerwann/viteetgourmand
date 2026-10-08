@@ -63,9 +63,9 @@ CREATE TABLE IF NOT EXISTS avis(
 );
 
 INSERT INTO avis(note,description,status) VALUES
-('3','la nourriture est bonne mais jai eu des problèmes de liaison','validé'),
-('5','nous nous sommes régalé','validé'),
-('0','je ne recommande pas','validé');
+('3','la nourriture est bonne mais jai eu des problèmes de liaison','publie'),
+('5','nous nous sommes régalé','cree'),
+('0','je ne recommande pas','non_valide');
 
 -- Initialisation de la Table utilisateur 
 CREATE TABLE utilisateur (
