@@ -31,7 +31,7 @@ class AvisController
                     avis_id: (int) $row['avis_id'],
                     description: $row['description'],
                     status: $row['status'],
-                    note: $row['note']
+                    note: (int)$row['note']
                 );
 
                 $listAvis[] = $avisObj->toArray();
@@ -61,7 +61,7 @@ class AvisController
                 $avisObj = new Avis(
                     description: $row['description'],
                     status: $row['status'],
-                    note: $row['note'],
+                    note: (int)$row['note'],
                     avis_id: (int) $row['avis_id']
 
                 );
@@ -98,7 +98,7 @@ class AvisController
 
                 $avisTab = [
                     "description" => $row['description'],
-                    "note" => $row['note']
+                    "note" => (int)$row['note']
                 ];
 
                 $listAvis[] = $avisTab;

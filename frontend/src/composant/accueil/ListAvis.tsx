@@ -22,8 +22,7 @@ export default function ListAvisComposant() {
     <div>
       {listeAvis.map((avis) => (
         <li key={avis.avis_id}>
-          <p>Note : {avis.note} / 5</p>
-          <p>Commentaire : {avis.description}</p>
+          <AvisCard note={avis.note} description={avis.description} />
         </li>
       ))}
     </div>
