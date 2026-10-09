@@ -56,16 +56,19 @@ INSERT INTO role(libelle) VALUES
 -- Initialisation de la Table avis
 CREATE TABLE IF NOT EXISTS avis(
     avis_id INT AUTO_INCREMENT PRIMARY KEY,
-    note VARCHAR(50) NOT NULL,
+    note INT NOT NULL,
     description VARCHAR(550) NOT NULL,
     status VARCHAR(50) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 INSERT INTO avis(note,description,status) VALUES
-('3','la nourriture est bonne mais jai eu des problèmes de liaison','publie'),
-('5','nous nous sommes régalé','cree'),
-('0','je ne recommande pas','non_valide');
+(3,'la nourriture est bonne mais jai eu des problèmes de liaison','publie'),
+(5,'nous nous sommes régalé','publie'),
+(0,'je ne recommande pas','publie'),
+(2,'la nourriture est bonne mais jai eu des problèmes de liaison','publie'),
+(5,'nous nous sommes régalé','publie'),
+(1,'je ne recommande pas','publie');
 
 -- Initialisation de la Table utilisateur 
 CREATE TABLE utilisateur (

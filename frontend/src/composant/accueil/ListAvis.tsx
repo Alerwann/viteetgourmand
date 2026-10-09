@@ -75,7 +75,7 @@ export default function ListAvisComposant() {
           {listeAvis.map((avis) => (
             <li
               key={avis.avis_id}
-              className="list-none flex-shrink-0"
+              className="list-none shrink-0"
               style={{
                 width: `calc(${100 / itemsVisible}% - ${(4 * (itemsVisible - 1)) / itemsVisible}px)`,
               }}
