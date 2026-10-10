@@ -16,7 +16,6 @@ export default function Accueil_coposant() {
       </h3>
 
       <ListAvisComposant />
-      {/* <div className="flex  mx-10 p-2 bg-[#69e68c99] shadow-[10px_10px_15px_RGBA(0,0,0,0.25)] border-2 border-[RGBA(240,175,70,1)] rounded-xl justify-center"></div> */}
     </div>
   );
 }
