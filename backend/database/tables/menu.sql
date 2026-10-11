@@ -12,7 +12,7 @@ CREATE TABLE menu (
     CONSTRAINT fk_menu_regime FOREIGN KEY (regime_id) REFERENCES regime(regime_id) ON DELETE CASCADE,
     CONSTRAINT fk_menu_theme FOREIGN KEY (theme_id) REFERENCES theme(theme_id) ON DELETE CASCADE,
     CONSTRAINT fk_menu_plat FOREIGN KEY (plat_id) REFERENCES plat(plat_id) ON DELETE CASCADE
-);
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO menu(titre, nombre_personne_minimum,prix_par_personne, description,quantite_restante, plat_id, regime_id,theme_id) VALUES
 ('Menu Gourmand',4,15.00, 'Entrée, plat et dessert du terroir',20, 1,1,1),
