@@ -51,6 +51,7 @@ services:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+      - ./backend/database:/docker-entrypoint-initdb.d/database
       - ./backend/database/init.sql:/docker-entrypoint-initdb.d/init.sql
 
   # Interface graphique PhpMyAdmin

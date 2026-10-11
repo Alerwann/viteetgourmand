@@ -19,7 +19,7 @@ class AvisController
     {
 
         try {
-            $stmt = $this->pdo->query("SELECT avis_id, description, status,note FROM avis");
+            $stmt = $this->pdo->query("SELECT avis_id, description, status,note , commande_id FROM avis");
             $listAvis = [];
 
             error_log("✅ tout est récupéré");
@@ -31,7 +31,8 @@ class AvisController
                     avis_id: (int) $row['avis_id'],
                     description: $row['description'],
                     status: $row['status'],
-                    note: (int)$row['note']
+                    note: (int)$row['note'],
+                    commande_id: (int)$row['commande_id']
                 );
 
                 $listAvis[] = $avisObj->toArray();
@@ -49,7 +50,7 @@ class AvisController
     {
         $limite = isset($_GET['limite']) ? (int) $_GET['limite'] : 5;
         try {
-            $stmt = $this->pdo->prepare("SELECT avis_id,description, status,note FROM avis ORDER BY created_at DESC LIMIT :limite ");
+            $stmt = $this->pdo->prepare("SELECT avis_id,description, status,note, commande_id FROM avis ORDER BY created_at DESC LIMIT :limite ");
             $stmt->bindValue(':limite', $limite, PDO::PARAM_INT);
             $stmt->execute();
 
@@ -62,7 +63,8 @@ class AvisController
                     description: $row['description'],
                     status: $row['status'],
                     note: (int)$row['note'],
-                    avis_id: (int) $row['avis_id']
+                    avis_id: (int) $row['avis_id'],
+                    commande_id: (int)$row['commande_id']
 
                 );
 
@@ -116,7 +118,7 @@ class AvisController
     {
         $data = json_decode(file_get_contents("php://input"), true);
 
-        if (empty($data) || !isset($data['description'], $data['status'], $data['note'])) {
+        if (empty($data) || !isset($data['description'], $data['status'], $data['note'], $data['commande_id'])) {
             http_response_code(400);
             echo json_encode(["message" => "Données incomplètes ( description, status, note)."]);
             return;
@@ -131,8 +133,8 @@ class AvisController
         }
 
         try {
-            $stmt = $this->pdo->prepare("INSERT INTO avis (description,status,note) VALUES (:description,:status,:note)");
-            $stmt->execute([':description' => $data['description'], ':status' => $data['status'], ':note' => $data['note']]);
+            $stmt = $this->pdo->prepare("INSERT INTO avis (description,status,note,commande_id) VALUES (:description,:status,:note, :commande_id)");
+            $stmt->execute([':description' => $data['description'], ':status' => $data['status'], ':note' => $data['note'], ':commande_id' => $data['commande_id']]);
             http_response_code(201);
             echo json_encode([
                 "message" => "Avis créé avec succès !",
