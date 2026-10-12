@@ -8,7 +8,7 @@ class Menus
     private float $prix;
     private string $description;
     private int $quantite;
-    private int $plat_id;
+    private string $plat_id;
     private int $regime_id;
     private int $theme_id;
 

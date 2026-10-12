@@ -5,6 +5,7 @@ import RootLayout from "./RootLayout";
 import Accueil_coposant from "./composant/accueil/Accueil";
 import DashboardLayout from "./composant/dashboard/DashboardLayout";
 import Contact_composant from "./composant/contact/contact";
+import Menus_composant from "./composant/Menus/Menus";
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
       {
         path: "contact",
         element: <Contact_composant />,
+      },
+      {
+        path: "menus",
+        element: <Menus_composant />,
       },
     ],
   },
