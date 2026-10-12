@@ -1,3 +1,5 @@
+SET NAMES 'utf8mb4';
+
 SOURCE /docker-entrypoint-initdb.d/database/tables/horaire.sql;
 SOURCE /docker-entrypoint-initdb.d/database/tables/role.sql;
 SOURCE /docker-entrypoint-initdb.d/database/tables/regime.sql;

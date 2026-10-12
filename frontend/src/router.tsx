@@ -6,6 +6,7 @@ import Accueil_coposant from "./composant/accueil/Accueil";
 import DashboardLayout from "./composant/dashboard/DashboardLayout";
 import Contact_composant from "./composant/contact/contact";
 import Menus_composant from "./composant/Menus/Menus";
+import MenuDetail from "./composant/Menus/Menu_detail";
 
 const router = createBrowserRouter([
   {
@@ -29,6 +30,7 @@ const router = createBrowserRouter([
         path: "menus",
         element: <Menus_composant />,
       },
+      { path: "menus/:id", element: <MenuDetail /> },
     ],
   },
 ]);

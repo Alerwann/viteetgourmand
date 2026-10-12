@@ -20,8 +20,11 @@ switch ($method) {
 
 
     case 'GET':
-
-        $controller->getAllMenus();
+        if (isset($_GET['id'])) {
+            $controller->getOneByID();
+        } else {
+            $controller->getAllMenus();
+        }
         break;
 
     default:

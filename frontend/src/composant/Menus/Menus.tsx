@@ -1,6 +1,7 @@
 /** @format */
 import type { menusInt } from "../../interfaces/menus";
 import { useState, useEffect } from "react";
+import CardMenu from "./Card_menu";
 export default function Menus_composant() {
   const [allMenus, setAllMenus] = useState<menusInt[]>([]);
 
@@ -11,12 +12,18 @@ export default function Menus_composant() {
       .catch((err) => console.error("Erreur fetch horaires:", err));
   }, []);
   return (
-    <div className="h-screen">
-      <h3>Voici les noms des menus disponible</h3>
-      <ul>
+    <div className="h-screen p-10 flex flex-col items-center gap-4">
+      <h2 className="text-3xl text-center ">Choisissez votre menu</h2>
+      <ul className="grid grid-cols-4">
         {allMenus.map((menu) => (
           <li key={menu.menu_id}>
-            <p>{menu.menu_titre}</p>
+            <CardMenu
+              menu_id={menu.menu_id}
+              titre_menu={menu.menu_titre}
+              description={menu.description}
+              nb_minimal={menu.nombre_personne_minimum}
+              price_by_person={menu.prix_par_personne}
+            />
           </li>
         ))}
       </ul>
