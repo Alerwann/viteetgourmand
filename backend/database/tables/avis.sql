@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS avis(
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,    
     CONSTRAINT fk_commande_id FOREIGN KEY (commande_id) REFERENCES commande(commande_id) ON DELETE RESTRICT,
     CONSTRAINT uk_commande_avis UNIQUE (commande_id)
-);
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO avis(note, description, status, commande_id) VALUES
 (5, 'Super repas pour notre événement, tout le monde s est régalé !', 'publie', 1),

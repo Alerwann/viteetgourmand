@@ -11,7 +11,7 @@ CREATE TABLE utilisateur (
     is_actif BOOLEAN DEFAULT TRUE,
     role_id INT NOT NULL, 
     CONSTRAINT fk_utilisateur_role FOREIGN KEY (role_id) REFERENCES role(role_id) 
-);
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO utilisateur (email, password, prenom, telephone, ville, pays, adresse_postale, is_actif, role_id) VALUES
 ('jean.dupont@email.com', '$2y$10$abcdefghijklmnopqrstuv', 'Jean', '0601020304', 'Chalon-sur-Saône', 'France', '10 rue de la République', 1, 2),

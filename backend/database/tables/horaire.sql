@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS horaire (
     jour VARCHAR(50) NOT NULL UNIQUE,
     heure_ouverture VARCHAR(50) NOT NULL,
     heure_fermeture VARCHAR(50) NOT NULL
-);
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO horaire (jour, heure_ouverture, heure_fermeture) VALUES
 ('lundi', '09:00', '18:00'),

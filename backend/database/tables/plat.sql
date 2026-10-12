@@ -4,7 +4,7 @@ CREATE TABLE plat(
     titre_plat VARCHAR(50) NOT NULL,
     type_plat VARCHAR(50) NOT NULL,
     photo VARCHAR(50) NOT NULL
-);
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO plat(titre_plat,type_plat,photo) VALUES
 ('coucou','entree','fofo'),
