@@ -7,5 +7,5 @@ CREATE TABLE plat(
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO plat(nom_plat,type_plat,photo) VALUES
-('coucou','entree','fofo'),
-('coucou','plat','fofo');
+('plat1','entree','fofo'),
+('plat2','plat','fofo');

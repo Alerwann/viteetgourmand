@@ -28,6 +28,4 @@ CREATE TABLE menu_plat (
 
 INSERT INTO menu_plat (menu_id, plat_id) VALUES
 (1, 1), 
-(1, 2), 
-(2, 1), 
 (2, 2);

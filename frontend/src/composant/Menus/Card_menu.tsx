@@ -1,5 +1,6 @@
 /** @format */
 import { Link } from "react-router-dom";
+import type { PlatDetail } from "../../interfaces/menus";
 
 interface MenuData {
   menu_id: number;
@@ -7,6 +8,7 @@ interface MenuData {
   description: string;
   nb_minimal: number;
   price_by_person: number;
+  detail_plat: PlatDetail[];
 }
 
 export default function CardMenu({
@@ -15,12 +17,22 @@ export default function CardMenu({
   description,
   nb_minimal,
   price_by_person,
+  detail_plat,
 }: MenuData) {
   return (
     <div className="p-5 m-2 border-2 rounded-3xl flex flex-col items-center gap-4">
       <div>
         <div className="bg-amber-400 text-center py-1 font-extrabold text-2xl">
           <p>{titre_menu}</p>
+        </div>
+        <div>
+          {detail_plat?.map((plat) => (
+            <div key={plat.plat_id} className="mt-1">
+              {plat.alergenes.length > 0 && (
+                <div>⚠️ {plat.alergenes.join(", ")} </div>
+              )}
+            </div>
+          ))}
         </div>
         <div className="bg-amber-300 text-l text-center px-2 ">
           <p>{description}</p>
