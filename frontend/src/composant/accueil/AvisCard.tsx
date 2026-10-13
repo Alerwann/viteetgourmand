@@ -30,7 +30,7 @@ export default function AvisCard({ note, description }: AvisProps) {
       </div>
 
       {/* Description / Témoignage */}
-      <p className="text-slate-700 text-sm leading-relaxed italic flex-grow">
+      <p className="text-slate-700 text-sm leading-relaxed italic grow">
         "{description}"
       </p>
     </div>

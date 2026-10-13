@@ -43,7 +43,7 @@ export default function CardMenu({
       </div>
 
       {/* Corps de la carte (Plats & Allergènes) */}
-      <div className="px-6 py-3 bg-slate-50/50 border-t border-b border-slate-100 flex flex-col gap-3 flex-grow">
+      <div className="px-6 py-3 bg-slate-50/50 border-t border-b border-slate-100 flex flex-col gap-3 grow">
         {/* Liste condensée des plats */}
         <div className="space-y-1">
           <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
@@ -62,7 +62,7 @@ export default function CardMenu({
         {allAllergens.length > 0 && (
           <div className="flex items-center gap-1.5 text-xs text-amber-800 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-lg w-fit">
             <span>⚠️</span>
-            <span className="font-medium truncate max-w-[200px]">
+            <span className="font-medium truncate max-w-50">
               {allAllergens.join(", ")}
             </span>
           </div>
