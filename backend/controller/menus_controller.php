@@ -27,6 +27,8 @@ class MenuController
                         JSON_OBJECT(
                             'plat_id', p.plat_id,
                             'nom', p.nom_plat,
+                            'type_plat', p.type_plat,
+                            'photo', CONCAT('data:image/jpeg;base64,', TO_BASE64(p.photo)),
                             'alergenes', (
                                 SELECT IFNULL(JSON_ARRAYAGG(a.alergene_nom), JSON_ARRAY())
                                 FROM plat_alergene pa
@@ -87,6 +89,8 @@ class MenuController
                         JSON_OBJECT(
                             'plat_id', p.plat_id,
                             'nom', p.nom_plat,
+                            'type_plat', p.type_plat,
+                            'photo', CONCAT('data:image/jpeg;base64,', TO_BASE64(p.photo)),
                             'alergenes', (
                                 SELECT IFNULL(JSON_ARRAYAGG(a.alergene_nom), JSON_ARRAY())
                                 FROM plat_alergene pa

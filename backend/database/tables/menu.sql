@@ -28,5 +28,7 @@ CREATE TABLE menu_plat (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO menu_plat (menu_id, plat_id) VALUES
-(1, 1), 
+(1, 1),
+(1,2), 
+(1,3),
 (2, 2);

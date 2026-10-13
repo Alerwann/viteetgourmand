@@ -3,6 +3,8 @@
 export interface PlatDetail {
   plat_id: number;
   nom: string;
+  type_plat: string;
+  photo: string;
   alergenes: string[];
 }
 

@@ -12,7 +12,7 @@ export default function MenuDetail() {
     fetch(`http://localhost:8000/api/menus.php?id=${id}`)
       .then((res) => res.json())
       .then((data) => setDataMenu(data))
-      .catch((err) => console.error("Erreur fetch horaires:", err));
+      .catch((err) => console.error("Erreur fetch menu:", err));
   }, [id]);
 
   if (!dataMenu) {
@@ -23,8 +23,19 @@ export default function MenuDetail() {
     );
   }
 
+  // Groupement des plats par type_plat
+  const platsByType = dataMenu.plats_details?.reduce(
+    (acc, plat) => {
+      const type = plat.type_plat || "autres";
+      if (!acc[type]) acc[type] = [];
+      acc[type].push(plat);
+      return acc;
+    },
+    {} as Record<string, typeof dataMenu.plats_details>,
+  );
+
   return (
-    <div className="min-h-screen  py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100">
         {/* En-tête / Badge Thème */}
         <div className="bg-[RGBA(105,230,140,1)] text-black px-8 py-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -56,7 +67,7 @@ export default function MenuDetail() {
             </p>
           </div>
 
-          {/* Infos clés (Min personnes & Stock) */}
+          {/* Infos clés */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-200">
             <div className="flex items-center gap-3">
               <span className="p-2 bg-indigo-100 text-indigo-700 rounded-lg">
@@ -86,28 +97,51 @@ export default function MenuDetail() {
             </div>
           </div>
 
-          {/* Liste des Plats et Allergènes */}
-          <div>
-            <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4">
+          {/* Composition du menu par type de plat ordonné */}
+          <div className="space-y-6">
+            <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-wider">
               Composition du menu
             </h2>
-            <div className="grid grid-cols-1 gap-3">
-              {dataMenu.plats_details?.map((plat) => (
-                <div
-                  key={plat.plat_id}
-                  className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 bg-white rounded-xl border border-slate-200 shadow-sm gap-2"
-                >
-                  <span className="font-medium text-slate-800 text-base">
-                    {plat.nom}
-                  </span>
-                  {plat.alergenes.length > 0 && (
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium bg-amber-50 text-amber-800 rounded-full border border-amber-200">
-                      ⚠️ {plat.alergenes.join(", ")}
-                    </span>
-                  )}
-                </div>
-              ))}
-            </div>
+
+            {platsByType &&
+              ["entree", "plat", "dessert"]
+                .filter(
+                  (type) => platsByType[type] && platsByType[type].length > 0,
+                )
+                .map((type) => (
+                  <div key={type} className="space-y-3">
+                    {/* Entête du type */}
+                    <h3 className="text-md font-bold text-slate-700 uppercase tracking-wide border-b pb-1">
+                      {type}
+                    </h3>
+
+                    {/* Nom et photo en dessous */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {platsByType[type].map((plat) => (
+                        <div
+                          key={plat.plat_id}
+                          className="flex items-center p-4 bg-white rounded-xl border border-slate-200 shadow-sm gap-4"
+                        >
+                          <img
+                            src={plat.photo}
+                            alt={plat.nom}
+                            className="w-16 h-16 object-cover rounded-lg border border-slate-100 shrink-0"
+                          />
+                          <div className="flex-1 min-w-0">
+                            <span className="block font-medium text-slate-800 text-base truncate">
+                              {plat.nom}
+                            </span>
+                            {plat.alergenes.length > 0 && (
+                              <span className="inline-flex items-center gap-1 mt-1 px-2 py-0.5 text-xs font-medium bg-amber-50 text-amber-800 rounded-full border border-amber-200">
+                                ⚠️ {plat.alergenes.join(", ")}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
           </div>
 
           {/* Note particulière */}
