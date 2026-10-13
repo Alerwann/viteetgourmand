@@ -11,8 +11,9 @@ class Menus
     private string $plat_id;
     private int $regime_id;
     private int $theme_id;
+    private ?string $note_particuliere;
 
-    public function __construct(string $title, int $nb_perso_min, float $prix, string $description, int $quantite, int $plat_id, int $regime_id, int $theme_id, ?int $menu_id = null)
+    public function __construct(string $title, int $nb_perso_min, float $prix, string $description, int $quantite, int $plat_id, int $regime_id, int $theme_id, ?int $menu_id = null, ?string $note_particuliere = "")
     {
         $this->menu_id = $menu_id;
         $this->title = $title;
@@ -23,6 +24,7 @@ class Menus
         $this->plat_id = $plat_id;
         $this->regime_id = $regime_id;
         $this->theme_id = $theme_id;
+        $this->note_particuliere = $note_particuliere;
     }
 
     public function getMenuId(): ?int
@@ -70,6 +72,11 @@ class Menus
         return $this->theme_id;
     }
 
+    public function getNoteParticuliere(): string
+    {
+        return $this->note_particuliere;
+    }
+
     public function toArray(): array
     {
         return [
@@ -82,6 +89,7 @@ class Menus
             "plat_id" => $this->plat_id,
             "regime_id" => $this->regime_id,
             "theme_id" => $this->theme_id,
+            "note_particuliere" => $this->note_particuliere,
         ];
     }
 }

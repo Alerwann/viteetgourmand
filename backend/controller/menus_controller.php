@@ -19,6 +19,7 @@ class MenuController
                 m.prix_par_personne,
                 m.description,
                 m.quantite_restante,
+                m.note_particuliere,
                 r.nom_regime AS nom_regime,   
                 t.theme_nom AS theme_nom,       
                 (
@@ -54,6 +55,7 @@ class MenuController
                     "quantite_restante" => (int)$row['quantite_restante'],
                     "nom_regime" => $row["nom_regime"],
                     "theme_nom" => $row["theme_nom"],
+                    "note_particuliere" => $row["note_particuliere"],
                     "plats_details" => $row['plats_details'] ? json_decode($row['plats_details'], true) : []
                 ];
             }
@@ -66,8 +68,9 @@ class MenuController
         }
     }
 
-    public function getOneByID(int $id): void
+    public function getOneByID(): void
     {
+        $id = isset($_GET['id']) ? $_GET['id'] : 1;
         try {
             $stmt = $this->pdo->prepare("SELECT 
                 m.menu_id,
@@ -76,6 +79,7 @@ class MenuController
                 m.prix_par_personne,
                 m.description,
                 m.quantite_restante,
+                m.note_particuliere,
                 r.nom_regime AS nom_regime,   
                 t.theme_nom AS theme_nom, 
                 (
@@ -118,6 +122,7 @@ class MenuController
                 "quantite_restante" => (int)$row['quantite_restante'],
                 "nom_regime" => $row["nom_regime"],
                 "theme_nom" => $row["theme_nom"],
+                "note_particuliere" => $row["note_particuliere"],
                 "plats_details" => $row['plats_details'] ? json_decode($row['plats_details'], true) : []
             ];
 

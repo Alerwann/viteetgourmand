@@ -43,7 +43,7 @@ export default function Navigation_composant() {
           <li key={type}>
             <a
               onClick={() => handleClick(type)}
-              href={type === "accueil" ? "/" : `./${type}`}
+              href={type === "accueil" ? "/" : `/${type}`}
               className="hover:bg-[RGBA(105,230,140,1)] p-2 rounded-md text-l font-semibold font-marmelad"
             >
               {convertType(type)}

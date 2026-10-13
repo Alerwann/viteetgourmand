@@ -8,9 +8,6 @@ interface ContactFormData {
   email: string;
 }
 
-const inputDiv = "grid grid-cols-[1fr_3fr]  px-5  text-center items-center ";
-const inputForm = "bg-amber-100 p-2 border-1";
-
 export default function Contact_composant() {
   const [formData, setFormData] = useState<ContactFormData>({
     title: "",
@@ -18,6 +15,7 @@ export default function Contact_composant() {
     email: "",
   });
   const [status, setStatus] = useState<string | null>(null);
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
@@ -44,64 +42,88 @@ export default function Contact_composant() {
       setStatus("Une erreur est survenue.");
     }
   };
+
   return (
-    <div className="h-screen ">
-      <div className="text-center mt-5 font-bold text-2xl  ">
-        <h2>Besoin d'informations supplémentaires?</h2>
-        <p>Nous répondrons à votre formulaire sous les plus bref délais !</p>
-      </div>
-      <form onSubmit={handleSubmit} className="flex flex-col items-center">
-        <div className="flex flex-col gap-4 bg-green-50 m-5 py-5 w-5/10">
-          <div className={inputDiv}>
-            <label>Objet</label>
+    <div className="min-h-screen bg-slate-50 py-12 px-4 sm:px-6 lg:px-8 flex flex-col justify-center">
+      <div className="max-w-2xl mx-auto w-full bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100 p-8 sm:p-10">
+        {/* En-tête */}
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">
+            Besoin d'informations supplémentaires ?
+          </h2>
+          <p className="mt-2 text-sm text-slate-600">
+            Nous répondrons à votre formulaire dans les plus brefs délais !
+          </p>
+        </div>
+
+        {/* Formulaire */}
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Objet */}
+          <div>
+            <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
+              Objet
+            </label>
             <input
               type="text"
               name="title"
               value={formData.title}
               onChange={handleChange}
               required
-              className={inputForm}
-              placeholder="Sujet"
+              className="w-full bg-slate-50 border border-slate-200 p-3 rounded-xl text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              placeholder="Sujet de votre demande"
             />
           </div>
-          <div className={inputDiv}>
-            <label className="flex-1">Description</label>
-            <div className="w-full flex-3 flex flex-col ">
-              <textarea
-                name="description"
-                value={formData.description}
-                onChange={handleChange}
-                required
-                rows={6}
-                maxLength={250}
-                className={inputForm}
-                placeholder="Demande (250 caractère max)"
-              />
-              <p className="text-xs text-right">
-                {formData.description.length} / 250 caractères
-              </p>
-            </div>
-          </div>
 
-          <div className={inputDiv}>
-            <label>Votre email </label>
+          {/* Email */}
+          <div>
+            <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
+              Votre email
+            </label>
             <input
               type="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
               required
-              className={inputForm}
-              placeholder="votre.email@perso.com"
+              className="w-full bg-slate-50 border border-slate-200 p-3 rounded-xl text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              placeholder="votre.email@exemple.com"
             />
           </div>
-        </div>
-        <div className=" ">
-          <CustomButton label="Valider" type="submit" />
-        </div>
 
-        {status && <p>{status}</p>}
-      </form>
+          {/* Description */}
+          <div>
+            <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
+              Description
+            </label>
+            <textarea
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              required
+              rows={5}
+              maxLength={250}
+              className="w-full bg-slate-50 border border-slate-200 p-3 rounded-xl text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"
+              placeholder="Votre message (250 caractères max)"
+            />
+            <div className="mt-1 text-right text-xs text-slate-400">
+              {formData.description.length} / 250 caractères
+            </div>
+          </div>
+
+          {/* Bouton de validation & Statut */}
+          <div className="flex flex-col items-center gap-4 pt-4">
+            <CustomButton label="Envoyer le message" type="submit" />
+
+            {status && (
+              <p
+                className={`text-sm font-medium ${status.includes("succès") ? "text-emerald-600" : "text-rose-600"}`}
+              >
+                {status}
+              </p>
+            )}
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

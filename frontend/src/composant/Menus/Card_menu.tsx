@@ -19,33 +19,67 @@ export default function CardMenu({
   price_by_person,
   detail_plat,
 }: MenuData) {
+  // Collecte et fusion unique de tous les allergènes du menu
+  const allAllergens = Array.from(
+    new Set(detail_plat?.flatMap((plat) => plat.alergenes) || []),
+  );
+
   return (
-    <div className="p-5 m-2 border-2 rounded-3xl flex flex-col items-center gap-4">
-      <div>
-        <div className="bg-amber-400 text-center py-1 font-extrabold text-2xl">
-          <p>{titre_menu}</p>
+    <div className="bg-white rounded-2xl border border-slate-100 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between h-full overflow-hidden group">
+      {/* En-tête de la carte */}
+      <div className="p-6 pb-4 flex flex-col gap-3">
+        <div className="flex justify-between items-start gap-2">
+          <h3 className="text-xl font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">
+            {titre_menu}
+          </h3>
+          <span className="text-lg font-extrabold text-indigo-600 whitespace-nowrap">
+            {price_by_person} €
+          </span>
         </div>
-        <div>
-          {detail_plat?.map((plat) => (
-            <div key={plat.plat_id} className="mt-1">
-              {plat.alergenes.length > 0 && (
-                <div>⚠️ {plat.alergenes.join(", ")} </div>
-              )}
-            </div>
-          ))}
-        </div>
-        <div className="bg-amber-300 text-l text-center px-2 ">
-          <p>{description}</p>
-        </div>
-        <div className="flex gap-2 px-2 bg-amber-200">
-          <p>Minimum de part : {nb_minimal}</p>
-          <p>Prix / Personne : {price_by_person} €</p>
-        </div>
+
+        <p className="text-slate-600 text-sm line-clamp-2 leading-relaxed">
+          {description}
+        </p>
       </div>
 
-      <div className="m-3">
-        <Link to={`/menus/${menu_id}`} className=" p-3 border-2 rounded-2xl">
-          Détails
+      {/* Corps de la carte (Plats & Allergènes) */}
+      <div className="px-6 py-3 bg-slate-50/50 border-t border-b border-slate-100 flex flex-col gap-3 flex-grow">
+        {/* Liste condensée des plats */}
+        <div className="space-y-1">
+          <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+            Composition
+          </span>
+          <ul className="text-sm text-slate-700 space-y-0.5">
+            {detail_plat?.map((plat) => (
+              <li key={plat.plat_id} className="truncate">
+                • {plat.nom}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Badge d'allergènes globaux si présents */}
+        {allAllergens.length > 0 && (
+          <div className="flex items-center gap-1.5 text-xs text-amber-800 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-lg w-fit">
+            <span>⚠️</span>
+            <span className="font-medium truncate max-w-[200px]">
+              {allAllergens.join(", ")}
+            </span>
+          </div>
+        )}
+      </div>
+
+      {/* Pied de carte (Infos min. convives + Bouton) */}
+      <div className="p-6 pt-4 flex items-center justify-between gap-4 bg-white">
+        <div className="text-xs text-slate-500 flex items-center gap-1 font-medium">
+          <span>👥</span> Min. {nb_minimal} pers.
+        </div>
+
+        <Link
+          to={`/menus/${menu_id}`}
+          className="px-4 py-2 bg-slate-900 hover:bg-indigo-600 text-white text-sm font-semibold rounded-xl shadow transition-colors"
+        >
+          Voir le détail
         </Link>
       </div>
     </div>

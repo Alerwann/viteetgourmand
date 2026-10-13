@@ -12,25 +12,27 @@ export default function AvisCard({ note, description }: AvisProps) {
   const validNote = Math.max(0, Math.min(note, maxStars));
 
   return (
-    <div className="p-5 h-full w-85 flex flex-col  bg-[RGBA(105,230,140,0.2)] border-2 rounded-2xl border-[RGBA(240,175,70,1)]">
-      <div className="flex justify-center gap-1">
-        {/* Étoiles jaunes (pleines) */}
+    <div className="h-full w-full max-w-sm p-6 bg-white rounded-2xl shadow-md hover:shadow-xl border border-slate-100 flex flex-col justify-between gap-4 transition-all duration-300 group">
+      {/* Étoiles */}
+      <div className="flex items-center gap-1">
         {Array.from({ length: validNote }).map((_, i) => (
           <Star
             key={`yellow-${i}`}
-            className="text-yellow-400 fill-yellow-400 w-5 h-5"
+            className="text-amber-400 fill-amber-400 w-5 h-5"
           />
         ))}
-
-        {/* Étoiles blanches (vides) */}
         {Array.from({ length: maxStars - validNote }).map((_, i) => (
           <Star
             key={`white-${i}`}
-            className="text-gray-300 fill-white w-5 h-5"
+            className="text-slate-200 fill-slate-100 w-5 h-5"
           />
         ))}
       </div>
-      <p>{description}</p>
+
+      {/* Description / Témoignage */}
+      <p className="text-slate-700 text-sm leading-relaxed italic flex-grow">
+        "{description}"
+      </p>
     </div>
   );
 }

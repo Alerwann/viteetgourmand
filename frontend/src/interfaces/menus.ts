@@ -15,5 +15,6 @@ export interface menusInt {
   quantite_restante: number;
   nom_regime: string;
   theme_nom: string;
+  note_particuliere?: string;
   plats_details: PlatDetail[];
 }
