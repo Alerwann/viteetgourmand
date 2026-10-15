@@ -8,7 +8,6 @@ import CustomButton from "../global/button_global";
 export default function PlatCreateForm() {
   const [plats, setPlats] = useState<Plat[]>([]);
   const [alergenes, setAlergenes] = useState<alergene[]>([]);
-
   const [nom_plat, setNomPlat] = useState<string>("");
   const [type_plat, setTypePlat] = useState<string>("");
   const [alergene_array, setAlergeneArray] = useState<alergene[]>([]);
