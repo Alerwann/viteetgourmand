@@ -1,7 +1,5 @@
 /** @format */
 
-import { useState } from "react";
-
 import type { alergene } from "../../interfaces/alergene";
 
 interface Props {

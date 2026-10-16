@@ -1,5 +1,6 @@
 FROM php:8.3-fpm
-
+RUN echo "upload_max_filesize = 10M" > /usr/local/etc/php/conf.d/uploads.ini \
+    && echo "post_max_size = 10M" >> /usr/local/etc/php/conf.d/uploads.ini
 # Installation des dépendances système et extensions PHP
 RUN apt-get update && apt-get install -y \
     libssl-dev \

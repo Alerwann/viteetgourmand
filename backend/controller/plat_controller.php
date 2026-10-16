@@ -62,25 +62,47 @@ class PlatController
 
     public function createPlat()
     {
-        $data = json_decode(file_get_contents("php://input"), true);
+        $nom_plat = $_POST['nom_plat'] ?? null;
+        $type_plat = $_POST['type_plat'] ?? null;
 
-        if (isset($data) || isset($data['nom_plat'], $data['type_plat'], $data['photo'])) {
+        if (!$nom_plat || !$type_plat || !isset($_FILES['photo'])) {
             http_response_code(400);
-            echo json_encode(["message" => "Données incomplètes ( id, nom, type, photo)."]);
-            return;
+            echo json_encode(["message" => "Données incomplètes (nom, type, photo)."]);
+            exit; // Arrête l'exécution ici
+        }
+
+        $fileTmpPath = $_FILES['photo']['tmp_name'];
+
+        if ($_FILES['photo']['error'] !== UPLOAD_ERR_OK) {
+            http_response_code(400);
+            echo json_encode(["message" => "Erreur lors du chargement du fichier."]);
+            exit; // Arrête l'exécution ici
         }
 
         try {
-            $stmt = $this->pdo->prepare("INSERT INTO plat (nom_plat,type_plat,photo) VALUES (:nom_plat,:type_plat,:photo)");
-            $stmt->execute([':nom_plat' => $data['nom_plat'], ':type_plat' => $data['type_plat'], ':photo' => $data['photo']]);
+            $fp = fopen($fileTmpPath, 'rb');
+            $imageData = fread($fp, filesize($fileTmpPath));
+            fclose($fp);
+
+            $stmt = $this->pdo->prepare("INSERT INTO plat (nom_plat, type_plat, photo) VALUES (:nom_plat, :type_plat, :photo)");
+
+            $stmt->bindValue(':nom_plat', $nom_plat, \PDO::PARAM_STR);
+            $stmt->bindValue(':type_plat', $type_plat, \PDO::PARAM_STR);
+            $stmt->bindParam(':photo', $imageData, \PDO::PARAM_LOB);
+
+            $stmt->execute();
+
             http_response_code(201);
             echo json_encode([
-                "message" => "plat créé avec succès !",
-                "id" => (int) $this->pdo->lastInsertId()
+                "message" => "Plat créé avec succès !",
+                "plat_id" => (int) $this->pdo->lastInsertId()
             ]);
+            exit; // STOppe net le script pour renvoyer un JSON pur
+
         } catch (\Exception $e) {
             http_response_code(500);
             echo json_encode(["message" => "Erreur : " . $e->getMessage()]);
+            exit;
         }
     }
 
