@@ -137,4 +137,46 @@ class MenuController
             echo json_encode(["message" => "Erreur : " . $e->getMessage()]);
         }
     }
+
+    public function createMenu(): void
+    {
+        $data = json_decode(file_get_contents("php://input"), true);
+        try {
+            $this->pdo->beginTransaction();
+
+            $sqlMenu = "INSERT INTO menu (titre, nombre_personne_minimum, prix_par_personne, description, quantite_restante, note_particuliere, regime_id, theme_id) 
+                    VALUES (:titre, :nb_min, :prix, :desc, :qte, :note, :regime_id, :theme_id)";
+
+            $stmtMenu = $this->pdo->prepare($sqlMenu);
+            $stmtMenu->execute([
+                ':titre'     => $data['titre'],
+                ':nb_min'    => $data['nombre_personne_minimum'],
+                ':prix'      => $data['prix_par_personne'],
+                ':desc'      => $data['description'],
+                ':qte'       => $data['quantite_restante'],
+                ':note'      => $data['note_particuliere'],
+                ':regime_id' => $data['regime_id'],
+                ':theme_id'  => $data['theme_id']
+            ]);
+
+            $menuId = $this->pdo->lastInsertId();
+
+            if (!empty($data['plats']) && is_array($data['plats'])) {
+                $sqlPlat = "INSERT INTO menu_plat (menu_id, plat_id) VALUES (:menu_id, :plat_id)";
+                $stmtPlat = $this->pdo->prepare($sqlPlat);
+
+                foreach ($data['plats'] as $platId) {
+                    $stmtPlat->execute([
+                        ':menu_id' => $menuId,
+                        ':plat_id' => $platId
+                    ]);
+                }
+            }
+
+            $this->pdo->commit();
+        } catch (\Exception $e) {
+            $this->pdo->rollBack();
+            throw new \Exception("Erreur lors de la création du menu : " . $e->getMessage());
+        }
+    }
 }

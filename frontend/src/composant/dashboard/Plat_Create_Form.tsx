@@ -1,15 +1,14 @@
 /** @format */
 import { useEffect, useState, type ChangeEvent } from "react";
-import { DishType, type Plat } from "../../interfaces/plat";
+import { DishType } from "../../interfaces/plat";
 import type { alergene } from "../../interfaces/alergene";
 import CustomButton from "../global/button_global";
 
 export default function PlatCreateForm() {
-  const [plats, setPlats] = useState<Plat[]>([]);
   const [alergenes, setAlergenes] = useState<alergene[]>([]);
   const [nom_plat, setNomPlat] = useState<string>("");
   const [type_plat, setTypePlat] = useState<string>("");
-  const [photo, setPhoto] = useState<File | null>(null); // Stockage du fichier brut
+  const [photo, setPhoto] = useState<File | null>(null);
   const [alergene_array, setAlergeneArray] = useState<alergene[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -21,7 +20,7 @@ export default function PlatCreateForm() {
       if (file.size > MAX_SIZE) {
         setErrorMessage("Le fichier est trop volumineux (2 Mo maximum).");
         setPhoto(null);
-        e.target.value = ""; // Réinitialise l'input file du DOM
+        e.target.value = "";
         return;
       }
       setErrorMessage(null);
@@ -30,11 +29,6 @@ export default function PlatCreateForm() {
   };
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/plat.php")
-      .then((res) => res.json())
-      .then((data) => setPlats(data))
-      .catch((err) => console.error("Erreur chargement :", err));
-
     fetch("http://localhost:8000/api/alergene.php")
       .then((res) => res.json())
       .then((data) => setAlergenes(data))
@@ -61,7 +55,6 @@ export default function PlatCreateForm() {
     e.preventDefault();
 
     try {
-      // Utilisation de FormData pour envoyer du multi-part (Texte + Fichier Binaire/BLOB)
       const formData = new FormData();
       formData.append("nom_plat", nom_plat);
       formData.append("type_plat", type_plat);
@@ -84,7 +77,6 @@ export default function PlatCreateForm() {
 
       const nouveauPlatId = dataPlat.plat_id;
 
-      // On envoie uniquement les IDs des allergènes (ou le tableau complet selon ton API)
       const responseLiaison = await fetch(
         "http://localhost:8000/api/plat_alergene.php",
         {

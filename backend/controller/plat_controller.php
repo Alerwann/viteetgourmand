@@ -20,12 +20,14 @@ class PlatController
                     "plat_id" => $row['plat_id'],
                     "nom_plat" => $row['nom_plat'],
                     "type_plat" => $row['type_plat'],
-                    "photo" => $row['photo']
+                    "photo" => 'data:image/jpeg;base64,' . base64_encode($row['photo'])
                 ];
 
                 $plats[] = $platArray;
             }
+
             http_response_code(200);
+            header('Content-Type: application/json');
             echo json_encode($plats);
         } catch (Exception $e) {
             http_response_code(500);
@@ -62,8 +64,17 @@ class PlatController
 
     public function createPlat()
     {
+
         $nom_plat = $_POST['nom_plat'] ?? null;
         $type_plat = $_POST['type_plat'] ?? null;
+
+        $allowedTypes = ["Entrée", "Plat", "Dessert"];
+
+        if (!in_array('type_plat', $allowedTypes, true)) {
+            http_response_code(400);
+            echo json_encode(["message" => "Type de plat invalide."]);
+            exit;
+        }
 
         if (!$nom_plat || !$type_plat || !isset($_FILES['photo'])) {
             http_response_code(400);
