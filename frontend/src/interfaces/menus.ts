@@ -8,15 +8,15 @@ export interface PlatDetail {
   alergenes: string[];
 }
 
-export interface menusInt {
-  menu_id: number;
+export interface MenusInt {
+  menu_id?: number;
   menu_titre: string;
+  note_add: string;
   nombre_personne_minimum: number;
   prix_par_personne: number;
   description: string;
   quantite_restante: number;
-  nom_regime: string;
-  theme_nom: string;
+  regime_id: number;
+  theme_id: number;
   note_particuliere?: string;
-  plats_details: PlatDetail[];
 }
