@@ -5,6 +5,7 @@ import { DishType, type Plat } from "../../interfaces/plat";
 import CustomButton from "../global/button_global";
 import type { Theme } from "../../interfaces/theme";
 import type { MenusInt } from "../../interfaces/menus";
+import type { Regime } from "../../interfaces/regime";
 
 const inputAsset = "bg-white border-2 p-2";
 const filesetAsset =
@@ -13,6 +14,7 @@ const filesetAsset =
 export default function MenuCreateFor() {
   const [array_plats, setArrayPlats] = useState<Plat[]>([]);
   const [array_theme, setArrayTheme] = useState<Theme[]>([]);
+  const [array_regime, setArrayRegime] = useState<Regime[]>([]);
 
   const [menuData, setMenuData] = useState<MenusInt>({
     menu_titre: "",
@@ -38,6 +40,11 @@ export default function MenuCreateFor() {
       .then((res) => res.json())
       .then((data) => setArrayTheme(data))
       .catch((err) => console.error("Erreur chargement :", err));
+
+    fetch("http://localhost:8000/api/regime.php")
+      .then((res) => res.json())
+      .then((data) => setArrayRegime(data))
+      .catch((err) => console.error("Erreur chargement :", err));
   }, []);
 
   const listPlatsByType = array_plats.reduce<Record<string, Plat[]>>(
@@ -61,7 +68,6 @@ export default function MenuCreateFor() {
 
     setMenuData((prev) => ({
       ...prev,
-      // Conversion en nombre pour les champs numériques, sinon texte brut
       [name]: [
         "nombre_personne_minimum",
         "prix_par_personne",
@@ -83,19 +89,63 @@ export default function MenuCreateFor() {
 
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (menuData.regime_id == -1) {
+      alert("Merci de choisir un régime");
+      return;
+    }
+
+    if (menuData.theme_id == -1) {
+      alert("Merci de choisir un thème");
+    }
+
+    const platsIds = Object.values(plats)
+      .filter((id) => id !== "")
+      .map((id) => Number(id));
+
+    const payload = {
+      titre: menuData.menu_titre,
+      theme_id: menuData.theme_id,
+      regime_id: menuData.regime_id,
+      description: menuData.description,
+      note_particuliere: menuData.note_add,
+      nombre_personne_minimum: menuData.nombre_personne_minimum,
+      prix_par_personne: menuData.prix_par_personne,
+      quantite_restante: menuData.quantite_restante,
+      plats: platsIds,
+    };
+
     try {
-      console.log(`titre : ${menuData.menu_titre}`);
-      console.log(`theme : ${menuData.theme_id}`);
-      console.log(`description : ${menuData.description}`);
-      console.log(`note : ${menuData.note_add}`);
-      console.log(`Entrée : ${plats["Entrée"]}`);
-      console.log(`Plat : ${plats["Plat"]}`);
-      console.log(`dessert : ${plats["Dessert"]}`);
-      console.log(`Nb part: ${menuData.nombre_personne_minimum}`);
-      console.log(`prix : ${menuData.prix_par_personne}`);
-      console.log(`quantité restante : ${menuData.quantite_restante}`);
+      const response = await fetch("http://localhost:8000/api/menus.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error("Erreur HTTP : " + response.status);
+      }
+
+      const result = await response.json();
+      console.log("Menu créé avec succès :", result);
+      alert("Menu ajouté");
+
+      setMenuData({
+        menu_titre: "",
+        note_add: "",
+        nombre_personne_minimum: 0,
+        prix_par_personne: 0,
+        description: "",
+        quantite_restante: 0,
+        regime_id: -1,
+        theme_id: -1,
+        note_particuliere: "",
+      });
+      setPlats({});
     } catch (error) {
-      console.error(error);
+      console.error("Erreur lors de la soumission :", error);
     }
   };
 
@@ -115,6 +165,7 @@ export default function MenuCreateFor() {
           value={menuData.menu_titre}
           onChange={handleChange}
           className={inputAsset}
+          required
         />
 
         <label htmlFor="theme_id">Quel est le thème du menu :</label>
@@ -124,11 +175,28 @@ export default function MenuCreateFor() {
           className={inputAsset}
           onChange={handleChange}
           value={menuData.theme_id}
+          required
         >
           <option value="-1">-- Sélectionner le thème --</option>
           {array_theme.map((theme) => (
             <option value={theme.theme_id} key={theme.theme_id}>
               {theme.theme_nom}
+            </option>
+          ))}
+        </select>
+        <label htmlFor="regime_id">Quel est le régime du menu :</label>
+        <select
+          name="regime_id"
+          id="regime_id"
+          className={inputAsset}
+          onChange={handleChange}
+          value={menuData.regime_id}
+          required
+        >
+          <option value="-1">-- Sélectionner le régime --</option>
+          {array_regime.map((regime) => (
+            <option value={regime.regime_id} key={regime.regime_id}>
+              {regime.nom_regime}
             </option>
           ))}
         </select>
@@ -142,6 +210,7 @@ export default function MenuCreateFor() {
           className={inputAsset}
           onChange={handleChange}
           value={menuData.description}
+          required
         ></textarea>
 
         <label htmlFor="note_add">Informations supplémentaires</label>
@@ -198,18 +267,17 @@ export default function MenuCreateFor() {
         />
 
         <label htmlFor="prix_par_personne">Prix par personne en €</label>
-        <div>
-          <input
-            type="number"
-            name="prix_par_personne"
-            id="prix_par_personne"
-            min={0}
-            className={inputAsset}
-            onChange={handleChange}
-            value={menuData.prix_par_personne}
-            required
-          />
-        </div>
+
+        <input
+          type="number"
+          name="prix_par_personne"
+          id="prix_par_personne"
+          min={0}
+          className={inputAsset}
+          onChange={handleChange}
+          value={menuData.prix_par_personne}
+          required
+        />
 
         <label htmlFor="quantite_restante">Quantité restante</label>
         <input

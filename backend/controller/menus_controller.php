@@ -174,9 +174,24 @@ class MenuController
             }
 
             $this->pdo->commit();
+            header('Content-Type: application/json');
+            http_response_code(201);
+
+            // 2. Renvoyer une réponse JSON
+            echo json_encode([
+                "message" => "Menu créé avec succès.",
+                "menu_id" => $menuId
+            ]);
+            exit;
         } catch (\Exception $e) {
             $this->pdo->rollBack();
-            throw new \Exception("Erreur lors de la création du menu : " . $e->getMessage());
+
+            header('Content-Type: application/json');
+            http_response_code(500);
+            echo json_encode([
+                "message" => "Erreur lors de la création du menu : " . $e->getMessage()
+            ]);
+            exit;
         }
     }
 }

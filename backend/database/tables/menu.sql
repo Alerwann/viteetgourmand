@@ -4,7 +4,7 @@ CREATE TABLE menu (
     titre VARCHAR(50) NOT NULL,
     nombre_personne_minimum INT NOT NULL,
     prix_par_personne DOUBLE NOT NULL,
-    description VARCHAR(50) NOT NULL,
+    description VARCHAR(255) NOT NULL,
     quantite_restante INT NOT NULL,
     note_particuliere VARCHAR(255),
     regime_id INT NOT NULL,
