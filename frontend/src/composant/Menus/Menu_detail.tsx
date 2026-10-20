@@ -2,11 +2,11 @@
 
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import type { menusInt } from "../../interfaces/menus";
+import type { MenuDetail } from "../../interfaces/menus";
 
 export default function MenuDetail() {
   const { id } = useParams();
-  const [dataMenu, setDataMenu] = useState<menusInt>();
+  const [dataMenu, setDataMenu] = useState<MenuDetail>();
 
   useEffect(() => {
     fetch(`http://localhost:8000/api/menus.php?id=${id}`)
@@ -37,7 +37,6 @@ export default function MenuDetail() {
   return (
     <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100">
-        {/* En-tête / Badge Thème */}
         <div className="bg-[RGBA(105,230,140,1)] text-black px-8 py-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
             <span className="inline-block px-3 py-1 text-xs font-semibold uppercase tracking-wider bg-indigo-100 rounded-full mb-3">
@@ -55,9 +54,7 @@ export default function MenuDetail() {
           </div>
         </div>
 
-        {/* Corps de la page */}
         <div className="p-8 space-y-8">
-          {/* Description */}
           <div>
             <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-2">
               Description
@@ -104,7 +101,7 @@ export default function MenuDetail() {
             </h2>
 
             {platsByType &&
-              ["entree", "plat", "dessert"]
+              ["Entrée", "Plat", "Dessert"]
                 .filter(
                   (type) => platsByType[type] && platsByType[type].length > 0,
                 )

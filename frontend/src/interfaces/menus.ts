@@ -20,3 +20,17 @@ export interface MenusInt {
   theme_id: number;
   note_particuliere?: string;
 }
+
+export interface MenuDetail {
+  menu_id?: number;
+  menu_titre: string;
+  note_add: string;
+  nombre_personne_minimum: number;
+  prix_par_personne: number;
+  description: string;
+  quantite_restante: number;
+  nom_regime: string;
+  theme_nom: string;
+  note_particuliere?: string;
+  plats_details: PlatDetail[];
+}

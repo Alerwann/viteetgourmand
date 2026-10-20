@@ -20,8 +20,12 @@ switch ($method) {
 
 
     case 'GET':
+        if (isset($_GET['id'])) {
+            $controller->getThemeById();
+        } else {
 
-        $controller->getAllTheme();
+            $controller->getAllTheme();
+        }
 
         break;
 
