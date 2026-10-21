@@ -3,16 +3,20 @@
 require_once __DIR__ . '/../classes/Utilisateur.php';
 require_once __DIR__ . '/../classes/AdressePostale.php';
 
+
+
 class UtilisateurController
 {
     private PDO $pdo;
+    private AuthService $authService;
 
     public function __construct(PDO $pdo)
     {
         $this->pdo = $pdo;
+        $this->authService = new AuthService($pdo);
     }
 
-    private function findUserById(int $id): ?Utilisateur
+    public function findUserById(int $id): ?Utilisateur
     {
 
 
@@ -207,9 +211,9 @@ class UtilisateurController
             echo json_encode(["message" => "Données incomplètes."]);
             return;
         } else {
-            $id = $_GET['id'];
+            $id =  $_GET['id'];
         }
-        $data = json_decode(file_get_contents("php://input"), true);
+        $data =  json_decode(file_get_contents("php://input"), true);
 
         try {
             $user = $this->findUserById($id);
@@ -287,6 +291,60 @@ class UtilisateurController
 
             http_response_code(200);
             echo json_encode(["message" => "Utilisateur mis à jour avec succès"]);
+        } catch (\Throwable $th) {
+            http_response_code(500);
+            echo json_encode(["message" => "Erreur : " . $th->getMessage()]);
+        }
+    }
+
+    public function updatePassword(): void
+    {
+        $token = $_GET['token'] ?? null;
+        if (!$token) {
+            http_response_code(400);
+            echo json_encode(["message" => "Token manquant."]);
+            return;
+        }
+
+        $data = json_decode(file_get_contents("php://input"), true);
+        if (!isset($data['password'])) {
+            http_response_code(400);
+            echo json_encode(["message" => "Nouveau mot de passe requis."]);
+            return;
+        }
+
+        $userId = $this->authService->verif_auth_update($token);
+        if (!$userId) {
+            http_response_code(400);
+            echo json_encode(["message" => "Token invalide ou expiré."]);
+            return;
+        }
+
+        $user = $this->findUserById($userId);
+        if ($user == null) {
+            http_response_code(400);
+            echo json_encode(["message" => "Utilisateur introuvable"]);
+            return;
+        }
+
+
+        $user->setPassword($data['password']);
+
+        try {
+
+            $stmt = $this->pdo->prepare("UPDATE utilisateur 
+                                    SET password = :password
+                                    WHERE utilisateur_id = :utilisateur_id");
+            $stmt->execute([
+                ':password' => $user->getPasswordHash(),
+                ':utilisateur_id' => $userId
+            ]);
+
+
+            $this->authService->delete_token($token);
+
+            http_response_code(200);
+            echo json_encode(["message" => "Mot de passe mis à jour avec succès."]);
         } catch (\Throwable $th) {
             http_response_code(500);
             echo json_encode(["message" => "Erreur : " . $th->getMessage()]);
