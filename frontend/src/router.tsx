@@ -7,30 +7,39 @@ import DashboardLayout from "./composant/dashboard/DashboardLayout";
 import Contact_composant from "./composant/contact/contact";
 import Menus_composant from "./composant/Menus/Menus";
 import MenuDetail from "./composant/Menus/Menu_detail";
+import Connect_composant from "./composant/connexion/Connect";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <RootLayout />,
     children: [
+      // all
       {
         index: true,
         element: <Accueil_coposant />,
       },
-
+      // admin et employe
       {
         path: "dashboard",
+
         element: <DashboardLayout />,
       },
+      //all
       {
         path: "contact",
         element: <Contact_composant />,
       },
+      // all
       {
         path: "menus",
         element: <Menus_composant />,
       },
+      // all
       { path: "menus/:id", element: <MenuDetail /> },
+
+      // all
+      { path: "connect", element: <Connect_composant /> },
     ],
   },
 ]);
