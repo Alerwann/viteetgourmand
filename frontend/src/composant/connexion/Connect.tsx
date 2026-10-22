@@ -49,7 +49,7 @@ export default function Connect_composant() {
         <a href="" className="">
           Mot de passe oublié
         </a>
-        <a href="">Créer un compte</a>
+        <a href="/createcompte">Créer un compte</a>
       </section>
     </div>
   );

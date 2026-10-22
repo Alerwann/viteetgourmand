@@ -8,6 +8,7 @@ import Contact_composant from "./composant/contact/contact";
 import Menus_composant from "./composant/Menus/Menus";
 import MenuDetail from "./composant/Menus/Menu_detail";
 import Connect_composant from "./composant/connexion/Connect";
+import CreateCompte from "./composant/connexion/CreateCompte";
 
 const router = createBrowserRouter([
   {
@@ -40,6 +41,7 @@ const router = createBrowserRouter([
 
       // all
       { path: "connect", element: <Connect_composant /> },
+      { path: "createcompte", element: <CreateCompte /> },
     ],
   },
 ]);
