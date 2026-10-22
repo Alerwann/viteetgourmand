@@ -22,6 +22,8 @@ services:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MAIL_HOST: mailpit
+      MAIL_PORT: 1025
 
   # Serveur Web pour PHP (Nginx)
   webserver:
@@ -76,6 +78,14 @@ services:
     volumes:
       - mongo_data:/data/db
 
+  # Serveur Mail local (Mailpit)
+  mailpit:
+    image: axllent/mailpit
+    container_name: mailpit
+    restart: always
+    ports:
+      - "1025:1025"
+      - "8025:8025"
 volumes:
   mysql_data:
   mongo_data:

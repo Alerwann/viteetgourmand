@@ -9,14 +9,18 @@ use PDO;
 require_once __DIR__ . '/../classes/Utilisateur.php';
 require_once __DIR__ . '/../classes/AdressePostale.php';
 
+
+
 class AuthService
 {
     private PDO $pdo;
+    private MailerService $mailer;
 
 
     public function __construct(PDO $pdo)
     {
         $this->pdo = $pdo;
+        $this->mailer = new MailerService();
     }
 
 
@@ -42,7 +46,7 @@ class AuthService
         );
 
 
-        $userObj = new Utilisateur(
+        $userObj =  Utilisateur::fromDataBase(
             email: $row['email'],
             password: $row['password'],
             prenom: $row['prenom'],
@@ -58,31 +62,19 @@ class AuthService
         return $userObj;
     }
 
-    public function login(string $email, string $password): ?array
+
+    public function calcul_token(): array
     {
-        $user = $this->findOneByEmail($email);
-        if ($user == \null) {
-            return [];
-        }
+        $date = new DateTime();
 
-        $hashPassword = $user->getPasswordHash();
+        $token = bin2hex(random_bytes(32));
 
-
-        if (!\password_verify($password, $hashPassword)) {
-            return [];
-        }
-
-        $statutUser = $user->getIsActif();
-
-        if (!$statutUser) {
-            return [];
-        }
-
-        return [$user->toArray()];
+        return ["token" => $token, "date" => $date];
     }
 
 
-    public function create_token(string $email): string
+
+    public function create_user_token(string $email): string
     {
         $user = $this->findOneByEmail($email);
         if ($user == null) {
@@ -96,8 +88,11 @@ class AuthService
         $stmtCheck->execute([':utilisateur_id' => $userId]);
         $existing = $stmtCheck->fetch(PDO::FETCH_ASSOC);
 
-        $token = bin2hex(random_bytes(32));
-        $date = new DateTime();
+        $calcul_token = $this->calcul_token();
+
+        $token = $calcul_token['token'];
+        $date = $calcul_token['date'];
+
         $date->add(new DateInterval('PT15M'));
         $expireFormatted = $date->format('Y-m-d H:i:s');
 
@@ -128,9 +123,74 @@ class AuthService
                 ':utilisateur_id' => $userId
             ]);
         }
+        $resetLink = "http://localhost:5173/reset-password?token=" . $token;
+        $this->mailer->sendPasswordResetEmail($user->getEmail(), $resetLink);
 
         return $token;
     }
+
+    private function save_session_token(int $id): string
+    {
+        $tokendata = $this->calcul_token();
+        $token = $tokendata['token'];
+        $date = $tokendata['date'];
+        $expireDate = clone $date;
+        $expireDate->add(new DateInterval('P7D'));
+        $expireFormatted = $expireDate->format('Y-m-d H:i:s');
+
+        $stmtInsert = $this->pdo->prepare("INSERT INTO session_token (token, expire_at, utilisateur_id) 
+                                           VALUES (:token, :expire_at, :utilisateur_id)");
+        $stmtInsert->execute([
+            ':token' => $token,
+            ':expire_at' => $expireFormatted,
+            ':utilisateur_id' => $id
+        ]);
+        return $token;
+    }
+
+    public function login(string $email, string $plainPassword): array
+    {
+        $user = $this->findOneByEmail($email);
+
+        if (!$user || !password_verify($plainPassword, $user->getPasswordHash())) {
+            return ["success" => false, "error" => "INVALID_CREDENTIALS", "code" => 401];
+        }
+
+        if (!$user->getIsActif()) {
+            return ["success" => false, "error" => "ACCOUNT_INACTIVE", "code" => 403];
+        }
+
+        $token = $this->save_session_token($user->getUtilisateurID());
+
+        return ["success" => true, "token" => $token, "code" => 200];
+    }
+    public function logout(string $token): void
+    {
+        $stmt = $this->pdo->prepare("DELETE FROM session_token WHERE token = :token");
+        $stmt->execute([':token' => $token]);
+    }
+
+    public function verifyToken(string $token): ?int
+    {
+        $stmt = $this->pdo->prepare("SELECT utilisateur_id, expire_at FROM session_token WHERE token = :token");
+        $stmt->execute([':token' => $token]);
+        $session = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$session) {
+            return null;
+        }
+
+
+        $expireDate = new \DateTime($session['expire_at']);
+        if ($expireDate < new \DateTime()) {
+
+            $this->logout($token);
+            return null;
+        }
+
+        return (int) $session['utilisateur_id'];
+    }
+
 
     public function verif_auth_update(string $token): ?int
     {
@@ -152,9 +212,31 @@ class AuthService
         return (int) $auth_data['utilisateur_id'];
     }
 
-    public function delete_token(string $token): void
+    public function delete_user_token(string $token): void
     {
         $stmt = $this->pdo->prepare("DELETE FROM  password_reset_token WHERE token = :token");
         $stmt->execute([':token' => $token]);
+    }
+
+    public function updatePassword(string $token, string $newPlainPassword): bool
+    {
+        $userId = $this->verif_auth_update($token);
+        if (!$userId) {
+            return false;
+        }
+
+        // Hashage sécurisé du nouveau mot de passe
+        $newPasswordHash = password_hash($newPlainPassword, PASSWORD_DEFAULT);
+
+        $stmt = $this->pdo->prepare("UPDATE utilisateur SET password = :password WHERE utilisateur_id = :utilisateur_id");
+        $stmt->execute([
+            ':password' => $newPasswordHash,
+            ':utilisateur_id' => $userId
+        ]);
+
+        // Suppression du token utilisé
+        $this->delete_user_token($token);
+
+        return true;
     }
 }

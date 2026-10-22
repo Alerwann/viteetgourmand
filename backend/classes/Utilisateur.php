@@ -15,10 +15,13 @@ class Utilisateur
     private bool $is_actif;
     private int $role_id;
 
-    public function __construct(string $email, string $password, string $prenom, string $nom, string $telephone, AdressePostale $adresse_postale, bool $is_actif, int $role_id, ?int $utilisateur_id = null)
+
+    // constructeurs 
+    // Général
+    private function __construct(string $email, string $password, string $prenom, string $nom, string $telephone, AdressePostale $adresse_postale, bool $is_actif, int $role_id, ?int $utilisateur_id = null)
     {
         $this->email = $email;
-        $this->setPassword($password);
+        $this->password = $password;
         $this->prenom = $prenom;
         $this->nom = $nom;
         $this->telephone = $telephone;
@@ -27,6 +30,28 @@ class Utilisateur
         $this->role_id = $role_id;
         $this->utilisateur_id = $utilisateur_id;
     }
+
+    //Si nouveau
+    public static function register(string $email, string $password, string $prenom, string $nom, string $telephone, AdressePostale $adresse_postale, bool $is_actif, int $role_id, ?int $utilisateur_id = null): self
+    {
+        if (strlen($password) < 8) {
+            throw new \InvalidArgumentException("Le mot de passe doit faire au moins 8 caractères.");
+        }
+
+        $hashPassword = password_hash($password, PASSWORD_DEFAULT);
+
+
+        return new self($email, $hashPassword, $prenom, $nom, $telephone, $adresse_postale, $is_actif, $role_id, $utilisateur_id);
+    }
+
+    //Si déjà présent
+    public static function fromDataBase(string $email, string $password, string $prenom, string $nom, string $telephone, AdressePostale $adresse_postale, bool $is_actif, int $role_id, ?int $utilisateur_id = null): self
+    {
+
+
+        return new self($email, $password, $prenom, $nom, $telephone, $adresse_postale, $is_actif, $role_id, $utilisateur_id);
+    }
+
 
     // GET utilisateur_id
 
@@ -64,7 +89,11 @@ class Utilisateur
         $this->password = password_hash($plainPassword, PASSWORD_DEFAULT);
     }
 
-    // GET Hash Password
+    // GET/SET Hash Password
+    public function setPasswordHash(string $passwordHash): void
+    {
+        $this->password = $passwordHash;
+    }
 
     public function getPasswordHash(): string
     {
