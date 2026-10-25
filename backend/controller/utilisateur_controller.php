@@ -1,9 +1,10 @@
     <?php
 
+    use App\Services\AuthService;
+
     require_once __DIR__ . '/../classes/Utilisateur.php';
     require_once __DIR__ . '/../classes/AdressePostale.php';
-
-
+    require_once __DIR__ . '/../service/auth_service.php';
 
     class UtilisateurController
     {

@@ -5,9 +5,11 @@ namespace App\Services;
 use DateTime;
 use DateInterval;
 use PDO;
+use App\Services\MailerService;
 
 require_once __DIR__ . '/../classes/Utilisateur.php';
 require_once __DIR__ . '/../classes/AdressePostale.php';
+require_once __DIR__ . '/MailerService.php';
 
 
 
