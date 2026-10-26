@@ -1,7 +1,7 @@
 /** @format */
 
 import CustomButton from "../global/button_global";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import type { utilisateur } from "../../interfaces/utilisateur";
 
@@ -11,6 +11,7 @@ const filesetAsset =
 
 export default function CreateCompte() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [allUtilisateur, setAllUtilisateur] = useState<utilisateur[]>([]);
   const [utilisateur, setUtilisateur] = useState<utilisateur>({
     email: "",
     password: "",
@@ -40,10 +41,18 @@ export default function CreateCompte() {
     setShowPassword(newStatePass);
   };
 
+  useEffect(() => {
+    try {
+      fetch("http://localhost:8000/api/utilisateur.php")
+        .then((res) => res.json())
+        .then((data) => setAllUtilisateur(data))
+        .catch((err) => console.error("Erreur chargement :", err));
+    } catch (error) {}
+  }, []);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
-    // Liste des champs qui appartiennent à l'adresse
     const adresseFields = [
       "numero_rue",
       "street",
@@ -72,10 +81,23 @@ export default function CreateCompte() {
 
   const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
+
+    // test des conditions de mot de passe
     if (!(hasMinLength && hasUpper && hasLower && hasNumber && hasSpecial)) {
       alert("Le mot de passe ne respecte pas les critères de sécurité.");
       return;
     }
+
+    //test de l'existance d'un compte avec le mail (alerte à améliorer)
+    const chekExistance = !allUtilisateur.some(
+      (utilisateurs) => utilisateurs.email === utilisateur.email,
+    );
+    if (chekExistance) {
+      alert("Utilisateur déjà existant");
+      return;
+    }
+
+    //création de l'objet utilisateur
     const preload = {
       email: utilisateur.email,
       password: utilisateur.password,
@@ -93,6 +115,7 @@ export default function CreateCompte() {
       role_id: 2,
     };
 
+    //envoie pour traitement back
     try {
       const response = await fetch(
         "http://localhost:8000/api/utilisateur.php",
@@ -115,6 +138,7 @@ export default function CreateCompte() {
       //faire envoie de mail ici
       alert("Utilisateur ajouté");
 
+      //réinitialisation du formulaire
       setUtilisateur({
         email: "",
         password: "",
