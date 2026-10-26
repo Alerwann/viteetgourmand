@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Entity;
+
 class AdressePostale
 {
     private ?int $numero_rue;

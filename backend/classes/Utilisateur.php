@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Entity;
+
 require_once 'AdressePostale.php';
 
 
