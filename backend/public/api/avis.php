@@ -15,9 +15,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 require_once __DIR__ . '/../../config/db_init.php';
 require_once __DIR__ . '/../../controller/avis_controller.php';
+require_once __DIR__ . '/../../repository/avis/SqlAvisRepository.php';
+
+$aviRepository = new \App\Repository\SqlAvisRepository($pdo);
 
 
-$controller = new AvisController($pdo);
+$controller = new \APP\Controller\AvisController($aviRepository);
 
 $method = $_SERVER['REQUEST_METHOD'];
 

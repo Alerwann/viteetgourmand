@@ -1,17 +1,21 @@
 <?php
 
+namespace App\Controller;
+
+use App\Repository\AvisRepositoryInterface;
+use App\Enum\StatusAvis;
+
 
 require_once __DIR__ . '/../classes/Avis.php';
 
 class AvisController
 {
 
-    private PDO $pdo;
+    private AvisRepositoryInterface $avisRepo;
 
-
-    public function __construct(PDO $pdo)
+    public function __construct(AvisRepositoryInterface $avisRepo)
     {
-        $this->pdo = $pdo;
+        $this->avisRepo = $avisRepo;
     }
 
 
@@ -19,24 +23,7 @@ class AvisController
     {
 
         try {
-            $stmt = $this->pdo->query("SELECT avis_id, description, status,note , commande_id FROM avis");
-            $listAvis = [];
-
-            error_log("✅ tout est récupéré");
-
-
-            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-
-                $avisObj = new Avis(
-                    avis_id: (int) $row['avis_id'],
-                    description: $row['description'],
-                    status: $row['status'],
-                    note: (int)$row['note'],
-                    commande_id: (int)$row['commande_id']
-                );
-
-                $listAvis[] = $avisObj->toArray();
-            }
+            $listAvis = $this->avisRepo->findAll();
 
             http_response_code(200);
             echo json_encode($listAvis);
@@ -50,26 +37,7 @@ class AvisController
     {
         $limite = isset($_GET['limite']) ? (int) $_GET['limite'] : 5;
         try {
-            $stmt = $this->pdo->prepare("SELECT avis_id,description, status,note, commande_id FROM avis ORDER BY created_at DESC LIMIT :limite ");
-            $stmt->bindValue(':limite', $limite, PDO::PARAM_INT);
-            $stmt->execute();
-
-            $listAvis = [];
-
-
-            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-
-                $avisObj = new Avis(
-                    description: $row['description'],
-                    status: $row['status'],
-                    note: (int)$row['note'],
-                    avis_id: (int) $row['avis_id'],
-                    commande_id: (int)$row['commande_id']
-
-                );
-
-                $listAvis[] = $avisObj->toArray();
-            }
+            $listAvis = $this->avisRepo->findLastAvis($limite);
 
             http_response_code(200);
             echo json_encode($listAvis);
@@ -81,7 +49,7 @@ class AvisController
 
     public function getAvisbyStatus(): void
     {
-        $statusIN = isset($_GET['status']) ? $_GET['status'] : 'cree';
+        $statusIN = isset($_GET['status']) ? $_GET['status'] : '';
 
         $statusEnum = StatusAvis::tryFrom($statusIN);
 
@@ -90,21 +58,7 @@ class AvisController
         }
 
         try {
-            $stmt = $this->pdo->prepare("SELECT description,note FROM avis WHERE status= :status");
-            $stmt->bindValue(':status', $statusEnum->value, PDO::PARAM_STR);
-            $stmt->execute();
-
-            $listAvis = [];
-
-            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-
-                $avisTab = [
-                    "description" => $row['description'],
-                    "note" => (int)$row['note']
-                ];
-
-                $listAvis[] = $avisTab;
-            }
+            $listAvis = $this->avisRepo->findByStatus($statusEnum);
 
             http_response_code(200);
             echo json_encode($listAvis);
@@ -133,12 +87,11 @@ class AvisController
         }
 
         try {
-            $stmt = $this->pdo->prepare("INSERT INTO avis (description,status,note,commande_id) VALUES (:description,:status,:note, :commande_id)");
-            $stmt->execute([':description' => $data['description'], ':status' => $data['status'], ':note' => $data['note'], ':commande_id' => $data['commande_id']]);
+            $id = $this->avisRepo->save($data);
             http_response_code(201);
             echo json_encode([
                 "message" => "Avis créé avec succès !",
-                "id" => (int) $this->pdo->lastInsertId()
+                "id" => $id
             ]);
         } catch (\Exception $e) {
             http_response_code(500);
