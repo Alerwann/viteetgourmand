@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 // 1. Inclusion des fichiers nécessaires (ou via Composer)
 require_once __DIR__ . '/../../config/db_init.php';
-require_once __DIR__ . '/../../repository/SqlUserRepositoryInterface.php';
+require_once __DIR__ . '/../../repository/users/SqlUserRepositoryInterface.php';
 require_once __DIR__ . '/../../service/auth_service.php';
 require_once __DIR__ . '/../../controller/utilisateur_controller.php';
 
@@ -24,7 +24,7 @@ $controller = new \App\Controller\UtilisateurController($userRepository, $authSe
 
 $method = $_SERVER['REQUEST_METHOD'];
 
-// 4. Routage basé sur la méthode HTTP et les paramètres
+
 switch ($method) {
     case 'GET':
         if (isset($_GET['id'])) {
@@ -35,12 +35,10 @@ switch ($method) {
         break;
 
     case 'POST':
-        // Si on a un token dans l'URL, c'est une action spécifique comme updatePassword
+
         if (isset($_GET['token'])) {
             $controller->updatePassword();
-        }
-        // Si on a un id, c'est une mise à jour (certains clients envoient du POST pour l'update)
-        else if (isset($_GET['id'])) {
+        } else if (isset($_GET['id'])) {
             $controller->updateOne();
         }
         // Sinon, c'est une création
@@ -50,7 +48,7 @@ switch ($method) {
         break;
 
     case 'PUT':
-        // Support propre de la méthode PUT pour la mise à jour
+
         if (isset($_GET['id'])) {
             $controller->updateOne();
         }
