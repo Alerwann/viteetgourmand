@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controller;
 
 use App\Repository\UserRepositoryInterface;
 use App\Services\AuthService;
@@ -32,9 +32,23 @@ class UtilisateurController
         try {
             $listUtilisateurs = $this->userRepository->findAll();
 
+            $data = array_map(function ($user) {
+                return [
+                    'id' => $user->getUtilisateurID(),
+                    'email' => $user->getEmail(),
+                    'prenom' => $user->getPrenom(),
+                    'nom' => $user->getNom(),
+                    'telephone' => $user->getTel(),
+                    'adresse' => $user->getAdressePostal(),
+                    'is_actif' => $user->getIsActif(),
+                    'role_id' => $user->getRoleId(),
+
+                ];
+            }, $listUtilisateurs);
+
             http_response_code(200);
             header('Content-Type: application/json');
-            echo json_encode($listUtilisateurs);
+            echo json_encode($data);
         } catch (\Exception $e) {
             http_response_code(500);
             echo json_encode(["message" => "Erreur : " . $e->getMessage()]);
@@ -77,7 +91,7 @@ class UtilisateurController
         }
 
         try {
-            // 1. Instancier l'AdressePostale depuis les données reçues
+
             $adresseData = $data['adresse_postale'];
             $adresse = new AdressePostale(
                 $adresseData['street'] ?? '',
@@ -95,7 +109,7 @@ class UtilisateurController
                 $data['nom'],
                 $data['telephone'],
                 $adresse,
-                true, // is_actif par défaut
+                true,
                 (int)$data['role_id']
             );
 

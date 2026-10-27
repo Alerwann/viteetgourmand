@@ -89,7 +89,7 @@ export default function CreateCompte() {
     }
 
     //test de l'existance d'un compte avec le mail (alerte à améliorer)
-    const chekExistance = !allUtilisateur.some(
+    const chekExistance = allUtilisateur.some(
       (utilisateurs) => utilisateurs.email === utilisateur.email,
     );
     if (chekExistance) {

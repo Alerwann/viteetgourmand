@@ -6,6 +6,8 @@ use App\Entity\Utilisateur;
 use App\Entity\AdressePostale;
 use PDO;
 
+require_once __DIR__ . '/UserRepositoryInterface.php';
+
 class SqlUserRepository implements UserRepositoryInterface
 {
     private PDO $db;
@@ -17,7 +19,7 @@ class SqlUserRepository implements UserRepositoryInterface
 
     public function findById(int $id): ?Utilisateur
     {
-        $stmt = $this->db->prepare("SELECT * FROM UTILISATEUR WHERE utilisateur_id = :id");
+        $stmt = $this->db->prepare("SELECT * FROM utilisateur WHERE utilisateur_id = :id");
         $stmt->execute(['id' => $id]);
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -26,7 +28,7 @@ class SqlUserRepository implements UserRepositoryInterface
 
     public function findByEmail(string $email): ?Utilisateur
     {
-        $stmt = $this->db->prepare("SELECT * FROM UTILISATEUR WHERE email = :email");
+        $stmt = $this->db->prepare("SELECT * FROM utilisateur WHERE email = :email");
         $stmt->execute(['email' => $email]);
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -35,30 +37,29 @@ class SqlUserRepository implements UserRepositoryInterface
 
     public function findAll(): array
     {
-        $stmt = $this->db->query("SELECT * FROM UTILISATEUR");
+        $stmt = $this->db->query("SELECT * FROM utilisateur");
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         $users = [];
         foreach ($rows as $data) {
             $users[] = $this->hydrate($data);
         }
+
         return $users;
     }
 
-    public function save(Utilisateur $utilisateur): int
+    public function save(Utilisateur $utilisateur): void
     {
         $adresse = $utilisateur->getAdressePostal();
 
         if ($utilisateur->getUtilisateurID() === null) {
             // INSERT (Création)
-            $stmt = $this->db->prepare("
-                INSERT INTO UTILISATEUR (email, password, prenom, nom, telephone, is_actif, role_id, numero_rue, street, ville, code_postal, pays) 
+            $stmt = $this->db->prepare("INSERT INTO utilisateur (email, password, prenom, nom, telephone, is_actif, role_id, numero_rue, street, ville, code_postal, pays) 
                 VALUES (:email, :password, :prenom, :nom, :telephone, :is_actif, :role_id, :numero_rue, :street, :ville, :code_postal, :pays)
             ");
         } else {
             // UPDATE (Mise à jour)
-            $stmt = $this->db->prepare("
-                UPDATE UTILISATEUR SET 
+            $stmt = $this->db->prepare("UPDATE utilisateur SET 
                     email = :email, password = :password, prenom = :prenom, nom = :nom, 
                     telephone = :telephone, is_actif = :is_actif, role_id = :role_id, 
                     numero_rue = :numero_rue, street = :street, ville = :ville, 
@@ -87,36 +88,34 @@ class SqlUserRepository implements UserRepositoryInterface
         }
 
         $stmt->execute($params);
-
-        return $params['id'];
     }
 
     public function delete(int $id): void
     {
-        $stmt = $this->db->prepare("DELETE FROM UTILISATEUR WHERE utilisateur_id = :id");
+        $stmt = $this->db->prepare("DELETE FROM utilisateur WHERE utilisateur_id = :id");
         $stmt->execute(['id' => $id]);
     }
 
     private function hydrate(array $data): Utilisateur
     {
         $adresse = new AdressePostale(
-            $data['street'] ?? '',
-            $data['ville'] ?? '',
-            $data['pays'] ?? '',
-            $data['numero_rue'] ?? null,
-            $data['code_postal'] ?? null
+            street: $data['street'],
+            ville: $data['ville'],
+            pays: $data['pays'],
+            numero_rue: (int)$data['numero_rue'] ?? null,
+            code_postal: (int)$data['code_postal'] ?? null
         );
 
         return Utilisateur::fromDataBase(
-            $data['email'],
-            $data['password'],
-            $data['prenom'],
-            $data['nom'],
-            $data['telephone'],
-            $adresse,
-            (bool)$data['is_actif'],
-            (int)$data['role_id'],
-            (int)$data['utilisateur_id']
+            email: $data['email'],
+            password: $data['password'],
+            prenom: $data['prenom'],
+            nom: $data['nom'],
+            telephone: $data['telephone'],
+            adresse_postale: $adresse,
+            is_actif: (bool)$data['is_actif'],
+            role_id: (int)$data['role_id'],
+            utilisateur_id: (int)$data['utilisateur_id'] ?? null
         );
     }
 }
