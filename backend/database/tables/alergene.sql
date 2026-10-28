@@ -4,9 +4,3 @@ CREATE TABLE IF NOT EXISTS alergene(
     alergene_nom VARCHAR(50) NOT NULL
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO alergene(alergene_nom) VALUES
-('Fruits de mer'),
-('Fruits à coque'),
-('Lactose'),
-('Gluten'),
-('arachide');

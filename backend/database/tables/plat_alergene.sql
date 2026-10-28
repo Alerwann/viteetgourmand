@@ -7,4 +7,3 @@ CREATE TABLE plat_alergene(
     CONSTRAINT fk_plat_alergene_plat FOREIGN KEY (plat_id) REFERENCES plat(plat_id) ON DELETE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO plat_alergene VALUES(1,2),(1,3),(2,1);

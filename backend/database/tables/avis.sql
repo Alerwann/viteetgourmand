@@ -10,10 +10,3 @@ CREATE TABLE IF NOT EXISTS avis(
     CONSTRAINT uk_commande_avis UNIQUE (commande_id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO avis(note, description, status, commande_id) VALUES
-(5, 'Super repas pour notre événement, tout le monde s est régalé !', 'publie', 1),
-(4, 'Très bonne prestation, livraison ponctuelle.', 'publie', 2),
-(1, 'Problème lors de la livraison, le repas est arrivé froid.', 'refuse', 3),
-(5, 'Super repas pour notre événement, tout le monde s est régalé !', 'publie', 4),
-(3, 'Très bonne prestation, livraison ponctuelle.', 'publie', 5),
-(2, 'Problème lors de la livraison, le repas est arrivé froid.', 'refuse', 6);

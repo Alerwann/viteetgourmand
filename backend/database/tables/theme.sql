@@ -4,8 +4,3 @@ CREATE TABLE IF NOT EXISTS theme(
     theme_nom VARCHAR(50) NOT NULL
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO theme(theme_nom) VALUES
-('Classique'),
-('Noël'),
-('Pâques'),
-('Événement');

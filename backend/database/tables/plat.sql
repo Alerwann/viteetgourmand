@@ -6,7 +6,3 @@ CREATE TABLE plat(
     photo BLOB NOT NULL
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO plat(plat_nom,type_plat,photo) VALUES
-('plat1','Entrée',X''),
-('plat2','Plat',X''),
-('dessert','Dessert',X'');
