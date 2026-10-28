@@ -24,20 +24,7 @@ class SqlAvisRepository implements AvisRepositoryInterface
     public function findAll(): array
     {
         $stmt = $this->pdo->query("SELECT avis_id, description, status,note , commande_id FROM avis");
-        $listAvis = [];
-
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-
-            $avisObj = new Avis(
-                avis_id: (int) $row['avis_id'],
-                description: $row['description'],
-                status: $row['status'],
-                note: (int)$row['note'],
-                commande_id: (int)$row['commande_id']
-            );
-
-            $listAvis[] = $avisObj->toArray();
-        }
+        $listAvis = $this->hydrateAvis($stmt);
         return $listAvis;
     }
 
