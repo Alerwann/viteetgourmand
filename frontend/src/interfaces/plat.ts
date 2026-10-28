@@ -2,7 +2,7 @@
 
 export interface Plat {
   plat_id: number;
-  nom_plat: string;
+  plat_nom: string;
   type_plat: string;
   photo: string;
 }

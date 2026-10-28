@@ -1,30 +1,24 @@
 <?php
 
+namespace App\Controller;
+
+use App\Entity\Plat;
+use App\Enum\TypePlat;
+use App\Repository\PlatRepositoryInterface;
+
 class PlatController
 {
-    private PDO $pdo;
+    private PlatRepositoryInterface $platRepo;
 
-    public function __construct(PDO $pdo)
+    public function __construct(PlatRepositoryInterface $platRepo)
     {
-        $this->pdo = $pdo;
+        $this->platRepo = $platRepo;
     }
 
     public function getAllPlat()
     {
         try {
-            $stmt = $this->pdo->query("SELECT plat_id, nom_plat, type_plat,photo FROM plat");
-
-            $plats = [];
-            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $platArray = [
-                    "plat_id" => $row['plat_id'],
-                    "nom_plat" => $row['nom_plat'],
-                    "type_plat" => $row['type_plat'],
-                    "photo" => 'data:image/jpeg;base64,' . base64_encode($row['photo'])
-                ];
-
-                $plats[] = $platArray;
-            }
+            $plats = $this->platRepo->getAll();
 
             http_response_code(200);
             header('Content-Type: application/json');
@@ -37,23 +31,17 @@ class PlatController
 
     public function getPlatByType()
     {
-        $type = isset($_GET['type']) ? $_GET['type'] : "AUCUN";
+        if (isset($_GET['type'])) {
+            $type = $_GET['type'];
+        } else {
+            http_response_code(400);
+            echo json_encode(["message" => "Données incomplètes."]);
+            return;
+        }
+
+
         try {
-            $stmt = $this->pdo->prepare("SELECT plat_id,nom_plat,type_plat,photo FROM plat WHERE type_plat= :type_plat");
-            $stmt->bindValue(':type_plat', $type->value, PDO::PARAM_STR);
-            $stmt->execute();
-
-            $plats = [];
-            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $platArray = [
-                    "plat_id" => $row['plat_id'],
-                    "nom_plat" => $row['nom_plat'],
-                    "type_plat" => $row['type_plat'],
-                    "photo" => $row['photo']
-                ];
-
-                $plats[] = $platArray;
-            }
+            $plats = $this->platRepo->getByType($type);
             http_response_code(200);
             echo json_encode($plats);
         } catch (Exception $e) {
@@ -62,21 +50,42 @@ class PlatController
         }
     }
 
-    public function createPlat()
+    public function getById(): void
     {
-
-        $nom_plat = $_POST['nom_plat'] ?? null;
-        $type_plat = $_POST['type_plat'] ?? null;
-
-        $allowedTypes = ["Entrée", "Plat", "Dessert"];
-
-        if (!in_array('type_plat', $allowedTypes, true)) {
+        if (isset($_GET['id'])) {
+            $id = $_GET['id'];
+        } else {
             http_response_code(400);
-            echo json_encode(["message" => "Type de plat invalide."]);
-            exit;
+            echo json_encode(["message" => "Données incomplètes."]);
+            return;
         }
 
-        if (!$nom_plat || !$type_plat || !isset($_FILES['photo'])) {
+
+        try {
+            $plats = $this->platRepo->getOne($id);
+            http_response_code(200);
+            echo json_encode($plats);
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode(["message" => "Erreur : " . $e->getMessage()]);
+        }
+    }
+
+    public function save()
+    {
+
+        $plat_nom = $_POST['plat_nom'] ?? null;
+        $type_plat = $_POST['type_plat'] ?? null;
+        $alergenes = $_POST['alergenes'] ?? [];
+        $plat_id = $_POST['plat_id'] ?? \null;
+
+        $typeEnum = TypePlat::tryFrom($type_plat);
+
+        if ($typeEnum === null) {
+            throw new \InvalidArgumentException("Statut invalide : " . $type_plat);
+        }
+
+        if (!$plat_nom || !$type_plat || !isset($_FILES['photo'])) {
             http_response_code(400);
             echo json_encode(["message" => "Données incomplètes (nom, type, photo)."]);
             exit; // Arrête l'exécution ici
@@ -95,21 +104,23 @@ class PlatController
             $imageData = fread($fp, filesize($fileTmpPath));
             fclose($fp);
 
-            $stmt = $this->pdo->prepare("INSERT INTO plat (nom_plat, type_plat, photo) VALUES (:nom_plat, :type_plat, :photo)");
+            $plat = new Plat(
+                plat_id: $plat_id,
+                plat_nom: $plat_nom,
+                type_plat: $type_plat,
+                photo: $imageData,
+                alergenes: $alergenes
+            );
 
-            $stmt->bindValue(':nom_plat', $nom_plat, \PDO::PARAM_STR);
-            $stmt->bindValue(':type_plat', $type_plat, \PDO::PARAM_STR);
-            $stmt->bindParam(':photo', $imageData, \PDO::PARAM_LOB);
+            $id = $this->platRepo->save($plat);
 
-            $stmt->execute();
 
             http_response_code(201);
             echo json_encode([
                 "message" => "Plat créé avec succès !",
-                "plat_id" => (int) $this->pdo->lastInsertId()
+                "plat_id" => $id
             ]);
-            exit; // STOppe net le script pour renvoyer un JSON pur
-
+            exit;
         } catch (\Exception $e) {
             http_response_code(500);
             echo json_encode(["message" => "Erreur : " . $e->getMessage()]);
@@ -117,33 +128,22 @@ class PlatController
         }
     }
 
-    public function updatePlat()
+    public function delete()
     {
-        $data = json_decode(file_get_contents("php://input"), true);
-
-        if (isset($data) || isset($data['nom_plat'], $data['type_plat'], $data['photo'])) {
+        if (isset($_GET['id'])) {
+            $id = $_GET['id'];
+        } else {
             http_response_code(400);
-            echo json_encode(["message" => "Données incomplètes ( nom, type, photo)."]);
+            echo json_encode(["message" => "Données incomplètes."]);
             return;
         }
 
+
         try {
-            $query = "UPDATE plat SET  type_plat = :type_plat, photo = :photo WHERE nom_plat = :nom_plat";
-            $stmt = $this->pdo->prepare($query);
-            $stmt->execute([
-                ':nom_plat'      => $data['nom_plat'],
-                ':type_plat' => $data['type_plat'],
-                ':photo' => $data['photo']
-            ]);
-
-
+            $this->platRepo->delete($id);
             http_response_code(200);
-            echo json_encode([
-                "message" => "Horaire mis à jour avec succès !",
-                "jour" => $data['jour']
-            ]);
+            echo json_encode(["message" => "Plat supprimé"]);
         } catch (Exception $e) {
-
             http_response_code(500);
             echo json_encode(["message" => "Erreur : " . $e->getMessage()]);
         }

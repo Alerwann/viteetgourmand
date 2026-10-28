@@ -242,7 +242,7 @@ export default function MenuCreateFor() {
                 </option>
                 {listPlatsByType[typeDish]?.map((plat) => (
                   <option value={plat.plat_id} key={plat.plat_id}>
-                    {plat.nom_plat}
+                    {plat.plat_nom}
                   </option>
                 ))}
               </select>

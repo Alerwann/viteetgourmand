@@ -6,7 +6,7 @@ import CustomButton from "../global/button_global";
 
 export default function PlatCreateForm() {
   const [alergenes, setAlergenes] = useState<alergene[]>([]);
-  const [nom_plat, setNomPlat] = useState<string>("");
+  const [plat_nom, setNomPlat] = useState<string>("");
   const [type_plat, setTypePlat] = useState<string>("");
   const [photo, setPhoto] = useState<File | null>(null);
   const [alergene_array, setAlergeneArray] = useState<alergene[]>([]);
@@ -56,7 +56,7 @@ export default function PlatCreateForm() {
 
     try {
       const formData = new FormData();
-      formData.append("nom_plat", nom_plat);
+      formData.append("plat_nom", plat_nom);
       formData.append("type_plat", type_plat);
       if (photo) {
         formData.append("photo", photo);
@@ -109,7 +109,7 @@ export default function PlatCreateForm() {
         <label htmlFor="nomPlat">Nom du plat</label>
         <input
           type="text"
-          value={nom_plat}
+          value={plat_nom}
           id="nomPlat"
           onChange={(e) => setNomPlat(e.target.value)}
         />

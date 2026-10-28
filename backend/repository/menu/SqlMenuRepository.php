@@ -36,7 +36,7 @@ class SqlMenuRepository implements MenuRepositoryInterface
             r.nom_regime,   
             t.theme_nom,
             p.plat_id,
-            p.nom_plat,
+            p.plat_nom,
             p.type_plat,
             p.photo,
             a.alergene_id,
@@ -67,12 +67,12 @@ class SqlMenuRepository implements MenuRepositoryInterface
             m.description,
             m.quantite_restante,
             m.note_particuliere,
-            m.regime_id,   -- Ajouté pour l'objet
-            m.theme_id,    -- Ajouté pour l'objet
+            m.regime_id,  
+            m.theme_id,    
             r.nom_regime,   
             t.theme_nom,
             p.plat_id,
-            p.nom_plat,
+            p.plat_nom,
             p.type_plat,
             p.photo,
             a.alergene_id,
@@ -167,7 +167,7 @@ class SqlMenuRepository implements MenuRepositoryInterface
                 if (!isset($menusData[$menuId]['plats_details'][$platId])) {
                     $menusData[$menuId]['plats_details'][$platId] = [
                         "plat_id" => $platId,
-                        "nom" => $row['nom_plat'],
+                        "nom" => $row['plat_nom'],
                         "type_plat" => $row['type_plat'],
                         "photo" => $row['photo'] ? 'data:image/jpeg;base64,' . base64_encode($row['photo']) : null,
                         "alergenes" => []

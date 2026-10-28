@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use App\Enum\StatusAvis;
 
-require_once __DIR__ . '/Enum_Avis.php';
+require_once __DIR__ . '/Enum/Enum_Avis.php';
 
 class Avis
 {

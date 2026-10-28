@@ -1,8 +1,9 @@
 <?php
 
 
+
 header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Methods: GET, POST,DELETE, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
 
@@ -12,9 +13,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 require_once __DIR__ . '/../../config/db_init.php';
+require_once __DIR__ . '/../../repository/plat/PlatRepositoryInterface.php';
+require_once __DIR__ . '/../../repository/plat/SqlPlatRepository.php';
 require_once __DIR__ . '/../../controller/plat_controller.php';
 
-$controller = new PlatController($pdo);
+$platRepo = new App\Repository\SqlPlatRepository($pdo);
+$controller = new app\Controller\PlatController($platRepo);
 
 $method = $_SERVER['REQUEST_METHOD'];
 
@@ -22,16 +26,20 @@ switch ($method) {
     case 'GET':
         if (isset($_GET['type'])) {
             $controller->getPlatByType();
+        } else if (isset($_GET['id'])) {
+            $controller->getById();
         } else {
             $controller->getAllPlat();
         }
 
         break;
-
     case 'POST':
-        $controller->createPlat();
-    case 'PUT':
-        $controller->updatePlat();
+        $controller->save();
+        break;
+
+    case 'DELETE':
+        $controller->delete();
+        break;
 
     default:
 

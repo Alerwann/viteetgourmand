@@ -11,7 +11,7 @@ class ContactRequestcontroller
 
     public function postRequest(): void
     {
-        error_log("✅ au moins tu es dans post");
+
         $data = json_decode(file_get_contents("php://input"), true);
 
         $title = trim($data['title'] ?? '');
