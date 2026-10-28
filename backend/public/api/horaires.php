@@ -1,5 +1,6 @@
 <?php
 
+use App\Repository\SqlHoraireRepository;
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type");
@@ -13,16 +14,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
+
+require_once __DIR__ . '/../../repository/Horaire/SqlHoraireRepository.php';
 require_once __DIR__ . '/../../config/db_init.php';
 require_once __DIR__ . '/../../controller/horaire_controller.php';
 
-$controller = new HoraireController($pdo);
+$horaireRepo = new SqlHoraireRepository($pdo);
+$controller = new APP\Controller\HoraireController($horaireRepo);
 
 $method = $_SERVER['REQUEST_METHOD'];
 
 switch ($method) {
     case 'GET':
-        $controller->getAll();
+        if (isset($_GET['id'])) {
+            $controller->getOne();
+        } else {
+            $controller->getAll();
+        }
         break;
 
     case 'PUT':

@@ -1,35 +1,25 @@
 <?php
 
+namespace App\Controller;
+
+use App\Repository\HoraireRepositoryInterface;
+
+
 require_once __DIR__ . '/../classes/Horaire.php';
 
 class HoraireController
 {
-    private PDO $pdo;
-
-
-    public function __construct(PDO $pdo)
+    private HoraireRepositoryInterface $horaireRepo;
+    public function __construct(HoraireRepositoryInterface $horaireRepo)
     {
-        $this->pdo = $pdo;
+        $this->horaireRepo = $horaireRepo;
     }
 
     public function getAll(): void
     {
 
         try {
-            $stmt = $this->pdo->query("SELECT horaire_id, jour, heure_ouverture, heure_fermeture FROM horaire");
-
-            $horaires = [];
-            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-
-                $horaireObj = new Horaire(
-                    horaire_id: (int) $row['horaire_id'],
-                    jour: $row['jour'],
-                    heure_ouverture: (int) $row['heure_ouverture'],
-                    heure_fermeture: (int) $row['heure_fermeture'],
-
-                );
-                $horaires[] = $horaireObj->toArray();
-            }
+            $horaires = $this->horaireRepo->getAll();
 
             http_response_code(200);
             echo json_encode($horaires);
@@ -39,7 +29,25 @@ class HoraireController
         }
     }
 
+    public function getOne(): void
+    {
+        if (!isset($_GET['id'])) {
+            http_response_code(400);
+            echo json_encode(["message" => "Données incomplètes."]);
+            return;
+        } else {
+            $id = $_GET['id'];
+        }
 
+        try {
+            $horaire = $this->horaireRepo->getOne($id);
+            http_response_code(200);
+            echo json_encode($horaire);
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode(["message" => "Erreur : " . $e->getMessage()]);
+        }
+    }
 
     public function updateHoraires(): void
     {
@@ -47,22 +55,22 @@ class HoraireController
         $data = json_decode(file_get_contents("php://input"), true);
 
 
-        if (empty($data) || !isset($data['jour'], $data['heure_ouverture'], $data['heure_fermeture'])) {
+        if (empty($data)) {
             http_response_code(400);
-            echo json_encode(["message" => "Données incomplètes (jour, heure d'ouverture, heure de fermeture)."]);
+            echo json_encode(["message" => "Données vide."]);
             return;
         }
 
+
         try {
-            $query = "UPDATE horaire SET  heure_ouverture = :ouverture, heure_fermeture = :fermeture WHERE jour = :jour";
-            $stmt = $this->pdo->prepare($query);
-            $stmt->execute([
-                ':jour'      => $data['jour'],
-                ':ouverture' => $data['heure_ouverture'],
-                ':fermeture' => $data['heure_fermeture']
-            ]);
-
-
+            foreach ($data as $horaire) {
+                if (!isset($horaire['horaire_id'], $horaire['jour'], $horaire['heure_ouverture'], $horaire['heure_fermeture'])) {
+                    http_response_code(400);
+                    echo json_encode(["message" => "Données incomplètes (jour, heure d'ouverture, heure de fermeture)."]);
+                    return;
+                }
+                $this->horaireRepo->updateHoraire($horaire);
+            }
             http_response_code(200);
             echo json_encode([
                 "message" => "Horaire mis à jour avec succès !",
