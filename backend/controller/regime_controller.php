@@ -82,7 +82,7 @@ class Regime_controller
         try {
             $this->regimeRepo->delete($regimeId);
             http_response_code(200);
-            echo json_encode(["message" => "Plat supprimé"]);
+            echo json_encode(["message" => "Régime supprimé"]);
         } catch (\Throwable $th) {
             http_response_code(500);
             echo json_encode(["message" => "Erreur serveur : " . $th->getMessage()]);

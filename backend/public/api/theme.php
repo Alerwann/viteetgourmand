@@ -1,7 +1,7 @@
 <?php
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type");
-header("Access-Control-Allow-Methods: GET, OPTIONS");
+header("Access-Control-Allow-Methods: GET,POST,DELETE, OPTIONS");
 header("Content-Type: application/json; charset=utf8mb4");
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -11,9 +11,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 require_once __DIR__ . '/../../config/db_init.php';
 require_once __DIR__ . '/../../controller/theme_controller.php';
+require_once __DIR__ . '/../../repository/theme/SqlThemeRepository.php';
+require_once __DIR__ . '/../../repository/theme/ThemeRepositoryInterface.php';
 
-
-$controller = new Theme_controller($pdo);
+$themeRepo = new App\Repository\SqlThemeRepository($pdo);
+$controller = new App\Controller\Theme_controller($themeRepo);
 
 $method = $_SERVER['REQUEST_METHOD'];
 
@@ -28,6 +30,12 @@ switch ($method) {
             $controller->getAllTheme();
         }
 
+        break;
+    case 'POST':
+        $controller->save();
+        break;
+    case 'DELETE':
+        $controller->delete();
         break;
 
     default:
