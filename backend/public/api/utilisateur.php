@@ -1,4 +1,12 @@
 <?php
+
+require_once __DIR__ . '/../../vendor/autoload.php';
+
+use \App\Repository\Users\SqlUserRepository;
+use App\Services\AuthService;
+use App\Services\MailerService;
+use App\Controller\UtilisateurController;
+
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Access-Control-Allow-Methods: POST, GET, PUT, OPTIONS");
@@ -9,21 +17,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
-// 1. Inclusion des fichiers nécessaires (ou via Composer)
 require_once __DIR__ . '/../../config/db_init.php';
-require_once __DIR__ . '/../../repository/users/SqlUserRepositoryInterface.php';
-require_once __DIR__ . '/../../service/auth_service.php';
-require_once __DIR__ . '/../../controller/utilisateur_controller.php';
 
-// 2. Initialisation des dépendances
-$userRepository = new \App\Repository\SqlUserRepository($pdo);
-$authService = new \App\Services\AuthService($pdo);
 
-// 3. Injection dans le contrôleur
-$controller = new \App\Controller\UtilisateurController($userRepository, $authService);
+$userRepository = new SqlUserRepository($pdo);
+$authService = new AuthService($pdo);
+$mailerService = new MailerService();
+
+
+$controller = new UtilisateurController($userRepository, $authService, $mailerService);
 
 $method = $_SERVER['REQUEST_METHOD'];
-
 
 switch ($method) {
     case 'GET':
@@ -35,20 +39,16 @@ switch ($method) {
         break;
 
     case 'POST':
-
         if (isset($_GET['token'])) {
             $controller->updatePassword();
         } else if (isset($_GET['id'])) {
             $controller->updateOne();
-        }
-        // Sinon, c'est une création
-        else {
+        } else {
             $controller->createUtilisateur();
         }
         break;
 
     case 'PUT':
-
         if (isset($_GET['id'])) {
             $controller->updateOne();
         }

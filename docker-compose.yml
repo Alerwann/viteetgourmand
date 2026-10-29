@@ -18,6 +18,7 @@ services:
     build: ./backend
     volumes:
       - ./backend:/var/www/html
+      - /var/www/html/vendor
     environment:
       MYSQL_HOST: mysql
       MONGO_HOST: mongodb

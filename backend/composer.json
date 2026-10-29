@@ -1,0 +1,16 @@
+{
+  "name": "viteetgourmand/backend",
+  "description": "Backend PHP pour mon application",
+  "require": {
+    "phpmailer/phpmailer": "^6.9"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\Controller\\": "controller/",
+      "\\App\\Repository\\": "repository/",
+      "App\\Entity\\": "Entity/",
+      "App\\Enum\\": "Enum/",
+      "App\\Services\\": "service/"
+    }
+  }
+}

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repository;
+namespace App\Repository\Users;
 
 use App\Entity\Utilisateur;
 

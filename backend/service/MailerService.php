@@ -9,6 +9,20 @@ use PHPMailer\PHPMailer\Exception;
 
 class MailerService
 {
+
+    private function createMailer(): PHPMailer
+    {
+        $mail = new PHPMailer(true);
+        $mail->isSMTP();
+        $mail->Host = $_ENV['MAIL_HOST'] ?? 'mailpit';
+        $mail->Port = (int)($_ENV['MAIL_PORT'] ?? 1025);
+        $mail->SMTPAuth = false;
+        $mail->setFrom('no-reply@mon-app.local', 'Mon Application');
+        $mail->isHTML(true);
+        return $mail;
+    }
+
+
     public function sendPasswordResetEmail(string $toEmail, string $resetLink): void
     {
         $mail = new PHPMailer(true);
@@ -34,5 +48,16 @@ class MailerService
         } catch (Exception $e) {
             throw new \Exception("L'e-mail n'a pas pu être envoyé. Erreur Mailer : {$mail->ErrorInfo}");
         }
+    }
+
+    public function sendWelcomeEmail(string $toEmail, string $prenom): void
+    {
+        $mail = $this->createMailer();
+        $mail->addAddress($toEmail);
+        $mail->Subject = 'Bienvenue sur Mon Application !';
+        $mail->Body    = "Bonjour $prenom,<br><br>Votre compte a été créé avec succès. Bienvenue parmi nous !<br><br>L'équipe.";
+        $mail->AltBody = "Bonjour $prenom, Votre compte a été créé avec succès. Bienvenue parmi nous !";
+
+        $mail->send();
     }
 }

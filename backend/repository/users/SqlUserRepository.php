@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Repository;
+namespace App\Repository\Users;
 
 use App\Entity\Utilisateur;
 use App\Entity\AdressePostale;
 use PDO;
 
-require_once __DIR__ . '/UserRepositoryInterface.php';
+
 
 class SqlUserRepository implements UserRepositoryInterface
 {

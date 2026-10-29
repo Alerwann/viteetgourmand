@@ -2,28 +2,26 @@
 
 namespace App\Controller;
 
-use App\Repository\UserRepositoryInterface;
+use App\Repository\Users\UserRepositoryInterface;
 use App\Services\AuthService;
+use App\Services\MailerService;
 use App\Entity\Utilisateur;
 use App\Entity\AdressePostale;
 
 
-
-require_once __DIR__ . '/../classes/Utilisateur.php';
-require_once __DIR__ . '/../classes/AdressePostale.php';
-require_once __DIR__ . '/../service/auth_service.php';
 
 class UtilisateurController
 {
 
     private AuthService $authService;
     private UserRepositoryInterface $userRepository;
+    private MailerService $mailer;
 
-
-    public function __construct(UserRepositoryInterface $userRepository, AuthService $authService)
+    public function __construct(UserRepositoryInterface $userRepository, AuthService $authService, MailerService $mailer)
     {
         $this->userRepository = $userRepository;
         $this->authService = $authService;
+        $this->mailer = $mailer;
     }
 
 
@@ -115,6 +113,12 @@ class UtilisateurController
 
 
             $this->userRepository->save($utilisateur);
+
+            try {
+                $this->mailer->sendWelcomeEmail($data['email'], $data['prenom']);
+            } catch (\Exception $mailException) {
+                error_log("Erreur envoi mail de bienvenue : " . $mailException->getMessage());
+            }
 
             http_response_code(201);
             echo json_encode([
