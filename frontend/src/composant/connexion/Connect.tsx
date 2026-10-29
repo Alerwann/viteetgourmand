@@ -97,7 +97,7 @@ export default function Connect_composant() {
             Mail ou mot de passe incorrect
           </span>
         )}
-        <a href="" className="">
+        <a href="/reinit" className="">
           Mot de passe oublié
         </a>
         <a href="/createcompte">Créer un compte</a>

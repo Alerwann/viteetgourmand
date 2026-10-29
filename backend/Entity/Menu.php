@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-class Menus
+class Menu
 {
     private ?int $menu_id;
     private string $title;

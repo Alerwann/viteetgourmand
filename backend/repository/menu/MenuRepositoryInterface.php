@@ -2,12 +2,12 @@
 
 namespace App\Repository\Menu;
 
-use App\Entity\Menus;
+use App\Entity\Menu;
 
 interface MenuRepositoryInterface
 {
-    public function findById(int $id): ?Menus;
+    public function findById(int $id): ?Menu;
     public function findAll(): array;
-    public function save(Menus $menu): int;
+    public function save(Menu $menu): int;
     public function delete(int $id): void;
 }

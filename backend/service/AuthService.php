@@ -125,7 +125,7 @@ class AuthService
                 ':utilisateur_id' => $userId
             ]);
         }
-        $resetLink = "http://localhost:5173/reset-password?token=" . $token;
+        $resetLink = "http://localhost:5173/reinit/" . $token;
         $this->mailer->sendPasswordResetEmail($user->getEmail(), $resetLink);
 
         return $token;

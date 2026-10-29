@@ -2,13 +2,12 @@
 
 namespace App\Repository\Menu;
 
-use App\Entity\Menus;
+use App\Entity\Menu;
 use App\Repository\Menu\MenuRepositoryInterface;
 use Override;
 use PDO;
 
-require_once __DIR__ . '/MenuRepositoryInterface.php';
-require_once __DIR__ . '/../../classes/Menus.php';
+
 
 class SqlMenuRepository implements MenuRepositoryInterface
 {
@@ -58,7 +57,7 @@ class SqlMenuRepository implements MenuRepositoryInterface
         return $menus;
     }
 
-    public function findById(int $menuId): ?Menus
+    public function findById(int $menuId): ?Menu
     {
         $sql = "SELECT 
             m.menu_id,
@@ -94,7 +93,7 @@ class SqlMenuRepository implements MenuRepositoryInterface
     }
 
 
-    public function save(Menus $menu): int
+    public function save(Menu $menu): int
     {
         $this->db->beginTransaction();
 
@@ -196,7 +195,7 @@ class SqlMenuRepository implements MenuRepositoryInterface
 
             $platIds = array_keys($data['plats_details']);
 
-            $menu = new Menus(
+            $menu = new Menu(
                 title: $data['title'],
                 nb_perso_min: $data['nombre_personne_minimum'],
                 prix_par_personne: $data['prix_par_personne'],

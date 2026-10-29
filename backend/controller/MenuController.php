@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\Menu\MenuRepositoryInterface;
-use App\Enum\Menu;
+use App\Entity\Menu;
 
 
 

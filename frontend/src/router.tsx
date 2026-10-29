@@ -9,6 +9,8 @@ import Menus_composant from "./composant/Menus/Menus";
 import MenuDetail from "./composant/Menus/Menu_detail";
 import Connect_composant from "./composant/connexion/Connect";
 import CreateCompte from "./composant/connexion/CreateCompte";
+import ReinitPassword from "./composant/connexion/ReinitPassword";
+import FormReinit from "./composant/connexion/FormReinit";
 
 const router = createBrowserRouter([
   {
@@ -42,6 +44,10 @@ const router = createBrowserRouter([
       // all
       { path: "connect", element: <Connect_composant /> },
       { path: "createcompte", element: <CreateCompte /> },
+
+      { path: "reinit", element: <ReinitPassword /> },
+
+      { path: "reinit/:token", element: <FormReinit /> },
     ],
   },
 ]);
