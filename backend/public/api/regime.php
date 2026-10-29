@@ -11,8 +11,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 require_once __DIR__ . '/../../config/db_init.php';
 require_once __DIR__ . '/../../controller/regime_controller.php';
+require_once __DIR__ . '/../../repository/regime/RegimeRepositoryInterface.php';
+require_once __DIR__ . '/../../repository/regime/SqlRegimeRepository.php';
 
-$controller = new regime_controller($pdo);
+$regimeRepo = new App\Repository\SqlRegimeRepository($pdo);
+$controller = new  App\Controller\Regime_controller($regimeRepo);
+
 
 $method = $_SERVER['REQUEST_METHOD'];
 
@@ -20,7 +24,12 @@ switch ($method) {
 
 
     case 'GET':
+        if (isset($_GET['id'])) {
+            $controller->getOne();
+        } else {
 
+            $controller->getAllRegime();
+        }
         $controller->getAllregime();
 
         break;

@@ -1,35 +1,103 @@
 <?php
+
+namespace App\Controller;
+
+use App\Repository\RegimeRepositoryInterface;
+use App\Entity\Regime;
+
+require_once __DIR__ . '/../classes/Regime.php';
+
 class Regime_controller
 {
-    private PDO $pdo;
+    private RegimeRepositoryInterface $regimeRepo;
 
-
-    public function __construct(PDO $pdo)
+    public function __construct(RegimeRepositoryInterface $regimeRepo)
     {
-        $this->pdo = $pdo;
+        $this->regimeRepo = $regimeRepo;
     }
 
     public function getAllRegime(): void
     {
         try {
-            $stmt = $this->pdo->query("SELECT  regime_id, nom_regime FROM regime");
+            $regimes = $this->regimeRepo->getAll();
+            http_response_code(200);
+            echo json_encode($regimes);
+        } catch (\InvalidArgumentException $e) {
+            http_response_code(400);
+            echo json_encode(["message" => $e->getMessage()]);
+        } catch (\Throwable $th) {
+            http_response_code(500);
+            echo json_encode(["message" => "Erreur serveur : " . $th->getMessage()]);
+        }
+    }
 
-            $regime = [];
+    public function getOne(): void
+    {
+        if (!isset($_GET['id'])) {
+            http_response_code(400);
+            echo json_encode(["message" => "Données incomplètes."]);
+            return;
+        } else {
+            $regimeId = $_GET['id'];
+        }
 
-            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-
-                $regimeObj = [
-                    'regime_id' => (int)$row['regime_id'],
-                    'nom_regime' => $row['nom_regime']
-                ];
-
-                $regime[] = $regimeObj;
-            }
+        try {
+            $regime = $this->regimeRepo->getOne($regimeId);
             http_response_code(200);
             echo json_encode($regime);
-        } catch (Exception $e) {
+        } catch (\InvalidArgumentException $e) {
+            http_response_code(400);
+            echo json_encode(["message" => $e->getMessage()]);
+        } catch (\Throwable $th) {
             http_response_code(500);
-            echo json_encode(["message" => "Erreur : " . $e->getMessage()]);
+            echo json_encode(["message" => "Erreur serveur : " . $th->getMessage()]);
+        }
+    }
+
+    public function save(): void
+    {
+        $data = json_decode(file_get_contents("php://input"), true);
+        if (empty($data) || !isset($data['nom_regime'])) {
+            http_response_code(400);
+            echo json_encode(["message" => "Données incomplètes."]);
+            return;
+        }
+        try {
+            $newRegime = new Regime(regime_id: $data['regime_id'] ?? \null, nom_regime: $data['nom_regime']);
+            $this->regimeRepo->save($newRegime);
+
+            http_response_code(201);
+            echo json_encode([
+                "message" => "Régime mis à jour avec succès !"
+            ]);
+        } catch (\InvalidArgumentException $e) {
+            http_response_code(400);
+            echo json_encode(["message" => $e->getMessage()]);
+        } catch (\Throwable $th) {
+            http_response_code(500);
+            echo json_encode(["message" => "Erreur serveur : " . $th->getMessage()]);
+        }
+    }
+
+    public function delete(): void
+    {
+        if (!isset($_GET['id'])) {
+            http_response_code(400);
+            echo json_encode(["message" => "Données incomplètes."]);
+            return;
+        } else {
+            $regimeId = $_GET['id'];
+        }
+        try {
+            $this->regimeRepo->delete($regimeId);
+            http_response_code(200);
+            echo json_encode(["message" => "Plat supprimé"]);
+        } catch (\InvalidArgumentException $e) {
+            http_response_code(400);
+            echo json_encode(["message" => $e->getMessage()]);
+        } catch (\Throwable $th) {
+            http_response_code(500);
+            echo json_encode(["message" => "Erreur serveur : " . $th->getMessage()]);
         }
     }
 }

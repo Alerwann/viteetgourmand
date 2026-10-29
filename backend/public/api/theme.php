@@ -12,6 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 require_once __DIR__ . '/../../config/db_init.php';
 require_once __DIR__ . '/../../controller/theme_controller.php';
 
+
 $controller = new Theme_controller($pdo);
 
 $method = $_SERVER['REQUEST_METHOD'];

@@ -69,22 +69,22 @@ class SqlUserRepository implements UserRepositoryInterface
         }
 
         $params = [
-            'email' => $utilisateur->getEmail(),
-            'password' => $utilisateur->getPasswordHash(),
-            'prenom' => $utilisateur->getPrenom(),
-            'nom' => $utilisateur->getNom(),
-            'telephone' => $utilisateur->getTel(),
-            'is_actif' => $utilisateur->getIsActif() ? 1 : 0,
-            'role_id' => $utilisateur->getRoleId(),
-            'numero_rue' => $adresse->getNumRue(),
-            'street' => $adresse->getStreet(),
-            'ville' => $adresse->getVille(),
-            'code_postal' => $adresse->getCodePostal(),
-            'pays' => $adresse->getPays(),
+            ':email' => $utilisateur->getEmail(),
+            ':password' => $utilisateur->getPasswordHash(),
+            ':prenom' => $utilisateur->getPrenom(),
+            ':nom' => $utilisateur->getNom(),
+            ':telephone' => $utilisateur->getTel(),
+            ':is_actif' => $utilisateur->getIsActif() ? 1 : 0,
+            ':role_id' => $utilisateur->getRoleId(),
+            ':numero_rue' => $adresse->getNumRue(),
+            ':street' => $adresse->getStreet(),
+            ':ville' => $adresse->getVille(),
+            ':code_postal' => $adresse->getCodePostal(),
+            ':pays' => $adresse->getPays(),
         ];
 
         if ($utilisateur->getUtilisateurID() !== null) {
-            $params['id'] = $utilisateur->getUtilisateurID();
+            $params[':id'] = $utilisateur->getUtilisateurID();
         }
 
         $stmt->execute($params);
@@ -93,7 +93,7 @@ class SqlUserRepository implements UserRepositoryInterface
     public function delete(int $id): void
     {
         $stmt = $this->db->prepare("DELETE FROM utilisateur WHERE utilisateur_id = :id");
-        $stmt->execute(['id' => $id]);
+        $stmt->execute([':id' => $id]);
     }
 
     private function hydrate(array $data): Utilisateur
