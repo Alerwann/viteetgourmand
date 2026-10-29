@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Plat;
 use App\Enum\TypePlat;
-use App\Repository\PlatRepositoryInterface;
+use App\Repository\Plat\PlatRepositoryInterface;
 
 class PlatController
 {

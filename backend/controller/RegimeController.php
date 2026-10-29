@@ -2,12 +2,12 @@
 
 namespace App\Controller;
 
-use App\Repository\RegimeRepositoryInterface;
+use App\Repository\Regime\RegimeRepositoryInterface;
 use App\Entity\Regime;
 
-require_once __DIR__ . '/../classes/Regime.php';
 
-class Regime_controller
+
+class RegimeController
 {
     private RegimeRepositoryInterface $regimeRepo;
 

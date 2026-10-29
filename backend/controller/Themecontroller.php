@@ -2,12 +2,12 @@
 
 namespace App\Controller;
 
-use App\Repository\ThemeRepositoryInterface;
+use App\Repository\Theme\ThemeRepositoryInterface;
 use App\Entity\Theme;
 
-require_once __DIR__ . '/../classes/Theme.php';
 
-class Theme_controller
+
+class ThemeController
 {
     private ThemeRepositoryInterface $themeRepo;
 

@@ -2,10 +2,10 @@
 
 namespace App\Controller;
 
-use App\Repository\HoraireRepositoryInterface;
+use App\Repository\Horaire\HoraireRepositoryInterface;
 
 
-require_once __DIR__ . '/../classes/Horaire.php';
+
 
 class HoraireController
 {

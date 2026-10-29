@@ -1,4 +1,11 @@
 <?php
+
+require_once __DIR__ . '/../../vendor/autoload.php';
+
+use App\Repository\Menu\SqlMenuRepository;
+use App\Controller\MenuController;
+
+
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Access-Control-Allow-Methods: GET,POST, OPTIONS");
@@ -10,13 +17,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 require_once __DIR__ . '/../../config/db_init.php';
-require_once __DIR__ . '/../../repository/menu/SqlMenuRepository.php';
-require_once __DIR__ . '/../../controller/menus_controller.php';
-
-$menuRepository = new \App\Repository\SqlMenuRepository($pdo);
 
 
-$controller = new \App\Controller\MenuController($menuRepository);
+$menuRepository = new SqlMenuRepository($pdo);
+$controller = new MenuController($menuRepository);
 
 
 $method = $_SERVER['REQUEST_METHOD'];

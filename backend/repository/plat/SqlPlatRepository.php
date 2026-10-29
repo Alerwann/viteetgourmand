@@ -1,17 +1,15 @@
 <?php
 
-namespace App\Repository;
+namespace App\Repository\Plat;
 
-use App\Repository\PlatRepositoryInterface;
+use App\Repository\Plat\PlatRepositoryInterface;
 use App\Entity\Plat;
 use App\Enum\TypePlat;
 use Override;
 use PDOStatement;
 use PDO;
 
-require_once __DIR__ . '/PlatRepositoryInterface.php';
-require_once __DIR__ . '/../../classes/Plat.php';
-require_once __DIR__ . '/../../classes/Enum/Enum_type_plat.php';
+
 
 
 class SqlPlatRepository implements PlatRepositoryInterface

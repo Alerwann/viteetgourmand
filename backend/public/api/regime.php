@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/../../vendor/autoload.php';
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type");
@@ -11,12 +12,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 require_once __DIR__ . '/../../config/db_init.php';
-require_once __DIR__ . '/../../controller/regime_controller.php';
-require_once __DIR__ . '/../../repository/regime/RegimeRepositoryInterface.php';
-require_once __DIR__ . '/../../repository/regime/SqlRegimeRepository.php';
 
-$regimeRepo = new App\Repository\SqlRegimeRepository($pdo);
-$controller = new  App\Controller\Regime_controller($regimeRepo);
+
+$regimeRepo = new SqlRegimeRepository($pdo);
+$controller = new  RegimeController($regimeRepo);
 
 
 $method = $_SERVER['REQUEST_METHOD'];

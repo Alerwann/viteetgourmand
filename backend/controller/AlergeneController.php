@@ -1,13 +1,15 @@
 <?php
 
-use App\Repository\AlergeneRepositoryInterface;
+namespace App\Controller;
+
+use App\Repository\Alergene\AlergeneRepositoryInterface;
 use App\Entity\Alergene;
 
-require_once __DIR__ . '/../classes/Alergene.php';
+
 
 class AlergeneController
 {
-    public AlergeneRepositoryInterface $alergenerepo;
+    private AlergeneRepositoryInterface $alergenerepo;
 
     public function __construct(AlergeneRepositoryInterface $alergenerepo)
     {

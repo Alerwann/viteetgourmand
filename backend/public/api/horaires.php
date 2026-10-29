@@ -1,6 +1,9 @@
 <?php
 
-use App\Repository\SqlHoraireRepository;
+require_once __DIR__ . '/../../vendor/autoload.php';
+
+use App\Repository\Horaire\SqlHoraireRepository;
+use App\Controller\HoraireController;
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type");
@@ -15,12 +18,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 
-require_once __DIR__ . '/../../repository/Horaire/SqlHoraireRepository.php';
+
 require_once __DIR__ . '/../../config/db_init.php';
-require_once __DIR__ . '/../../controller/horaire_controller.php';
+
 
 $horaireRepo = new SqlHoraireRepository($pdo);
-$controller = new APP\Controller\HoraireController($horaireRepo);
+$controller = new HoraireController($horaireRepo);
 
 $method = $_SERVER['REQUEST_METHOD'];
 

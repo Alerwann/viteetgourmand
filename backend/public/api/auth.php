@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . '/../../vendor/autoload.php';
+
 use App\Controllers\AuthController;
 
 header("Access-Control-Allow-Origin: *");
@@ -13,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 require_once __DIR__ . '/../../config/db_init.php';
-require_once __DIR__ . '/../../controller/auth_controller.php';
+
 
 $controller = new AuthController($pdo);
 

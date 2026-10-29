@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Repository;
+namespace App\Repository\Menu;
 
 use App\Entity\Menus;
+use App\Repository\Menu\MenuRepositoryInterface;
 use Override;
 use PDO;
 

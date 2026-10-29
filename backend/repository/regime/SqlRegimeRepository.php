@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Repository;
+namespace App\Repository\Regime;
 
 use App\Entity\Regime;
 use PDO;
 use PDOStatement;
-use App\Repository\RegimeRepositoryInterface;
+use App\Repository\Regime\RegimeRepositoryInterface;
 
-require_once __DIR__ . '/../../classes/Regime.php';
-require_once __DIR__ . '/../../repository/regime/RegimeRepositoryInterface.php';
+
 
 class SqlRegimeRepository implements RegimeRepositoryInterface
 {

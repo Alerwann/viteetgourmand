@@ -2,7 +2,8 @@
 
 namespace App\Controller;
 
-use App\Repository\MenuRepositoryInterface;
+use App\Repository\Menu\MenuRepositoryInterface;
+use App\Enum\Menu;
 
 
 

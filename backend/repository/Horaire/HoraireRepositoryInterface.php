@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repository;
+namespace App\Repository\Horaire;
 
 use App\Entity\Horaire;
 

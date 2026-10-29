@@ -1,4 +1,8 @@
 <?php
+require_once __DIR__ . '/../../vendor/autoload.php';
+
+use App\Controller\ContactRequestcontroller;
+
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Access-Control-Allow-Methods: POST, OPTIONS");
@@ -10,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 require_once __DIR__ . '/../../config/db_init.php';
-require_once __DIR__ . '/../../controller/contact_request_controller.php';
+
 
 $controller = new ContactRequestcontroller($pdo);
 

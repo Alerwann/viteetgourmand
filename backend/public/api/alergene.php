@@ -1,6 +1,9 @@
 <?php
 
-use App\Repository\SqlAlergeneRepository;
+require_once __DIR__ . '/../../vendor/autoload.php';
+
+use App\Repository\Alergene\SqlAlergeneRepository;
+use App\Controller\AlergeneController;
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type");
@@ -13,8 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 require_once __DIR__ . '/../../config/db_init.php';
-require_once __DIR__ . '/../../repository/alergene/AlergeneRepositoryInterface.php';
-require_once __DIR__ . '/../../controller/alergene_controller.php';
+
 
 $alergeneRepo = new SqlAlergeneRepository($pdo);
 $controller = new AlergeneController($alergeneRepo);

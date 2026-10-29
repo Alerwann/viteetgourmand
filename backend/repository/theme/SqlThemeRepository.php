@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Repository;
+namespace App\Repository\Theme;
 
 use PDO;
 use PDOStatement;
 use App\Entity\Theme;
-use App\Repository\ThemeRepositoryInterface;
+use App\Repository\Theme\ThemeRepositoryInterface;
 use Override;
 
-require_once __DIR__ . '/ThemeRepositoryInterface.php';
 
 class SqlThemeRepository implements ThemeRepositoryInterface
 {

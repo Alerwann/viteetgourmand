@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Repository;
+namespace App\Repository\Horaire;
 
 use App\Entity\Horaire;
+use App\Repository\Horaire\HoraireRepositoryInterface;
 use Override;
 use PDO;
 use PDOStatement;
 
-require_once __DIR__ . '/HoraireRepositoryInterface.php';
-require_once __DIR__ . '/../../classes/Horaire.php';
+
 
 class SqlHoraireRepository implements HoraireRepositoryInterface
 {

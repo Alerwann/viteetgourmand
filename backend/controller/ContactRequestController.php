@@ -1,5 +1,9 @@
 <?php
 
+namespace App\Controller;
+
+use PDO;
+
 class ContactRequestcontroller
 {
     private PDO $pdo;

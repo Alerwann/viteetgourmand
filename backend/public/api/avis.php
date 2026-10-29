@@ -1,10 +1,13 @@
 <?php
+require_once __DIR__ . '/../../vendor/autoload.php';
+
+use App\Repository\Avis\SqlAvisRepository;
+use App\Controller\AvisController;
 
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-
 header("Content-Type: application/json; charset=UTF-8");
 
 
@@ -14,13 +17,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 require_once __DIR__ . '/../../config/db_init.php';
-require_once __DIR__ . '/../../controller/avis_controller.php';
-require_once __DIR__ . '/../../repository/avis/SqlAvisRepository.php';
-
-$aviRepository = new \App\Repository\SqlAvisRepository($pdo);
 
 
-$controller = new \APP\Controller\AvisController($aviRepository);
+$aviRepository = new SqlAvisRepository($pdo);
+$controller = new AvisController($aviRepository);
 
 $method = $_SERVER['REQUEST_METHOD'];
 

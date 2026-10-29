@@ -1,4 +1,9 @@
 <?php
+require_once __DIR__ . '/../../vendor/autoload.php';
+
+use App\Repository\Theme\SqlThemeRepository;
+use App\Controller\ThemeController;
+
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Access-Control-Allow-Methods: GET,POST,DELETE, OPTIONS");
@@ -10,12 +15,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 require_once __DIR__ . '/../../config/db_init.php';
-require_once __DIR__ . '/../../controller/theme_controller.php';
-require_once __DIR__ . '/../../repository/theme/SqlThemeRepository.php';
-require_once __DIR__ . '/../../repository/theme/ThemeRepositoryInterface.php';
 
-$themeRepo = new App\Repository\SqlThemeRepository($pdo);
-$controller = new App\Controller\Theme_controller($themeRepo);
+
+$themeRepo = new SqlThemeRepository($pdo);
+$controller = new ThemeController($themeRepo);
 
 $method = $_SERVER['REQUEST_METHOD'];
 

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Repository;
+namespace App\Repository\plat;
 
 use App\Entity\Plat;
 use App\Enum\TypePlat;
 
-require_once __DIR__ . '/../../classes/Enum/Enum_type_plat.php';
+
 
 interface PlatRepositoryInterface
 {

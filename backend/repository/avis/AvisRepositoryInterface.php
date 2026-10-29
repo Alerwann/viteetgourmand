@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repository;
+namespace App\Repository\Avis;
 
 use App\Entity\Avis;
 use App\Enum\StatusAvis;

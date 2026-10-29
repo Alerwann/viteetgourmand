@@ -2,11 +2,9 @@
 
 namespace App\Controller;
 
-use App\Repository\AvisRepositoryInterface;
+use App\Repository\Avis\AvisRepositoryInterface;
 use App\Enum\StatusAvis;
 
-
-require_once __DIR__ . '/../classes/Avis.php';
 
 class AvisController
 {

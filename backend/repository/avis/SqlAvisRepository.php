@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repository;
+namespace App\Repository\Avis;
 
 use App\Enum\StatusAvis;
 use App\Entity\Avis;
@@ -8,7 +8,6 @@ use Override;
 use PDO;
 
 
-require_once __DIR__ . '/AvisRepositoryInterface.php';
 
 class SqlAvisRepository implements AvisRepositoryInterface
 {

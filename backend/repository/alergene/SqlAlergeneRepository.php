@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Repository;
+namespace App\Repository\Alergene;
 
 use App\Entity\Alergene;
-use App\Repository\AlergeneRepositoryInterface;
 use PDO;
 use Override;
 use PDOStatement;
 
-require_once __DIR__ . '/AlergeneRepositoryInterface.php';
+
 
 class SqlAlergeneRepository implements AlergeneRepositoryInterface
 {
