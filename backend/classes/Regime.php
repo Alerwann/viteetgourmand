@@ -2,7 +2,9 @@
 
 namespace App\Entity;
 
-class Regime
+use JsonSerializable;
+
+class Regime implements JsonSerializable
 {
     private ?int $regime_id;
     private string $nom_regime;
@@ -20,5 +22,12 @@ class Regime
     public function getNomRegime(): string
     {
         return $this->nom_regime;
+    }
+    public function jsonSerialize(): mixed
+    {
+        return [
+            "regime_id" => $this->regime_id,
+            "nom_regime" => $this->nom_regime
+        ];
     }
 }

@@ -22,9 +22,6 @@ class Regime_controller
             $regimes = $this->regimeRepo->getAll();
             http_response_code(200);
             echo json_encode($regimes);
-        } catch (\InvalidArgumentException $e) {
-            http_response_code(400);
-            echo json_encode(["message" => $e->getMessage()]);
         } catch (\Throwable $th) {
             http_response_code(500);
             echo json_encode(["message" => "Erreur serveur : " . $th->getMessage()]);
@@ -45,9 +42,6 @@ class Regime_controller
             $regime = $this->regimeRepo->getOne($regimeId);
             http_response_code(200);
             echo json_encode($regime);
-        } catch (\InvalidArgumentException $e) {
-            http_response_code(400);
-            echo json_encode(["message" => $e->getMessage()]);
         } catch (\Throwable $th) {
             http_response_code(500);
             echo json_encode(["message" => "Erreur serveur : " . $th->getMessage()]);
@@ -70,9 +64,6 @@ class Regime_controller
             echo json_encode([
                 "message" => "Régime mis à jour avec succès !"
             ]);
-        } catch (\InvalidArgumentException $e) {
-            http_response_code(400);
-            echo json_encode(["message" => $e->getMessage()]);
         } catch (\Throwable $th) {
             http_response_code(500);
             echo json_encode(["message" => "Erreur serveur : " . $th->getMessage()]);
@@ -92,9 +83,6 @@ class Regime_controller
             $this->regimeRepo->delete($regimeId);
             http_response_code(200);
             echo json_encode(["message" => "Plat supprimé"]);
-        } catch (\InvalidArgumentException $e) {
-            http_response_code(400);
-            echo json_encode(["message" => $e->getMessage()]);
         } catch (\Throwable $th) {
             http_response_code(500);
             echo json_encode(["message" => "Erreur serveur : " . $th->getMessage()]);
