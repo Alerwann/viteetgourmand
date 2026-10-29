@@ -2,7 +2,10 @@
 
 namespace App\Entity;
 
-class Menu
+use JsonSerializable;
+
+class Menu implements JsonSerializable
+
 {
     private ?int $menu_id;
     private string $title;
@@ -168,7 +171,7 @@ class Menu
     }
 
     // Mise sous forme de tableau
-    public function toArray(): array
+    public function jsonSerialize(): array
     {
         return [
             "menu_id" => $this->menu_id,
