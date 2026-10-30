@@ -71,10 +71,15 @@ INSERT INTO menu_plat (menu_id, plat_id) VALUES
 
 INSERT INTO commande (
     commande_id,
-    numero_commande, 
-    date_commande, 
+    commande_ref, 
+    commande_date, 
     date_prestation, 
-    heure_livraison, 
+    heure_livraison,
+    numero_rue,
+    street,
+    code_postal,
+    ville,
+    pays,
     nombre_personne, 
     prix_livraison, 
     statut, 
@@ -83,12 +88,12 @@ INSERT INTO commande (
     utilisateur_id, 
     menu_id
 ) VALUES
-(1,'CMD-2026-001', '2026-05-28', '2026-06-01', '12:00', 4, 10.00, 'livre', 1, 0, 1, 1),
-(2,'CMD-2026-002', '2026-05-29', '2026-06-02', '12:30',  2, 10.00, 'livre', 0, 0, 2, 2),
-(3,'CMD-2026-003', '2026-05-30', '2026-06-03', '19:00',  6, 15.00, 'annule', 1, 0, 1, 1),
-(4,'CMD-2026-004', '2026-05-31', '2026-06-04', '12:15',  3, 10.00, 'livre', 0, 0, 2, 1),
-(5,'CMD-2026-005', '2026-06-01', '2026-06-05', '13:00',  5, 12.50, 'livre', 1, 1, 1, 2),
-(6,'CMD-2026-006', '2026-06-02', '2026-06-06', '20:00',  4, 10.00, 'livre', 0, 0, 2, 2);
+(1,'CMD-2026-001', '2026-05-28', '2026-06-01', '12:00',10, 'rue de la République', 75001, 'Chalon-sur-Saône', 'France', 4, 10.00, 'livre', 1, 0, 1, 1),
+(2,'CMD-2026-002', '2026-05-29', '2026-06-02', '12:30',10, 'rue de la République', 75001, 'Chalon-sur-Saône', 'France',  2, 10.00, 'livre', 0, 0, 2, 2),
+(3,'CMD-2026-003', '2026-05-30', '2026-06-03', '19:00',10, 'rue de la République', 75001, 'Chalon-sur-Saône', 'France',  6, 15.00, 'annule', 1, 0, 1, 1),
+(4,'CMD-2026-004', '2026-05-31', '2026-06-04', '12:15',10, 'rue de la République', 75001, 'Chalon-sur-Saône', 'France',  3, 10.00, 'livre', 0, 0, 2, 1),
+(5,'CMD-2026-005', '2026-06-01', '2026-06-05', '13:00',10, 'rue de la République', 75001, 'Chalon-sur-Saône', 'France',  5, 12.50, 'livre', 1, 1, 1, 2),
+(6,'CMD-2026-006', '2026-06-02', '2026-06-06', '20:00', 10, 'rue de la République', 75001, 'Chalon-sur-Saône', 'France', 4, 10.00, 'livre', 0, 0, 2, 2);
 
 -- Valeur pour avis
 
