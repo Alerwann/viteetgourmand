@@ -1,7 +1,7 @@
 /** @format */
 
 import CustomButton from "../global/button_global";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import type { utilisateur } from "../../interfaces/utilisateur";
 
@@ -11,7 +11,6 @@ const filesetAsset =
 
 export default function CreateCompte() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [allUtilisateur, setAllUtilisateur] = useState<utilisateur[]>([]);
   const [utilisateur, setUtilisateur] = useState<utilisateur>({
     email: "",
     password: "",
@@ -76,15 +75,6 @@ export default function CreateCompte() {
     // test des conditions de mot de passe
     if (!(hasMinLength && hasUpper && hasLower && hasNumber && hasSpecial)) {
       alert("Le mot de passe ne respecte pas les critères de sécurité.");
-      return;
-    }
-
-    //test de l'existance d'un compte avec le mail (alerte à améliorer)
-    const chekExistance = allUtilisateur.some(
-      (utilisateurs) => utilisateurs.email === utilisateur.email,
-    );
-    if (chekExistance) {
-      alert("Utilisateur déjà existant");
       return;
     }
 
@@ -226,7 +216,7 @@ export default function CreateCompte() {
           <label htmlFor="telephone">Numéro de téléphone</label>
           <input
             type="tel"
-            pattern="0[1-9](?: [0-9]{2}){4}"
+            pattern="0[1-9](?:[0-9]{2}){4}"
             name="telephone"
             id="telephone"
             className={inputAsset}

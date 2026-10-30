@@ -27,6 +27,8 @@ class AuthController
 
         $result = $this->authService->login($data['email'], $data['password']);
 
+
+
         http_response_code($result['code']);
         echo json_encode($result);
     }

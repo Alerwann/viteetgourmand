@@ -2,8 +2,6 @@
 
 namespace App\Services;
 
-
-use DateInterval;
 use PDO;
 use App\Services\MailerService;
 use App\Entity\Utilisateur;

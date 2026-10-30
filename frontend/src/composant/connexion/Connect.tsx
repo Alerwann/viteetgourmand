@@ -49,6 +49,9 @@ export default function Connect_composant() {
       if (!response.ok) {
         throw new Error("Erreur HTTP : " + response.status);
       }
+      const data = await response.json();
+
+      localStorage.setItem("token", data.token);
     } catch (error) {
       console.error("Erreur lors de la soumission :", error);
     }
