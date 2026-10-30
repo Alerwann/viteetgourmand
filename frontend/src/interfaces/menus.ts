@@ -10,7 +10,7 @@ export interface PlatDetail {
 
 export interface MenusInt {
   menu_id?: number;
-  menu_titre: string;
+  menu_nom: string;
   nb_perso_min: number;
   menu_prix: number;
   description: string;
@@ -22,12 +22,12 @@ export interface MenusInt {
 
 export interface MenuDetail {
   menu_id?: number;
-  menu_titre: string;
+  menu_nom: string;
   nb_perso_min: number;
   menu_prix: number;
   description: string;
   quantite_restante: number;
-  nom_regime: string;
+  regime_nom: string;
   theme_nom: string;
   note_particuliere?: string;
   plats_details: PlatDetail[];

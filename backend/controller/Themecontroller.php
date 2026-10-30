@@ -66,7 +66,7 @@ class ThemeController
             return;
         }
         try {
-            $newTheme = new Theme(theme_id: $data['regime_id'] ?? \null, theme_nom: $data['nom_regime']);
+            $newTheme = new Theme(theme_id: $data['regime_id'] ?? \null, theme_nom: $data['regime_nom']);
             $this->themeRepo->save($newTheme);
 
             http_response_code(201);

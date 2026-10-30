@@ -21,7 +21,7 @@ class SqlRegimeRepository implements RegimeRepositoryInterface
     #[Override]
     public function getAll(): array
     {
-        $stmt = $this->pdo->query("SELECT  regime_id, nom_regime FROM regime");
+        $stmt = $this->pdo->query("SELECT  regime_id, regime_nom FROM regime");
 
         return $this->hydrateRegime($stmt);
     }
@@ -29,7 +29,7 @@ class SqlRegimeRepository implements RegimeRepositoryInterface
     #[Override]
     public function getOne(int $id): Regime
     {
-        $stmt = $this->pdo->prepare("SELECT  regime_id, nom_regime FROM regime WHERE regime_id= :regime_id");
+        $stmt = $this->pdo->prepare("SELECT  regime_id, regime_nom FROM regime WHERE regime_id= :regime_id");
         $stmt->execute([$id]);
         $arrayRegime = $this->hydrateRegime($stmt);
         return isset($arrayRegime) ? $arrayRegime[0] : [];
@@ -39,11 +39,11 @@ class SqlRegimeRepository implements RegimeRepositoryInterface
     public function save(Regime $regimeIn): void
     {
         if ($regimeIn->getRegimeId() !== null) {
-            $stmt = $this->pdo->prepare("UPDATE regime set ( nom_regime= :nom_regime) WHERE regime_id = :regime_id");
-            $params = [':regime_id' => $regimeIn->getRegimeId(), ':nom_regime' => $regimeIn->getNomRegime()];
+            $stmt = $this->pdo->prepare("UPDATE regime set ( regime_nom= :regime_nom) WHERE regime_id = :regime_id");
+            $params = [':regime_id' => $regimeIn->getRegimeId(), ':regime_nom' => $regimeIn->getNomRegime()];
         } else {
-            $stmt = $this->pdo->prepare("INSERT INTO regime (nom_regime) VALUES (:nom_regime)");
-            $params = [':nom_regime' => $regimeIn->getNomRegime()];
+            $stmt = $this->pdo->prepare("INSERT INTO regime (regime_nom) VALUES (:regime_nom)");
+            $params = [':regime_nom' => $regimeIn->getNomRegime()];
         }
         $stmt->execute($params);
     }
@@ -62,7 +62,7 @@ class SqlRegimeRepository implements RegimeRepositoryInterface
 
             $regimeObj = [
                 'regime_id' => (int)$row['regime_id'],
-                'nom_regime' => $row['nom_regime']
+                'regime_nom' => $row['regime_nom']
             ];
 
             $regime[] = $regimeObj;

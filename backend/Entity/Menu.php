@@ -14,21 +14,21 @@ class Menu implements JsonSerializable
     private string $description;
     private int $quantite_restante;
     private array $plat_id;
-    private int $regime_id;
-    private int $theme_id;
+    private string $regime_nom;
+    private string $theme_nom;
     private ?string $note_particuliere;
     private array $plats_details;
 
     public function __construct(
+        ?int $menu_id,
         string $menu_nom,
         int $nb_perso_min,
         float $menu_prix,
         string $description,
         int $quantite_restante,
         array $plat_id,
-        int $regime_id,
-        int $theme_id,
-        ?int $menu_id = null,
+        string $regime_nom,
+        string $theme_nom,
         ?string $note_particuliere = "",
         array $plats_details = []
     ) {
@@ -39,8 +39,8 @@ class Menu implements JsonSerializable
         $this->description = $description;
         $this->quantite_restante = $quantite_restante;
         $this->plat_id = $plat_id;
-        $this->regime_id = $regime_id;
-        $this->theme_id = $theme_id;
+        $this->regime_nom = $regime_nom;
+        $this->theme_nom = $theme_nom;
         $this->note_particuliere = $note_particuliere;
         $this->plats_details = $plats_details;
     }
@@ -125,26 +125,26 @@ class Menu implements JsonSerializable
 
     // GET/SET régime ID
 
-    public function getRegimeId(): int
+    public function getRegimeNom(): string
     {
-        return $this->regime_id;
+        return $this->regime_nom;
     }
 
-    public function setRegimeId(int $regimeId): void
+    public function setRegimeNom(string $regimeNom): void
     {
-        $this->regime_id = $regimeId;
+        $this->regime_nom = $regimeNom;
     }
 
     // GET/SET themeID
 
-    public function getThemeId(): int
+    public function getThemeNom(): string
     {
-        return $this->theme_id;
+        return $this->theme_nom;
     }
 
-    public function setThemeId(int $themeId): void
+    public function setThemeId(string $themeNom): void
     {
-        $this->theme_id = $themeId;
+        $this->theme_nom = $themeNom;
     }
 
     // GET/SET note particuliere
@@ -181,8 +181,8 @@ class Menu implements JsonSerializable
             "description" => $this->description,
             "quantite_restante" => $this->quantite_restante,
             "plat_id" => $this->plat_id,
-            "regime_id" => $this->regime_id,
-            "theme_id" => $this->theme_id,
+            "regime_nom" => $this->regime_nom,
+            "theme_nom" => $this->theme_nom,
             "note_particuliere" => $this->note_particuliere,
         ];
     }

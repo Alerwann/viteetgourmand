@@ -51,13 +51,13 @@ class RegimeController
     public function save(): void
     {
         $data = json_decode(file_get_contents("php://input"), true);
-        if (empty($data) || !isset($data['nom_regime'])) {
+        if (empty($data) || !isset($data['regime_nom'])) {
             http_response_code(400);
             echo json_encode(["message" => "Données incomplètes."]);
             return;
         }
         try {
-            $newRegime = new Regime(regime_id: $data['regime_id'] ?? \null, nom_regime: $data['nom_regime']);
+            $newRegime = new Regime(regime_id: $data['regime_id'] ?? \null, regime_nom: $data['regime_nom']);
             $this->regimeRepo->save($newRegime);
 
             http_response_code(201);

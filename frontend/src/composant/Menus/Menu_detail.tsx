@@ -47,7 +47,7 @@ export default function MenuDetail() {
               {dataMenu.theme_nom}
             </span>
             <h1 className="text-3xl font-bold tracking-tight">
-              {dataMenu.menu_titre}
+              {dataMenu.menu_nom}
             </h1>
           </div>
           <div className="text-right">

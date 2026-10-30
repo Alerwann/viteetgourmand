@@ -17,7 +17,7 @@ export default function MenuCreateFor() {
   const [array_regime, setArrayRegime] = useState<Regime[]>([]);
 
   const [menuData, setMenuData] = useState<MenusInt>({
-    menu_titre: "",
+    menu_nom: "",
     nb_perso_min: 0,
     menu_prix: 0,
     description: "",
@@ -103,7 +103,7 @@ export default function MenuCreateFor() {
       .map((id) => Number(id));
 
     const payload = {
-      titre: menuData.menu_titre,
+      titre: menuData.menu_nom,
       theme_id: menuData.theme_id,
       regime_id: menuData.regime_id,
       description: menuData.description,
@@ -131,7 +131,7 @@ export default function MenuCreateFor() {
       alert("Menu ajouté");
 
       setMenuData({
-        menu_titre: "",
+        menu_nom: "",
         nb_perso_min: 0,
         menu_prix: 0,
         description: "",
@@ -154,12 +154,12 @@ export default function MenuCreateFor() {
       <fieldset className={filesetAsset}>
         <legend>Intitulé</legend>
 
-        <label htmlFor="menu_titre">Titre du menu</label>
+        <label htmlFor="menu_nom">Titre du menu</label>
         <input
           type="text"
-          name="menu_titre"
-          id="menu_titre"
-          value={menuData.menu_titre}
+          name="menu_nom"
+          id="menu_nom"
+          value={menuData.menu_nom}
           onChange={handleChange}
           className={inputAsset}
           required
@@ -193,7 +193,7 @@ export default function MenuCreateFor() {
           <option value="-1">-- Sélectionner le régime --</option>
           {array_regime.map((regime) => (
             <option value={regime.regime_id} key={regime.regime_id}>
-              {regime.nom_regime}
+              {regime.regime_nom}
             </option>
           ))}
         </select>

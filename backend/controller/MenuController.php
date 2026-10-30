@@ -24,14 +24,14 @@ class MenuController
             $data = \array_map(function ($menu) {
                 return [
                     'menu_id' => $menu->getMenuId(),
-                    'menu_nom' => $menu->getTitle(),
+                    'menu_nom' => $menu->getMenuNom(),
                     'nb_perso_min' => $menu->getNbPersoMin(),
                     'menu_prix' => $menu->getPrix(),
                     'description' => $menu->getDescription(),
                     'quantite_restante' => $menu->getQuantite(),
                     'plat_id ' => $menu->getPlatId(),
-                    'regime_id' => $menu->getRegimeId(),
-                    'theme_id' => $menu->getThemeId(),
+                    'regime_nom' => $menu->getRegimeNom(),
+                    'theme_nom' => $menu->getThemeNom(),
                     'note_particuliere' => $menu->getNoteParticuliere(),
                     'plats_details' => $menu->getPlatsDetails()
                 ];
@@ -55,15 +55,29 @@ class MenuController
             $id = $_GET['id'];
         }
         try {
-            $menus = $this->menuRepo->findById($id);
-            if ($menus == \null) {
+            $menu = $this->menuRepo->findById($id);
+            if ($menu == \null) {
                 http_response_code(400);
                 echo json_encode(["message" => "menu non trouvé"]);
                 return;
             }
 
+            $data = [
+                'menu_id' => $menu->getMenuId(),
+                'menu_nom' => $menu->getMenuNom(),
+                'nb_perso_min' => $menu->getNbPersoMin(),
+                'menu_prix' => $menu->getPrix(),
+                'description' => $menu->getDescription(),
+                'quantite_restante' => $menu->getQuantite(),
+                'plat_id ' => $menu->getPlatId(),
+                'regime_nom' => $menu->getRegimeNom(),
+                'theme_nom' => $menu->getThemeNom(),
+                'note_particuliere' => $menu->getNoteParticuliere(),
+                'plats_details' => $menu->getPlatsDetails()
+            ];
+
             http_response_code(200);
-            echo json_encode($menus);
+            echo json_encode($data);
         } catch (Exception $e) {
             http_response_code(500);
             echo json_encode(["message" => "Erreur : " . $e->getMessage()]);
@@ -74,7 +88,7 @@ class MenuController
     {
         $data = json_decode(file_get_contents("php://input"), true);
         try {
-            $new_id = $this->menuRepo->save($data);
+            $this->menuRepo->save($data);
         } catch (\Exception $e) {
 
             header('Content-Type: application/json');

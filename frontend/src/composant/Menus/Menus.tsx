@@ -43,7 +43,7 @@ export default function Menus_composant() {
       if (maxPrice !== "" && price > Number(maxPrice)) return false;
       if (selectedTheme !== "all" && menu.theme_nom !== selectedTheme)
         return false;
-      if (selectedDiet !== "all" && menu.nom_regime !== selectedDiet)
+      if (selectedDiet !== "all" && menu.regime_nom !== selectedDiet)
         return false;
       if (minGuests !== "" && guests < Number(minGuests)) return false;
 
@@ -140,8 +140,8 @@ export default function Menus_composant() {
             >
               <option value="all">Tous les régimes</option>
               {allRegime.map((regime) => (
-                <option key={regime.regime_id} value={regime.nom_regime}>
-                  {regime.nom_regime}
+                <option key={regime.regime_id} value={regime.regime_nom}>
+                  {regime.regime_nom}
                 </option>
               ))}
             </select>
@@ -165,7 +165,7 @@ export default function Menus_composant() {
               <li key={menu.menu_id} className="h-full">
                 <CardMenu
                   menu_id={menu.menu_id}
-                  titre_menu={menu.menu_titre}
+                  titre_menu={menu.menu_nom}
                   description={menu.description}
                   nb_minimal={menu.nb_perso_min}
                   price_by_person={menu.menu_prix}

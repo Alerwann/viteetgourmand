@@ -33,7 +33,7 @@ class SqlMenuRepository implements MenuRepositoryInterface
             m.note_particuliere,
             m.regime_id,
             m.theme_id,
-            r.nom_regime,   
+            r.regime_nom,   
             t.theme_nom,
             p.plat_id,
             p.plat_nom,
@@ -69,7 +69,7 @@ class SqlMenuRepository implements MenuRepositoryInterface
             m.note_particuliere,
             m.regime_id,  
             m.theme_id,    
-            r.nom_regime,   
+            r.regime_nom,   
             t.theme_nom,
             p.plat_id,
             p.plat_nom,
@@ -97,8 +97,8 @@ class SqlMenuRepository implements MenuRepositoryInterface
     {
         $this->db->beginTransaction();
 
-        $sqlMenu = "INSERT INTO menu (menu_nom, nb_perso_min, menu_prix, description, quantite_restante, note_particuliere, regime_id, theme_id) 
-                    VALUES (:menu_nom, :nb_min, :prix, :desc, :qte, :note, :regime_id, :theme_id)";
+        $sqlMenu = "INSERT INTO menu (menu_nom, nb_perso_min, menu_prix, description, quantite_restante, note_particuliere, regime_nom, theme_id) 
+                    VALUES (:menu_nom, :nb_min, :prix, :desc, :qte, :note, :regime_nom, :theme_id)";
 
         $stmtMenu = $this->db->prepare($sqlMenu);
         $stmtMenu->execute([
@@ -108,8 +108,8 @@ class SqlMenuRepository implements MenuRepositoryInterface
             ':desc'      => $menu->getDescription(),
             ':qte'       => $menu->getQuantite(),
             ':note'      => $menu->getNoteParticuliere(),
-            ':regime_id' => $menu->getRegimeId(),
-            ':theme_id'  => $menu->getThemeId()
+            ':regime_nom' => $menu->getRegimeNom(),
+            ':theme_id'  => $menu->getThemeNom()
         ]);
 
         $menuId = $this->db->lastInsertId();
@@ -157,8 +157,8 @@ class SqlMenuRepository implements MenuRepositoryInterface
                     "menu_prix" => (float)$row["menu_prix"],
                     "description" => $row['description'],
                     "quantite_restante" => (int)$row['quantite_restante'],
-                    "regime_id" => (int)$row['regime_id'],
-                    "theme_id" => (int)$row['theme_id'],
+                    "regime_nom" => $row['regime_nom'],
+                    "theme_nom" => $row['theme_nom'],
                     "note_particuliere" => $row["note_particuliere"] ?? "",
                     "plats_details" => []
                 ];
@@ -203,8 +203,8 @@ class SqlMenuRepository implements MenuRepositoryInterface
                 description: $data['description'],
                 quantite_restante: $data['quantite_restante'],
                 plat_id: $platIds,
-                regime_id: $data['regime_id'],
-                theme_id: $data['theme_id'],
+                regime_nom: $data['regime_nom'],
+                theme_nom: $data['theme_nom'],
                 menu_id: $data['menu_id'],
                 note_particuliere: $data['note_particuliere'],
                 plats_details: $platsDetailsClean
