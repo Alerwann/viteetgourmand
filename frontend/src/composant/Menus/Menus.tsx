@@ -36,8 +36,8 @@ export default function Menus_composant() {
 
   const filteredMenus = useMemo(() => {
     return allMenus.filter((menu) => {
-      const price = menu.prix_par_personne;
-      const guests = menu.nombre_personne_minimum;
+      const price = menu.menu_prix;
+      const guests = menu.nb_perso_min;
 
       if (minPrice !== "" && price < Number(minPrice)) return false;
       if (maxPrice !== "" && price > Number(maxPrice)) return false;
@@ -167,8 +167,8 @@ export default function Menus_composant() {
                   menu_id={menu.menu_id}
                   titre_menu={menu.menu_titre}
                   description={menu.description}
-                  nb_minimal={menu.nombre_personne_minimum}
-                  price_by_person={menu.prix_par_personne}
+                  nb_minimal={menu.nb_perso_min}
+                  price_by_person={menu.menu_prix}
                   detail_plat={menu.plats_details}
                 />
               </li>

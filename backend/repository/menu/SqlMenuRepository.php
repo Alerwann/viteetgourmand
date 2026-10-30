@@ -25,9 +25,9 @@ class SqlMenuRepository implements MenuRepositoryInterface
 
         $sql = "SELECT 
             m.menu_id,
-            m.titre AS menu_titre,
-            m.nombre_personne_minimum,
-            m.prix_par_personne,
+            m.menu_nom AS menu_menu_nom,
+            m.nb_perso_min,
+            m.menu_prix,
             m.description,
             m.quantite_restante,
             m.note_particuliere,
@@ -61,9 +61,9 @@ class SqlMenuRepository implements MenuRepositoryInterface
     {
         $sql = "SELECT 
             m.menu_id,
-            m.titre AS menu_titre,
-            m.nombre_personne_minimum,
-            m.prix_par_personne,
+            m.menu_nom AS menu_menu_nom,
+            m.nb_perso_min,
+            m.menu_prix,
             m.description,
             m.quantite_restante,
             m.note_particuliere,
@@ -97,12 +97,12 @@ class SqlMenuRepository implements MenuRepositoryInterface
     {
         $this->db->beginTransaction();
 
-        $sqlMenu = "INSERT INTO menu (titre, nombre_personne_minimum, prix_par_personne, description, quantite_restante, note_particuliere, regime_id, theme_id) 
-                    VALUES (:titre, :nb_min, :prix, :desc, :qte, :note, :regime_id, :theme_id)";
+        $sqlMenu = "INSERT INTO menu (menu_nom, nb_perso_min, menu_prix, description, quantite_restante, note_particuliere, regime_id, theme_id) 
+                    VALUES (:menu_nom, :nb_min, :prix, :desc, :qte, :note, :regime_id, :theme_id)";
 
         $stmtMenu = $this->db->prepare($sqlMenu);
         $stmtMenu->execute([
-            ':titre'     => $menu->getTitle(),
+            ':menu_nom'     => $menu->getMenuNom(),
             ':nb_min'    => $menu->getNbPersoMin(),
             ':prix'      => $menu->getPrix(),
             ':desc'      => $menu->getDescription(),
@@ -142,6 +142,7 @@ class SqlMenuRepository implements MenuRepositoryInterface
     {
         $menusData = [];
 
+
         // 1. Regroupement et aplatissement des doublons SQL
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $menuId = (int)$row['menu_id'];
@@ -151,9 +152,9 @@ class SqlMenuRepository implements MenuRepositoryInterface
             if (!isset($menusData[$menuId])) {
                 $menusData[$menuId] = [
                     "menu_id" => $menuId,
-                    "title" => $row['menu_titre'],
-                    "nombre_personne_minimum" => (int)$row['nombre_personne_minimum'],
-                    "prix_par_personne" => (float)$row["prix_par_personne"],
+                    "menu_nom" => $row['menu_menu_nom'],
+                    "nb_perso_min" => (int)$row['nb_perso_min'],
+                    "menu_prix" => (float)$row["menu_prix"],
                     "description" => $row['description'],
                     "quantite_restante" => (int)$row['quantite_restante'],
                     "regime_id" => (int)$row['regime_id'],
@@ -196,11 +197,11 @@ class SqlMenuRepository implements MenuRepositoryInterface
             $platIds = array_keys($data['plats_details']);
 
             $menu = new Menu(
-                title: $data['title'],
-                nb_perso_min: $data['nombre_personne_minimum'],
-                prix_par_personne: $data['prix_par_personne'],
+                menu_nom: $data['menu_nom'],
+                nb_perso_min: $data['nb_perso_min'],
+                menu_prix: $data['menu_prix'],
                 description: $data['description'],
-                quantite: $data['quantite_restante'],
+                quantite_restante: $data['quantite_restante'],
                 plat_id: $platIds,
                 regime_id: $data['regime_id'],
                 theme_id: $data['theme_id'],

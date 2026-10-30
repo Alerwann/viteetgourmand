@@ -56,7 +56,7 @@ INSERT INTO plat(plat_nom,type_plat,photo) VALUES
 INSERT INTO plat_alergene VALUES(1,2),(1,3),(2,1);
 
 -- Valeur des menus
-INSERT INTO menu(titre, nombre_personne_minimum,prix_par_personne, description,quantite_restante,note_particuliere, regime_id,theme_id) VALUES
+INSERT INTO menu(menu_nom, nb_perso_min,menu_prix, description,quantite_restante,note_particuliere, regime_id,theme_id) VALUES
 ('Menu Gourmand',4,15.00, 'Entrée, plat et dessert du terroir',20,'Le dessert est glacé, ne pas le stocker hors d''un congélateur', 1,1),
 ('Menu Prestige',2,20.00, 'Menu de fête avec produits frais', 30,NULL, 1,1);
 

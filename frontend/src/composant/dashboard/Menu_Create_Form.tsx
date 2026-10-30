@@ -18,9 +18,8 @@ export default function MenuCreateFor() {
 
   const [menuData, setMenuData] = useState<MenusInt>({
     menu_titre: "",
-    note_add: "",
-    nombre_personne_minimum: 0,
-    prix_par_personne: 0,
+    nb_perso_min: 0,
+    menu_prix: 0,
     description: "",
     quantite_restante: 0,
     regime_id: -1,
@@ -69,8 +68,8 @@ export default function MenuCreateFor() {
     setMenuData((prev) => ({
       ...prev,
       [name]: [
-        "nombre_personne_minimum",
-        "prix_par_personne",
+        "nb_perso_min",
+        "menu_prix",
         "quantite_restante",
         "regime_id",
         "theme_id",
@@ -108,9 +107,8 @@ export default function MenuCreateFor() {
       theme_id: menuData.theme_id,
       regime_id: menuData.regime_id,
       description: menuData.description,
-      note_particuliere: menuData.note_add,
-      nombre_personne_minimum: menuData.nombre_personne_minimum,
-      prix_par_personne: menuData.prix_par_personne,
+      nb_perso_min: menuData.nb_perso_min,
+      menu_prix: menuData.menu_prix,
       quantite_restante: menuData.quantite_restante,
       plats: platsIds,
     };
@@ -134,9 +132,8 @@ export default function MenuCreateFor() {
 
       setMenuData({
         menu_titre: "",
-        note_add: "",
-        nombre_personne_minimum: 0,
-        prix_par_personne: 0,
+        nb_perso_min: 0,
+        menu_prix: 0,
         description: "",
         quantite_restante: 0,
         regime_id: -1,
@@ -213,14 +210,14 @@ export default function MenuCreateFor() {
           required
         ></textarea>
 
-        <label htmlFor="note_add">Informations supplémentaires</label>
+        <label htmlFor="note_particuliere">Informations supplémentaires</label>
         <textarea
-          name="note_add"
-          id="note_add"
+          name="note_particuliere"
+          id="note_particuliere"
           rows={5}
           cols={50}
           className={inputAsset}
-          value={menuData.note_add}
+          value={menuData.note_particuliere}
           onChange={handleChange}
         ></textarea>
       </fieldset>
@@ -254,28 +251,28 @@ export default function MenuCreateFor() {
       <fieldset className={filesetAsset}>
         <legend>Quantité et Prix</legend>
 
-        <label htmlFor="nombre_personne_minimum">Nombre minimum de part</label>
+        <label htmlFor="nb_perso_min">Nombre minimum de part</label>
         <input
           type="number"
-          name="nombre_personne_minimum"
-          id="nombre_personne_minimum"
+          name="nb_perso_min"
+          id="nb_perso_min"
           min={0}
           className={inputAsset}
           onChange={handleChange}
-          value={menuData.nombre_personne_minimum}
+          value={menuData.nb_perso_min}
           required
         />
 
-        <label htmlFor="prix_par_personne">Prix par personne en €</label>
+        <label htmlFor="menu_prix">Prix par personne en €</label>
 
         <input
           type="number"
-          name="prix_par_personne"
-          id="prix_par_personne"
+          name="menu_prix"
+          id="menu_prix"
           min={0}
           className={inputAsset}
           onChange={handleChange}
-          value={menuData.prix_par_personne}
+          value={menuData.menu_prix}
           required
         />
 

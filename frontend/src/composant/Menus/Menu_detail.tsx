@@ -15,6 +15,8 @@ export default function MenuDetail() {
       .catch((err) => console.error("Erreur fetch menu:", err));
   }, [id]);
 
+  console.log(dataMenu?.plats_details);
+
   if (!dataMenu) {
     return (
       <div className="flex h-screen items-center justify-center bg-gray-50 text-gray-500">
@@ -27,13 +29,15 @@ export default function MenuDetail() {
   const platsByType = dataMenu.plats_details?.reduce(
     (acc, plat) => {
       const type = plat.type_plat || "autres";
-      if (!acc[type]) acc[type] = [];
+      if (!acc[type]) {
+        acc[type] = [];
+      }
       acc[type].push(plat);
       return acc;
     },
     {} as Record<string, typeof dataMenu.plats_details>,
   );
-
+  console.log(dataMenu);
   return (
     <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100">
@@ -48,7 +52,7 @@ export default function MenuDetail() {
           </div>
           <div className="text-right">
             <div className="text-3xl font-extrabold text-indigo-500">
-              {dataMenu.prix_par_personne} €
+              {dataMenu.menu_prix} €
             </div>
             <div className="text-xs text-slate-400">par personne</div>
           </div>
@@ -75,7 +79,7 @@ export default function MenuDetail() {
                   Réservation
                 </span>
                 <span className="text-slate-800 font-semibold">
-                  Minimum {dataMenu.nombre_personne_minimum} personnes
+                  Minimum {dataMenu.nb_perso_min} personnes
                 </span>
               </div>
             </div>

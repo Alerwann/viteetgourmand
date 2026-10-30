@@ -1,9 +1,9 @@
 -- Initialisation de la table menu
 CREATE TABLE menu (
     menu_id INT AUTO_INCREMENT PRIMARY KEY,
-    titre VARCHAR(255) NOT NULL,
-    nombre_personne_minimum INT NOT NULL,
-    prix_par_personne DOUBLE NOT NULL,
+    menu_nom VARCHAR(255) NOT NULL,
+    nb_perso_min INT NOT NULL,
+    menu_prix DOUBLE NOT NULL,
     description VARCHAR(255) NOT NULL,
     quantite_restante INT NOT NULL,
     note_particuliere VARCHAR(255),

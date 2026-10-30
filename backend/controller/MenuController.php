@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\Menu\MenuRepositoryInterface;
-use App\Entity\Menu;
+
 
 
 
@@ -24,11 +24,11 @@ class MenuController
             $data = \array_map(function ($menu) {
                 return [
                     'menu_id' => $menu->getMenuId(),
-                    'title' => $menu->getTitle(),
+                    'menu_nom' => $menu->getTitle(),
                     'nb_perso_min' => $menu->getNbPersoMin(),
-                    'prix_par_personne' => $menu->getPrix(),
+                    'menu_prix' => $menu->getPrix(),
                     'description' => $menu->getDescription(),
-                    'quantite' => $menu->getQuantite(),
+                    'quantite_restante' => $menu->getQuantite(),
                     'plat_id ' => $menu->getPlatId(),
                     'regime_id' => $menu->getRegimeId(),
                     'theme_id' => $menu->getThemeId(),
@@ -56,7 +56,11 @@ class MenuController
         }
         try {
             $menus = $this->menuRepo->findById($id);
-
+            if ($menus == \null) {
+                http_response_code(400);
+                echo json_encode(["message" => "menu non trouvé"]);
+                return;
+            }
 
             http_response_code(200);
             echo json_encode($menus);

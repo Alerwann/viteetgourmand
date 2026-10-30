@@ -8,11 +8,11 @@ class Menu implements JsonSerializable
 
 {
     private ?int $menu_id;
-    private string $title;
+    private string $menu_nom;
     private int $nb_perso_min;
-    private float $prix_par_personne;
+    private float $menu_prix;
     private string $description;
-    private int $quantite;
+    private int $quantite_restante;
     private array $plat_id;
     private int $regime_id;
     private int $theme_id;
@@ -20,11 +20,11 @@ class Menu implements JsonSerializable
     private array $plats_details;
 
     public function __construct(
-        string $title,
+        string $menu_nom,
         int $nb_perso_min,
-        float $prix_par_personne,
+        float $menu_prix,
         string $description,
-        int $quantite,
+        int $quantite_restante,
         array $plat_id,
         int $regime_id,
         int $theme_id,
@@ -33,11 +33,11 @@ class Menu implements JsonSerializable
         array $plats_details = []
     ) {
         $this->menu_id = $menu_id;
-        $this->title = $title;
+        $this->menu_nom = $menu_nom;
         $this->nb_perso_min = $nb_perso_min;
-        $this->prix_par_personne = $prix_par_personne;
+        $this->menu_prix = $menu_prix;
         $this->description = $description;
-        $this->quantite = $quantite;
+        $this->quantite_restante = $quantite_restante;
         $this->plat_id = $plat_id;
         $this->regime_id = $regime_id;
         $this->theme_id = $theme_id;
@@ -51,20 +51,20 @@ class Menu implements JsonSerializable
         return  $this->menu_id;
     }
 
-    public function setMenuid(int $id): void
+    public function setMenuId(int $id): void
     {
         $this->menu_id = $id;
     }
 
-    // GET/SET title
-    public function getTitle(): string
+    // GET/SET menu_nom
+    public function getMenuNom(): string
     {
-        return $this->title;
+        return $this->menu_nom;
     }
 
-    public function setTitle(string $title): void
+    public function setMenuNom(string $menu_nom): void
     {
-        $this->title = $title;
+        $this->menu_nom = $menu_nom;
     }
 
     // GET/SET nombre de personne minimal
@@ -83,12 +83,12 @@ class Menu implements JsonSerializable
 
     public function getPrix(): float
     {
-        return $this->prix_par_personne;
+        return $this->menu_prix;
     }
 
     public function setPrix(float $prix): void
     {
-        $this->prix_par_personne = $prix;
+        $this->menu_prix = $prix;
     }
 
     // GET/SET description
@@ -105,11 +105,11 @@ class Menu implements JsonSerializable
     // GET/SET quantité
     public function getQuantite(): int
     {
-        return $this->quantite;
+        return $this->quantite_restante;
     }
-    public function setQuantite(int $quantite): void
+    public function setQuantite(int $quantite_restante): void
     {
-        $this->quantite = $quantite;
+        $this->quantite_restante = $quantite_restante;
     }
 
     // GET/SET tableau des ids de plat
@@ -175,11 +175,11 @@ class Menu implements JsonSerializable
     {
         return [
             "menu_id" => $this->menu_id,
-            "title" => $this->title,
+            "menu_nom" => $this->menu_nom,
             "nb_perso_min" => $this->nb_perso_min,
-            "prix" => $this->prix_par_personne,
+            "menu_prix" => $this->menu_prix,
             "description" => $this->description,
-            "quantite" => $this->quantite,
+            "quantite_restante" => $this->quantite_restante,
             "plat_id" => $this->plat_id,
             "regime_id" => $this->regime_id,
             "theme_id" => $this->theme_id,

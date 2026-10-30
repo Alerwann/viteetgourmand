@@ -18,11 +18,11 @@ class ContactRequestcontroller
 
         $data = json_decode(file_get_contents("php://input"), true);
 
-        $title = trim($data['title'] ?? '');
+        $menu_nom = trim($data['menu_nom'] ?? '');
         $description = trim($data['description'] ?? '');
         $email = trim($data['email'] ?? '');
 
-        if (empty($title) || empty($description) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        if (empty($menu_nom) || empty($description) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
             http_response_code(400);
             echo json_encode(["error" => "Données invalides."]);
             exit;
@@ -30,11 +30,11 @@ class ContactRequestcontroller
 
         try {
             // Utilisation de la connexion injectée via le constructeur
-            $stmt = $this->pdo->prepare("INSERT INTO contact_request (title, description, email) VALUES (?, ?, ?)");
-            $stmt->execute([$title, $description, $email]);
+            $stmt = $this->pdo->prepare("INSERT INTO contact_request (menu_nom, description, email) VALUES (?, ?, ?)");
+            $stmt->execute([$menu_nom, $description, $email]);
 
             $to = "alerwann411@gmail.com";
-            $subject = "Nouveau contact : " . htmlspecialchars($title);
+            $subject = "Nouveau contact : " . htmlspecialchars($menu_nom);
             $body = "Message de : $email\n\nDescription :\n$description";
             $headers = "From: noreply@tudomaine.com\r\n" .
                 "Reply-To: " . $email . "\r\n" .

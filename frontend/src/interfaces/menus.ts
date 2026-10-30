@@ -11,9 +11,8 @@ export interface PlatDetail {
 export interface MenusInt {
   menu_id?: number;
   menu_titre: string;
-  note_add: string;
-  nombre_personne_minimum: number;
-  prix_par_personne: number;
+  nb_perso_min: number;
+  menu_prix: number;
   description: string;
   quantite_restante: number;
   regime_id: number;
@@ -24,9 +23,8 @@ export interface MenusInt {
 export interface MenuDetail {
   menu_id?: number;
   menu_titre: string;
-  note_add: string;
-  nombre_personne_minimum: number;
-  prix_par_personne: number;
+  nb_perso_min: number;
+  menu_prix: number;
   description: string;
   quantite_restante: number;
   nom_regime: string;
