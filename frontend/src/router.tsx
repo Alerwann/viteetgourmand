@@ -11,6 +11,7 @@ import Connect_composant from "./composant/connexion/Connect";
 import CreateCompte from "./composant/connexion/CreateCompte";
 import ReinitPassword from "./composant/connexion/ReinitPassword";
 import FormReinit from "./composant/connexion/FormReinit";
+import FormCommande from "./composant/commande/FormCommande";
 
 const router = createBrowserRouter([
   {
@@ -48,6 +49,8 @@ const router = createBrowserRouter([
       { path: "reinit", element: <ReinitPassword /> },
 
       { path: "reinit/:token", element: <FormReinit /> },
+
+      { path: "commande", element: <FormCommande /> },
     ],
   },
 ]);

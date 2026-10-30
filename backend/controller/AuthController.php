@@ -53,6 +53,7 @@ class AuthController
     // 3. Demande de réinitialisation de mot de passe (Envoi du mail)
     public function requestPasswordReset(): void
     {
+        \error_log("✅ on reset");
         $data = json_decode(file_get_contents("php://input"), true);
 
         if (empty($data['email'])) {

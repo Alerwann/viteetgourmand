@@ -41,15 +41,6 @@ export default function CreateCompte() {
     setShowPassword(newStatePass);
   };
 
-  useEffect(() => {
-    try {
-      fetch("http://localhost:8000/api/utilisateur.php")
-        .then((res) => res.json())
-        .then((data) => setAllUtilisateur(data))
-        .catch((err) => console.error("Erreur chargement :", err));
-    } catch (error) {}
-  }, []);
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 

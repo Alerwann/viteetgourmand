@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use DateTime;
+
 use DateInterval;
 use PDO;
 use App\Services\MailerService;
@@ -65,15 +65,35 @@ class AuthService
     }
 
 
-    public function calcul_token(): array
+    private function base64UrlEncode(string $data): string
     {
-        $date = new DateTime();
-
-        $token = bin2hex(random_bytes(32));
-
-        return ["token" => $token, "date" => $date];
+        return rtrim(strtr(base64_encode($data), '+/', '-_'), '=️');
     }
 
+    public function calcul_token(int $userId): string
+    {
+
+        $header = json_encode(['alg' => 'HS256', 'typ' => 'JWT']);
+
+
+        $payload = json_encode([
+            'sub' => $userId,
+            'iat' => time(),
+            'exp' => time() + 3600
+        ]);
+
+
+        $base64Header = $this->base64UrlEncode($header);
+        $base64Payload = $this->base64UrlEncode($payload);
+
+
+        $secretKey = getenv('MYSQL_DATABASE');
+        $signature = hash_hmac('sha256', "$base64Header.$base64Payload", $secretKey, true);
+        $base64Signature = $this->base64UrlEncode($signature);
+
+
+        return "$base64Header.$base64Payload.$base64Signature";
+    }
 
 
     public function create_user_token(string $email): string
@@ -86,69 +106,40 @@ class AuthService
         $userId = $user->getUtilisateurId();
 
 
-        $stmtCheck = $this->pdo->prepare("SELECT tentatives, expire_at FROM password_reset_token WHERE utilisateur_id = :utilisateur_id");
+        $stmtCheck = $this->pdo->prepare("SELECT tentatives FROM password_reset_token WHERE utilisateur_id = :utilisateur_id");
         $stmtCheck->execute([':utilisateur_id' => $userId]);
         $existing = $stmtCheck->fetch(PDO::FETCH_ASSOC);
 
-        $calcul_token = $this->calcul_token();
 
-        $token = $calcul_token['token'];
-        $date = $calcul_token['date'];
 
-        $date->add(new DateInterval('PT15M'));
-        $expireFormatted = $date->format('Y-m-d H:i:s');
+        if ($existing && $existing['tentatives'] >= 3) {
+            throw new \Exception("Trop de demandes de réinitialisation. Veuillez réessayer plus tard.");
+        }
+
+        $token = $this->calcul_token($userId);
 
         if ($existing) {
-
-            if ($existing['tentatives'] >= 3) {
-                throw new \Exception("Trop de demandes de réinitialisation. Veuillez réessayer plus tard.");
-            }
-
-
-            $stmtUpdate = $this->pdo->prepare("UPDATE password_reset_token 
-                                           SET token = :token, 
-                                               expire_at = :expire_at, 
+            $stmt = $this->pdo->prepare("UPDATE password_reset_token 
+                                           SET token = :token,                                 
                                                tentatives = tentatives + 1 
                                            WHERE utilisateur_id = :utilisateur_id");
-            $stmtUpdate->execute([
-                ':token' => $token,
-                ':expire_at' => $expireFormatted,
-                ':utilisateur_id' => $userId
-            ]);
         } else {
 
-            $stmtInsert = $this->pdo->prepare("INSERT INTO password_reset_token (token, expire_at, tentatives, utilisateur_id) 
-                                           VALUES (:token, :expire_at, 1, :utilisateur_id)");
-            $stmtInsert->execute([
-                ':token' => $token,
-                ':expire_at' => $expireFormatted,
-                ':utilisateur_id' => $userId
-            ]);
+            $stmt = $this->pdo->prepare("INSERT INTO password_reset_token (token, tentatives, utilisateur_id) 
+                                           VALUES (:token, 1, :utilisateur_id)");
         }
+
+        $stmt->execute([
+            ':token' => $token,
+            ':utilisateur_id' => $userId
+        ]);
+
         $resetLink = "http://localhost:5173/reinit/" . $token;
         $this->mailer->sendPasswordResetEmail($user->getEmail(), $resetLink);
 
         return $token;
     }
 
-    private function save_session_token(int $id): string
-    {
-        $tokendata = $this->calcul_token();
-        $token = $tokendata['token'];
-        $date = $tokendata['date'];
-        $expireDate = clone $date;
-        $expireDate->add(new DateInterval('P7D'));
-        $expireFormatted = $expireDate->format('Y-m-d H:i:s');
-
-        $stmtInsert = $this->pdo->prepare("INSERT INTO session_token (token, expire_at, utilisateur_id) 
-                                           VALUES (:token, :expire_at, :utilisateur_id)");
-        $stmtInsert->execute([
-            ':token' => $token,
-            ':expire_at' => $expireFormatted,
-            ':utilisateur_id' => $id
-        ]);
-        return $token;
-    }
 
     public function login(string $email, string $plainPassword): array
     {
@@ -162,7 +153,7 @@ class AuthService
             return ["success" => false, "error" => "ACCOUNT_INACTIVE", "code" => 403];
         }
 
-        $token = $this->save_session_token($user->getUtilisateurID());
+        $token = $this->calcul_token($user->getUtilisateurID());
 
         return ["success" => true, "token" => $token, "code" => 200];
     }
