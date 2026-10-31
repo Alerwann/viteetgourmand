@@ -1,12 +1,12 @@
 /** @format */
-import type { menusInt } from "../../interfaces/menus";
+import type { MenuDetail } from "../../interfaces/menus";
 import type { Theme } from "../../interfaces/theme";
 import type { Regime } from "../../interfaces/regime";
 import { useState, useEffect, useMemo } from "react";
 import CardMenu from "./Card_menu";
 
 export default function Menus_composant() {
-  const [allMenus, setAllMenus] = useState<menusInt[]>([]);
+  const [allMenus, setAllMenus] = useState<MenuDetail[]>([]);
   const [allTheme, setAllTheme] = useState<Theme[]>([]);
   const [allRegime, setAllRegime] = useState<Regime[]>([]);
 
@@ -164,7 +164,7 @@ export default function Menus_composant() {
             {filteredMenus.map((menu) => (
               <li key={menu.menu_id} className="h-full">
                 <CardMenu
-                  menu_id={menu.menu_id}
+                  menu_id={menu.menu_id ? menu.menu_id : 0}
                   titre_menu={menu.menu_nom}
                   description={menu.description}
                   nb_minimal={menu.nb_perso_min}

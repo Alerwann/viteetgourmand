@@ -5,6 +5,7 @@ namespace App\Repository\Commande;
 use App\Entity\AdressePostale;
 use App\Entity\Commande;
 use App\Entity\PrestationDetail;
+use App\Enum\StatusCommande;
 use App\Repository\Commande\CommandeRepositoryInterface;
 use Override;
 use PDO;
@@ -28,16 +29,16 @@ class SqlCommandeRepository implements CommandeRepositoryInterface
         $sql = "SELECT commande_id,
                         commande_ref, 
                         commande_date, 
-                        date_prestation, 
-                        heure_livraison, 
+                        prestation_date, 
+                        prestation_heure, 
                         numero_rue, 
                         street, 
                         code_postal, 
                         ville, 
-                        pays
+                        pays,
                         nombre_personne, 
-                        prix_livraison, 
-                        statut, 
+                        livraison_prix, 
+                        commande_status, 
                         pret_materiel, 
                         restitution_materiel, 
                         utilisateur_id, 
@@ -49,64 +50,61 @@ class SqlCommandeRepository implements CommandeRepositoryInterface
     }
 
     #[Override]
-    public function getOne(int $commande_id): Commande
-
+    public function getOne(int $commande_id): ?Commande
     {
         $sql = "SELECT commande_id,
                         commande_ref, 
                         commande_date, 
-                        date_prestation, 
-                        heure_livraison, 
+                        prestation_date, 
+                        prestation_heure, 
                         numero_rue, 
                         street, 
                         code_postal, 
                         ville, 
-                        pays
+                        pays,
                         nombre_personne, 
-                        prix_livraison, 
-                        statut, 
+                        livraison_prix, 
+                        commande_status, 
                         pret_materiel, 
                         restitution_materiel, 
                         utilisateur_id, 
                         menu_id FROM commande
-                        WHERE commande_id =?";
-
+                        WHERE commande_id = ?";
 
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([$commande_id]);
 
         $tab = $this->hydrateCommande($stmt);
-        return $tab[0] ?? [];
+        return $tab[0] ?? null;
     }
 
     #[Override]
-    public function getByUtilisateurId(int $utilisateur_id): Commande
+    public function getByUtilisateurId(int $utilisateur_id): ?Commande
     {
         $sql = "SELECT commande_id,
                         commande_ref, 
                         commande_date, 
-                        date_prestation, 
-                        heure_livraison, 
+                        prestation_date, 
+                        prestation_heure, 
                         numero_rue, 
                         street, 
                         code_postal, 
                         ville, 
-                        pays
+                        pays,
                         nombre_personne, 
-                        prix_livraison, 
-                        statut, 
+                        livraison_prix, 
+                        commande_status,
                         pret_materiel, 
                         restitution_materiel, 
                         utilisateur_id, 
                         menu_id FROM commande
-                        WHERE utilisateur_id =?";
-
+                        WHERE utilisateur_id = ?";
 
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([$utilisateur_id]);
 
         $tab = $this->hydrateCommande($stmt);
-        return $tab[0] ?? [];
+        return $tab[0] ?? null;
     }
 
     #[Override]
@@ -114,20 +112,21 @@ class SqlCommandeRepository implements CommandeRepositoryInterface
     {
         $prestation_detail = $commande->getPresta();
         $prestation_adresse = $prestation_detail->getPrestationAdresse();
+
         if ($commande->getCommandeId() === null) {
             $sql = "INSERT INTO commande (
                             commande_ref, 
                             commande_date, 
-                            date_prestation, 
-                            heure_livraison,
+                            prestation_date, 
+                            prestation_heure,
                             numero_rue,
                             street,
                             code_postal,
                             ville,
                             pays,
                             nombre_personne, 
-                            prix_livraison, 
-                            statut, 
+                            livraison_prix, 
+                            commande_status, 
                             pret_materiel, 
                             restitution_materiel, 
                             utilisateur_id, 
@@ -135,66 +134,66 @@ class SqlCommandeRepository implements CommandeRepositoryInterface
                         ) VALUES ( 
                             :commande_ref, 
                             :commande_date, 
-                            :date_prestation, 
-                            :heure_livraison,
+                            :prestation_date, 
+                            :prestation_heure,
                             :numero_rue,
                             :street,
                             :code_postal,
                             :ville,
                             :pays,
                             :nombre_personne, 
-                            :prix_livraison, 
-                            :statut, 
+                            :livraison_prix, 
+                            :commande_status,
                             :pret_materiel, 
                             :restitution_materiel, 
                             :utilisateur_id, 
-                            :menu_id";
+                            :menu_id
+                        )";
         } else {
             $sql = "UPDATE commande SET
-                            commande_id =:commande_id,
-                            commande_ref= :commande_ref, 
+                            commande_ref = :commande_ref, 
                             commande_date = :commande_date, 
-                            date_prestation= :date_prestation, 
-                            heure_livraison= :heure_livraison,
-                            numero_rue=  :numero_rue,
-                            street=  :street,
-                            code_postal= :code_postal,
-                            ville= :ville,
-                            pays=:pays,
-                            nombre_personne=:nombre_personne, 
-                            prix_livraison=:prix_livraison, 
-                            statut:statut=:statut, 
-                            pret_materiel:pret_materiel, 
-                            restitution_materiel=  :restitution_materiel, 
+                            prestation_date = :prestation_date, 
+                            prestation_heure = :prestation_heure,
+                            numero_rue = :numero_rue,
+                            street = :street,
+                            code_postal = :code_postal,
+                            ville = :ville,
+                            pays = :pays,
+                            nombre_personne = :nombre_personne, 
+                            livraison_prix = :livraison_prix, 
+                            commande_status = :commande_status,
+                            pret_materiel = :pret_materiel, 
+                            restitution_materiel = :restitution_materiel, 
                             utilisateur_id = :utilisateur_id, 
-                            menu_id= :menu_id WHERE commande_id=:commande_id";
+                            menu_id = :menu_id 
+                        WHERE commande_id = :commande_id";
         }
 
         $params = [
             ':commande_ref' => $commande->getCommandeRef(),
             ':commande_date' => $commande->getCommandeDate(),
-            ':date_prestation' => $prestation_detail->getPrestationDate(),
-            ':heure_livraison' => $prestation_detail->getPrestionHeure(),
+            ':prestation_date' => $prestation_detail->getPrestationDate(),
+            ':prestation_heure' => $prestation_detail->getPrestationHeure(),
             ':numero_rue' => $prestation_adresse->getNumRue(),
             ':street' => $prestation_adresse->getStreet(),
             ':code_postal' => $prestation_adresse->getCodePostal(),
             ':ville' => $prestation_adresse->getVille(),
             ':pays' => $prestation_adresse->getPays(),
             ':nombre_personne' => $commande->getNombrePersonne(),
-            ':prix_livraison' => $prestation_detail->getLivraisonPrix(),
-            ':statut' => $commande->getStatus(),
+            ':livraison_prix' => $prestation_detail->getLivraisonPrix(),
+            ':commande_status' => $commande->getStatus()->value ?? $commande->getStatus(),
             ':pret_materiel' => $prestation_detail->getPretMateriel(),
             ':restitution_materiel' => $prestation_detail->getRestitutionMateriel(),
             ':utilisateur_id' => $commande->getUtilisateurId(),
-            ':menu_id' => $commande->getUtilisateurId()
+            ':menu_id' => $commande->getMenuId()
         ];
 
-        $stmt = $this->pdo->prepare($sql);
-
-        if ($commande->getCommandeiD() !== null) {
-            $params[':id'] = $commande->getCommandeId();
+        if ($commande->getCommandeId() !== null) {
+            $params[':commande_id'] = $commande->getCommandeId();
         }
 
+        $stmt = $this->pdo->prepare($sql);
         $stmt->execute($params);
     }
 
@@ -229,11 +228,11 @@ class SqlCommandeRepository implements CommandeRepositoryInterface
 
             $commande = new Commande(
                 commande_ref: $row['commande_ref'],
-                nombre_personne: $row['nombre_personnes'],
+                nombre_personne: $row['nombre_personne'],
                 menu_id: $row['menu_id'],
                 utilisateur_id: $row['utilisateur_id'],
                 commande_presta: $prestaDetail,
-                commande_status: $row['commande_status'],
+                commande_status: StatusCommande::from($row['commande_status']),
                 commande_id: $row['commande_id'],
                 commande_date: $row['commande_date'],
 

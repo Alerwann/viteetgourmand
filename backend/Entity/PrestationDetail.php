@@ -28,7 +28,7 @@ class PrestationDetail
         return $this->prestation_date;
     }
 
-    public function getPrestionHeure(): string
+    public function getPrestationHeure(): string
     {
         return $this->prestation_heure;
     }

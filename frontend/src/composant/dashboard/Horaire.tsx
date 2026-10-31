@@ -87,9 +87,9 @@ export default function Horaires() {
   };
 
   const handleChangeIsClose = () => {
-    var newStatut = !isClose;
-    setIsClose(newStatut);
-    if (newStatut) {
+    var newCommande_status = !isClose;
+    setIsClose(newCommande_status);
+    if (newCommande_status) {
       setCloseHour(-1);
       setOpenHour(-1);
     } else {
