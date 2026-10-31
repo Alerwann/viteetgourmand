@@ -29,9 +29,12 @@ class SqlHoraireRepository implements HoraireRepositoryInterface
     }
 
     #[Override]
-    public function getOne(int $id): Horaire
+    public function getOne(int $id): ?Horaire
     {
-        throw new \Exception('Not implemented');
+        $stmt = $this->pdo->prepare("SELECT horaire_id, jour, heure_ouverture, heure_fermeture FROM horaire WHERE horaire_id=:horaire_id");
+        $stmt->execute(['id' => $id]);
+        $horaire = $this->hydrateHoraire($stmt);
+        return $horaire ? $horaire : \null;
     }
 
     #[Override]
@@ -45,6 +48,13 @@ class SqlHoraireRepository implements HoraireRepositoryInterface
             ':ouverture' => $horaire->getHeureOuverture(),
             ':fermeture' => $horaire->getHeureFermeture()
         ]);
+    }
+
+    #[Override]
+    public function delete(int $horaire_id): void
+    {
+        $stmt = $this->pdo->prepare("DELETE FROM horaire WHERE $horaire_id = :id");
+        $stmt->execute([$horaire_id]);
     }
 
     private function hydrateHoraire(PDOStatement $stmt): array

@@ -37,15 +37,23 @@ class SqlAlergeneRepository implements AlergeneRepositoryInterface
     }
 
     #[Override]
-    public function createOne(Alergene $alergene): id
+    public function createOne(Alergene $alergene): void
     {
-        throw new \Exception('Not implemented');
+        if ($alergene->getAlergeneId() !== null) {
+            $stmt = $this->pdo->prepare("UPDATE alergene set ( alergene_nom= :alergene_nom) WHERE alergene_id = :alergene_id");
+            $params = [':alergene_id' => $alergene->getAlergeneId(), ':alergene_nom' => $alergene->getAlergeneId()];
+        } else {
+            $stmt = $this->pdo->prepare("INSERT INTO regime (alergene_nom) VALUES (:alergene_nom)");
+            $params = [':alergene_nom' => $alergene->getAlergeneId()];
+        }
+        $stmt->execute($params);
     }
 
     #[Override]
     public function deleteOne(int $alergene_id): void
     {
-        throw new \Exception('Not implemented');
+        $stmt = $this->pdo->prepare("DELETE FROM alergene WHERE alergene_id = :id");
+        $stmt->execute([$alergene_id]);
     }
 
     private function hydrateAlergene(PDOStatement $stmt): array
