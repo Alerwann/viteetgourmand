@@ -1,9 +1,9 @@
 /** @format */
 
-import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import type { MenuDetail } from "../../interfaces/menus";
-import CustomButton from "../global/button_global";
+import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import type { MenuDetail } from '../../interfaces/menus';
+import CustomButton from '../global/button_global';
 
 export default function MenuDetail() {
   const { id } = useParams();
@@ -13,7 +13,7 @@ export default function MenuDetail() {
     fetch(`http://localhost:8000/api/menus.php?id=${id}`)
       .then((res) => res.json())
       .then((data) => setDataMenu(data))
-      .catch((err) => console.error("Erreur fetch menu:", err));
+      .catch((err) => console.error('Erreur fetch menu:', err));
   }, [id]);
 
   console.log(dataMenu?.plats_details);
@@ -29,7 +29,7 @@ export default function MenuDetail() {
   // Groupement des plats par type_plat
   const platsByType = dataMenu.plats_details?.reduce(
     (acc, plat) => {
-      const type = plat.type_plat || "autres";
+      const type = plat.type_plat || 'autres';
       if (!acc[type]) {
         acc[type] = [];
       }
@@ -41,7 +41,7 @@ export default function MenuDetail() {
   console.log(dataMenu);
   return (
     <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100 flex flex-col items-center gap-4 my-8 pt-2">
-      <CustomButton label="Commander" type="button" to="/commande" />
+      <CustomButton label="Commander" type="button" to={`/commande/${id}`} />
       <div className="bg-[RGBA(105,230,140,1)] w-full text-black px-8 py-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <span className="inline-block px-3 py-1 text-xs font-semibold uppercase tracking-wider bg-indigo-100 rounded-full mb-3">
@@ -106,7 +106,7 @@ export default function MenuDetail() {
           </h2>
 
           {platsByType &&
-            ["Entrée", "Plat", "Dessert"]
+            ['Entrée', 'Plat', 'Dessert']
               .filter(
                 (type) => platsByType[type] && platsByType[type].length > 0,
               )
@@ -135,7 +135,7 @@ export default function MenuDetail() {
                           </span>
                           {plat.alergenes.length > 0 && (
                             <span className="inline-flex items-center gap-1 mt-1 px-2 py-0.5 text-xs font-medium bg-amber-50 text-amber-800 rounded-full border border-amber-200">
-                              ⚠️ {plat.alergenes.join(", ")}
+                              ⚠️ {plat.alergenes.join(', ')}
                             </span>
                           )}
                         </div>

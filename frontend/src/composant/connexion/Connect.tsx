@@ -1,22 +1,26 @@
 /** @format */
 
-import CustomButton from "../global/button_global";
-import { useState } from "react";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
-import type { IdentConnexion } from "../../interfaces/identConnexion";
+import CustomButton from '../global/button_global';
+import { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import type { IdentConnexion } from '../../interfaces/identConnexion';
 
-const inputAsset = "bg-white border-2 p-2";
+const inputAsset = 'bg-white border-2 p-2';
 const filesetAsset =
-  "border-2 grid grid-cols-2  text-left p-4 mt-4 gap-4 bg-[rgba(245,245,245,0.7)]";
+  'border-2 grid grid-cols-2  text-left p-4 mt-4 gap-4 bg-[rgba(245,245,245,0.7)]';
 
 export default function Connect_composant() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [identConnexion, setIdentConnexion] = useState<IdentConnexion>({
-    email: "",
-    password: "",
+    email: '',
+    password: '',
   });
 
   const [showError, setShowError] = useState<boolean>(false);
+
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const onClikPass = () => {
     const newStatePass = !showPassword;
@@ -36,10 +40,10 @@ export default function Connect_composant() {
     };
 
     try {
-      const response = await fetch("http://localhost:8000/api/auth.php", {
-        method: "POST",
+      const response = await fetch('http://localhost:8000/api/auth.php', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(preload),
       });
@@ -47,13 +51,16 @@ export default function Connect_composant() {
       response.status === 401 ? setShowError(true) : setShowError(false);
 
       if (!response.ok) {
-        throw new Error("Erreur HTTP : " + response.status);
+        throw new Error('Erreur HTTP : ' + response.status);
       }
       const data = await response.json();
 
-      localStorage.setItem("token", data.token);
+      const redirectTo = location.state?.from || '/';
+
+      localStorage.setItem('token', data.token);
+      navigate(redirectTo, { replace: true });
     } catch (error) {
-      console.error("Erreur lors de la soumission :", error);
+      console.error('Erreur lors de la soumission :', error);
     }
   };
 
@@ -80,7 +87,7 @@ export default function Connect_composant() {
           <label htmlFor="password">Mot de passe</label>
           <div className="flex flex-row gap-2">
             <input
-              type={showPassword ? "text" : "password"}
+              type={showPassword ? 'text' : 'password'}
               name="password"
               id="password"
               className={inputAsset}

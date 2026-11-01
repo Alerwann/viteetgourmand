@@ -6,7 +6,7 @@ use App\Repository\Horaire\SqlHoraireRepository;
 use App\Controller\HoraireController;
 
 header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: Content-Type");
+header("Access-Control-Allow-Headers: Content-Type, Atuhorization");
 header("Access-Control-Allow-Methods: GET, POST,PUT, OPTIONS");
 
 header("Content-Type: application/json; charset=UTF-8");

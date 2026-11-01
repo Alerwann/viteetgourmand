@@ -1,49 +1,50 @@
 /** @format */
 
-import React, { useState, useEffect } from "react";
-import { DishType, type Plat } from "../../interfaces/plat";
-import CustomButton from "../global/button_global";
-import type { Theme } from "../../interfaces/theme";
-import type { MenusInt } from "../../interfaces/menus";
-import type { Regime } from "../../interfaces/regime";
+import React, { useState, useEffect } from 'react';
+import { DishType, type Plat } from '../../interfaces/plat';
+import CustomButton from '../global/button_global';
+import type { Theme } from '../../interfaces/theme';
+import type { MenuDetail } from '../../interfaces/menus';
+import type { Regime } from '../../interfaces/regime';
 
-const inputAsset = "bg-white border-2 p-2";
+const inputAsset = 'bg-white border-2 p-2';
 const filesetAsset =
-  "border-2 grid grid-cols-2 items-center w-8/10 text-center p-4 mt-4 gap-4 bg-[rgba(245,245,245,0.7)]";
+  'border-2 grid grid-cols-2 items-center w-8/10 text-center p-4 mt-4 gap-4 bg-[rgba(245,245,245,0.7)]';
 
 export default function MenuCreateFor() {
   const [array_plats, setArrayPlats] = useState<Plat[]>([]);
   const [array_theme, setArrayTheme] = useState<Theme[]>([]);
   const [array_regime, setArrayRegime] = useState<Regime[]>([]);
 
-  const [menuData, setMenuData] = useState<MenusInt>({
-    menu_nom: "",
+  const [menuData, setMenuData] = useState<MenuDetail>({
+    menu_nom: '',
     nb_perso_min: 0,
     menu_prix: 0,
-    description: "",
+    description: '',
     quantite_restante: 0,
-    regime_id: -1,
-    theme_id: -1,
-    note_particuliere: "",
+    regime_nom: '',
+    theme_nom: '',
+    note_particuliere: '',
+    plats_details: [],
   });
 
   const [plats, setPlats] = useState<Record<string, string>>({});
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/plat.php")
+    fetch('http://localhost:8000/api/plat.php')
       .then((res) => res.json())
       .then((data) => setArrayPlats(data))
-      .catch((err) => console.error("Erreur chargement :", err));
+      .catch((err) => console.error('Erreur chargement :', err));
 
-    fetch("http://localhost:8000/api/theme.php")
+    fetch('http://localhost:8000/api/theme.php')
       .then((res) => res.json())
       .then((data) => setArrayTheme(data))
-      .catch((err) => console.error("Erreur chargement :", err));
+      .catch((err) => console.error('Erreur chargement :', err));
 
-    fetch("http://localhost:8000/api/regime.php")
+    fetch('http://localhost:8000/api/regime.php')
       .then((res) => res.json())
       .then((data) => setArrayRegime(data))
-      .catch((err) => console.error("Erreur chargement :", err));
+      .catch((err) => console.error('Erreur chargement :', err));
   }, []);
 
   const listPlatsByType = array_plats.reduce<Record<string, Plat[]>>(
@@ -68,11 +69,11 @@ export default function MenuCreateFor() {
     setMenuData((prev) => ({
       ...prev,
       [name]: [
-        "nb_perso_min",
-        "menu_prix",
-        "quantite_restante",
-        "regime_id",
-        "theme_id",
+        'nb_perso_min',
+        'menu_prix',
+        'quantite_restante',
+        'regime_id',
+        'theme_id',
       ].includes(name)
         ? Number(value)
         : value,
@@ -89,23 +90,23 @@ export default function MenuCreateFor() {
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (menuData.regime_id == -1) {
-      alert("Merci de choisir un régime");
+    if (menuData.regime_nom == '') {
+      alert('Merci de choisir un régime');
       return;
     }
 
-    if (menuData.theme_id == -1) {
-      alert("Merci de choisir un thème");
+    if (menuData.theme_nom == '') {
+      alert('Merci de choisir un thème');
     }
 
     const platsIds = Object.values(plats)
-      .filter((id) => id !== "")
+      .filter((id) => id !== '')
       .map((id) => Number(id));
 
     const payload = {
       titre: menuData.menu_nom,
-      theme_id: menuData.theme_id,
-      regime_id: menuData.regime_id,
+      theme_nom: menuData.theme_nom,
+      regime_nom: menuData.regime_nom,
       description: menuData.description,
       nb_perso_min: menuData.nb_perso_min,
       menu_prix: menuData.menu_prix,
@@ -114,35 +115,36 @@ export default function MenuCreateFor() {
     };
 
     try {
-      const response = await fetch("http://localhost:8000/api/menus.php", {
-        method: "POST",
+      const response = await fetch('http://localhost:8000/api/menus.php', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(payload),
       });
 
       if (!response.ok) {
-        throw new Error("Erreur HTTP : " + response.status);
+        throw new Error('Erreur HTTP : ' + response.status);
       }
 
       const result = await response.json();
-      console.log("Menu créé avec succès :", result);
-      alert("Menu ajouté");
+      console.log('Menu créé avec succès :', result);
+      alert('Menu ajouté');
 
       setMenuData({
-        menu_nom: "",
+        menu_nom: '',
         nb_perso_min: 0,
         menu_prix: 0,
-        description: "",
+        description: '',
         quantite_restante: 0,
-        regime_id: -1,
-        theme_id: -1,
-        note_particuliere: "",
+        regime_nom: '',
+        theme_nom: '',
+        note_particuliere: '',
+        plats_details: [],
       });
       setPlats({});
     } catch (error) {
-      console.error("Erreur lors de la soumission :", error);
+      console.error('Erreur lors de la soumission :', error);
     }
   };
 
@@ -171,12 +173,12 @@ export default function MenuCreateFor() {
           id="theme_id"
           className={inputAsset}
           onChange={handleChange}
-          value={menuData.theme_id}
+          value={menuData.theme_nom}
           required
         >
           <option value="-1">-- Sélectionner le thème --</option>
           {array_theme.map((theme) => (
-            <option value={theme.theme_id} key={theme.theme_id}>
+            <option value={theme.theme_nom} key={theme.theme_id}>
               {theme.theme_nom}
             </option>
           ))}
@@ -187,12 +189,12 @@ export default function MenuCreateFor() {
           id="regime_id"
           className={inputAsset}
           onChange={handleChange}
-          value={menuData.regime_id}
+          value={menuData.regime_nom}
           required
         >
           <option value="-1">-- Sélectionner le régime --</option>
           {array_regime.map((regime) => (
-            <option value={regime.regime_id} key={regime.regime_id}>
+            <option value={regime.regime_nom} key={regime.regime_id}>
               {regime.regime_nom}
             </option>
           ))}

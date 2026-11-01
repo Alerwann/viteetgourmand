@@ -22,7 +22,7 @@ class AuthService
         $this->mailer = $mailer;
     }
 
-    private function base64UrlEncode(string $data): string
+    public function base64UrlEncode(string $data): string
     {
         return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
     }

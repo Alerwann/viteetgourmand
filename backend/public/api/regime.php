@@ -5,7 +5,7 @@ use App\Repository\Regime\SqlRegimeRepository;
 use App\Controller\RegimeController;
 
 header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: Content-Type");
+header("Access-Control-Allow-Headers: Content-Type, Atuhorization");
 header("Access-Control-Allow-Methods: GET,POST,DELETE, OPTIONS");
 header("Content-Type: application/json; charset=utf8mb4");
 

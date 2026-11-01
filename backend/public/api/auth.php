@@ -11,7 +11,7 @@ use App\Services\MailerService;
 use App\Controller\AuthController;
 
 header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: Content-Type");
+header("Access-Control-Allow-Headers: Content-Type, Atuhorization");
 header("Access-Control-Allow-Methods: POST,DELETE,PUT, OPTIONS");
 header("Content-Type: application/json; charset=utf8mb4");
 

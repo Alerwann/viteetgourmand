@@ -18,3 +18,11 @@ export interface utilisateur {
   is_actif: boolean;
   role_id: number;
 }
+
+export interface utilisateurAuth {
+  utilisateur_id?: number;
+  email: string;
+  prenom: string;
+  nom: string;
+  telephone: string;
+}
