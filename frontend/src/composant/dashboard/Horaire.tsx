@@ -1,11 +1,12 @@
 /** @format */
 
-import { useState, useEffect } from "react";
-import creat_hour_array from "../../utils/init_array";
-import type { Horaire } from "../../interfaces/horaires";
+import { useState, useEffect } from 'react';
+import creat_hour_array from '../../utils/init_array';
+import type { Horaire } from '../../interfaces/horaires';
+import FormStyle from '../global/styles/Formulaire/FormStyle';
 
 export default function Horaires() {
-  const [daysChoice, setDaysChoice] = useState<string>("");
+  const [daysChoice, setDaysChoice] = useState<string>('');
   const [openHour, setOpenHour] = useState<number>(9);
   const [closeHour, setCloseHour] = useState<number>(18);
   const [isClose, setIsClose] = useState<boolean>(false);
@@ -15,20 +16,20 @@ export default function Horaires() {
   const heuresOptions = Array.from({ length: 24 }, (_, index) => index);
 
   const daysOption = [
-    "Lundi",
-    "Mardi",
-    "Mercredi",
-    "Jeudi",
-    "Vendredi",
-    "Samedi",
-    "Dimanche",
+    'Lundi',
+    'Mardi',
+    'Mercredi',
+    'Jeudi',
+    'Vendredi',
+    'Samedi',
+    'Dimanche',
   ];
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/horaires.php")
+    fetch('http://localhost:8000/api/horaires.php')
       .then((res) => res.json())
       .then((data) => setHorairesList(data))
-      .catch((err) => console.error("Erreur chargement :", err));
+      .catch((err) => console.error('Erreur chargement :', err));
   }, []);
 
   useEffect(() => {
@@ -51,7 +52,7 @@ export default function Horaires() {
     event.preventDefault();
 
     if (!daysChoice) {
-      alert("Veuillez choisir un jour.");
+      alert('Veuillez choisir un jour.');
       return;
     }
 
@@ -65,10 +66,10 @@ export default function Horaires() {
     };
 
     try {
-      const response = await fetch("http://localhost:8000/api/horaires.php", {
-        method: "PUT",
+      const response = await fetch('http://localhost:8000/api/horaires.php', {
+        method: 'PUT',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
       });
@@ -76,13 +77,13 @@ export default function Horaires() {
       const result = await response.json();
 
       if (response.ok) {
-        alert("Horaire mis à jour avec succès !");
+        alert('Horaire mis à jour avec succès !');
       } else {
-        alert("Erreur : " + result.message);
+        alert('Erreur : ' + result.message);
       }
     } catch (error) {
-      console.error("Erreur réseau :", error);
-      alert("Impossible de joindre le serveur.");
+      console.error('Erreur réseau :', error);
+      alert('Impossible de joindre le serveur.');
     }
   };
 
@@ -99,7 +100,7 @@ export default function Horaires() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col">
+    <FormStyle onSubmit={handleSubmit}>
       <div>
         <label htmlFor="days">Jour de la semaine</label>
         <select id="days" value={daysChoice} onChange={handleChangeDay}>
@@ -155,6 +156,6 @@ export default function Horaires() {
           Valider
         </button>
       </div>
-    </form>
+    </FormStyle>
   );
 }

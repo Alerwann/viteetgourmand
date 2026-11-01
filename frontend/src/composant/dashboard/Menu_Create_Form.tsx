@@ -6,10 +6,11 @@ import CustomButton from '../global/styles/button_global';
 import type { Theme } from '../../interfaces/theme';
 import type { MenuDetail } from '../../interfaces/menus';
 import type { Regime } from '../../interfaces/regime';
+import { FieldsetStyle } from '../global/styles/Formulaire/FieldsetStyle';
+import FormStyle from '../global/styles/Formulaire/FormStyle';
+import { InputStyle } from '../global/styles/Formulaire/InputStyle';
 
 const inputAsset = 'bg-white border-2 p-2';
-const filesetAsset =
-  'border-2 grid grid-cols-2 items-center w-8/10 text-center p-4 mt-4 gap-4 bg-[rgba(245,245,245,0.7)]';
 
 export default function MenuCreateFor() {
   const [array_plats, setArrayPlats] = useState<Plat[]>([]);
@@ -149,15 +150,10 @@ export default function MenuCreateFor() {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="flex flex-col items-center gap-5 mb-4"
-    >
-      <fieldset className={filesetAsset}>
-        <legend>Intitulé</legend>
-
-        <label htmlFor="menu_nom">Titre du menu</label>
-        <input
+    <FormStyle onSubmit={handleSubmit}>
+      <FieldsetStyle legend="Intitulé">
+        <InputStyle
+          label="Nom du menu"
           type="text"
           name="menu_nom"
           id="menu_nom"
@@ -222,10 +218,9 @@ export default function MenuCreateFor() {
           value={menuData.note_particuliere}
           onChange={handleChange}
         ></textarea>
-      </fieldset>
+      </FieldsetStyle>
 
-      <fieldset className={filesetAsset}>
-        <legend>Choix des plats</legend>
+      <FieldsetStyle legend="Choix de plats">
         {DishType.map((typeDish) => {
           return (
             <div key={typeDish} className="grid grid-cols-2 gap-4">
@@ -248,26 +243,22 @@ export default function MenuCreateFor() {
             </div>
           );
         })}
-      </fieldset>
+      </FieldsetStyle>
 
-      <fieldset className={filesetAsset}>
-        <legend>Quantité et Prix</legend>
-
-        <label htmlFor="nb_perso_min">Nombre minimum de part</label>
-        <input
+      <FieldsetStyle legend="Quantité et prix">
+        <InputStyle
+          label="Nombre minimum de part"
           type="number"
           name="nb_perso_min"
           id="nb_perso_min"
           min={0}
-          className={inputAsset}
           onChange={handleChange}
           value={menuData.nb_perso_min}
           required
         />
 
-        <label htmlFor="menu_prix">Prix par personne en €</label>
-
-        <input
+        <InputStyle
+          label="Prix par personne en €"
           type="number"
           name="menu_prix"
           id="menu_prix"
@@ -278,8 +269,8 @@ export default function MenuCreateFor() {
           required
         />
 
-        <label htmlFor="quantite_restante">Quantité restante</label>
-        <input
+        <InputStyle
+          label="Quantité restante"
           type="number"
           name="quantite_restante"
           id="quantite_restante"
@@ -289,9 +280,9 @@ export default function MenuCreateFor() {
           value={menuData.quantite_restante}
           required
         />
-      </fieldset>
+      </FieldsetStyle>
 
       <CustomButton label="Enregistrer" type="submit" />
-    </form>
+    </FormStyle>
   );
 }

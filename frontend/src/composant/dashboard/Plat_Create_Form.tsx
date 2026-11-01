@@ -3,6 +3,8 @@ import { useEffect, useState, type ChangeEvent } from 'react';
 import { DishType } from '../../interfaces/plat';
 import type { alergene } from '../../interfaces/alergene';
 import CustomButton from '../global/styles/button_global';
+import FormStyle from '../global/styles/Formulaire/FormStyle';
+import { InputStyle } from '../global/styles/Formulaire/InputStyle';
 
 export default function PlatCreateForm() {
   const [alergenes, setAlergenes] = useState<alergene[]>([]);
@@ -104,27 +106,25 @@ export default function PlatCreateForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col">
-      <div>
-        <label htmlFor="nomPlat">Nom du plat</label>
-        <input
-          type="text"
-          value={plat_nom}
-          id="nomPlat"
-          onChange={(e) => setNomPlat(e.target.value)}
-        />
-      </div>
-      <div>
-        <label htmlFor="photo">Charger une photo</label>
-        <input
-          type="file"
-          name="photo"
-          id="photo"
-          accept="image/*"
-          onChange={(e) => handleFileChange(e)}
-        />
-        {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
-      </div>
+    <FormStyle onSubmit={handleSubmit}>
+      <InputStyle
+        label="Nom du plat"
+        type="text"
+        value={plat_nom}
+        id="nomPlat"
+        onChange={(e) => setNomPlat(e.target.value)}
+      />
+
+      <InputStyle
+        label="Choix de la photo"
+        type="file"
+        name="photo"
+        id="photo"
+        accept="image/*"
+        onChange={(e) => handleFileChange(e)}
+      />
+      {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
+
       <div>
         <label htmlFor="typePlat">Types de plat</label>
         <select
@@ -140,24 +140,21 @@ export default function PlatCreateForm() {
           ))}
         </select>
       </div>
-      <div>
-        <ul>
-          {alergenes.map((alergene) => (
-            <li key={alergene.alergene_id}>
-              <label htmlFor={String(alergene.alergene_id)}>
-                {alergene.alergene_nom}
-              </label>
-              <input
-                type="checkbox"
-                id={String(alergene.alergene_id)}
-                onChange={() => handleCheckboxChange(alergene)}
-              />
-            </li>
-          ))}
-        </ul>
-      </div>
+
+      <ul className="grid grid-cols-3">
+        {alergenes.map((alergene) => (
+          <li key={alergene.alergene_id} className="grid grid-cols-2">
+            <InputStyle
+              label={alergene.alergene_nom}
+              type="checkbox"
+              id={String(alergene.alergene_id)}
+              onChange={() => handleCheckboxChange(alergene)}
+            />
+          </li>
+        ))}
+      </ul>
 
       <CustomButton label="Créer" type="submit" />
-    </form>
+    </FormStyle>
   );
 }
