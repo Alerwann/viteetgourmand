@@ -1,6 +1,6 @@
 /** @format */
-import { useState } from "react";
-import CustomButton from "../global/button_global";
+import { useState } from 'react';
+import CustomButton from '../global/styles/button_global';
 
 interface ContactFormData {
   title: string;
@@ -10,9 +10,9 @@ interface ContactFormData {
 
 export default function Contact_composant() {
   const [formData, setFormData] = useState<ContactFormData>({
-    title: "",
-    description: "",
-    email: "",
+    title: '',
+    description: '',
+    email: '',
   });
   const [status, setStatus] = useState<string | null>(null);
 
@@ -26,20 +26,20 @@ export default function Contact_composant() {
     e.preventDefault();
     try {
       const response = await fetch(
-        "http://localhost:8000/api/contact_request.php",
+        'http://localhost:8000/api/contact_request.php',
         {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(formData),
         },
       );
 
       if (!response.ok) throw new Error("Erreur lors de l'envoi");
 
-      setStatus("Message envoyé avec succès !");
-      setFormData({ title: "", description: "", email: "" });
+      setStatus('Message envoyé avec succès !');
+      setFormData({ title: '', description: '', email: '' });
     } catch (err) {
-      setStatus("Une erreur est survenue.");
+      setStatus('Une erreur est survenue.');
     }
   };
 
@@ -116,7 +116,7 @@ export default function Contact_composant() {
 
             {status && (
               <p
-                className={`text-sm font-medium ${status.includes("succès") ? "text-emerald-600" : "text-rose-600"}`}
+                className={`text-sm font-medium ${status.includes('succès') ? 'text-emerald-600' : 'text-rose-600'}`}
               >
                 {status}
               </p>

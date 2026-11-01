@@ -1,9 +1,13 @@
 /** @format */
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type SubmitEvent } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { type Commande } from '../../interfaces/commande';
 import { type utilisateurAuth } from '../../interfaces/utilisateur';
+import FormStyle from '../global/styles/Formulaire/FormStyle';
+import { FieldsetStyle } from '../global/styles/Formulaire/FieldsetStyle';
+import { InputStyle } from '../global/styles/Formulaire/InputStyle';
+import AdresseForm from '../global/styles/Formulaire/AdresseForm';
 
 export default function FormCommande() {
   const { menuid } = useParams();
@@ -92,12 +96,41 @@ export default function FormCommande() {
   if (loading) {
     return <p>Chargement de votre espace sécurisé...</p>;
   }
+  const handleChange = () => {};
+  const handleSubmit = (event: SubmitEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    console.log('Tu soummets');
+  };
 
   return (
     <div>
       <h1>Formulaire de commande</h1>
       <p>{utilisateur.nom}</p>
-      <form></form>
+      <FormStyle onSubmit={handleSubmit}>
+        <FieldsetStyle legend="Client">
+          <InputStyle label={'Nom'} id={'nom'} disabled />
+          <InputStyle label={'Prenom'} id={'prenom'} disabled />
+          <InputStyle label={'Email'} id={'email'} disabled />
+          <InputStyle label={'Téléphone'} id={'telephone'} disabled />
+        </FieldsetStyle>
+        <FieldsetStyle legend="Le Repas">
+          <InputStyle label={'Nom du menu'} id={'nomMenu'} />
+          <InputStyle
+            label="Nombre de pars"
+            id="nb_pars"
+            type="number"
+            min="0"
+          />
+        </FieldsetStyle>
+        <FieldsetStyle legend="Adresse de livraison">
+          <InputStyle label="Heure de livraison" id="heure" type="time" />
+          <InputStyle label="Date de livraison" id="date" type="date" />
+          <AdresseForm
+            handleChange={handleChange}
+            adresse_postale={commande.commande_presta.prestation_adresse}
+          ></AdresseForm>
+        </FieldsetStyle>
+      </FormStyle>
     </div>
   );
 }

@@ -1,13 +1,13 @@
 /** @format */
-import { useEffect, useState, type ChangeEvent } from "react";
-import { DishType } from "../../interfaces/plat";
-import type { alergene } from "../../interfaces/alergene";
-import CustomButton from "../global/button_global";
+import { useEffect, useState, type ChangeEvent } from 'react';
+import { DishType } from '../../interfaces/plat';
+import type { alergene } from '../../interfaces/alergene';
+import CustomButton from '../global/styles/button_global';
 
 export default function PlatCreateForm() {
   const [alergenes, setAlergenes] = useState<alergene[]>([]);
-  const [plat_nom, setNomPlat] = useState<string>("");
-  const [type_plat, setTypePlat] = useState<string>("");
+  const [plat_nom, setNomPlat] = useState<string>('');
+  const [type_plat, setTypePlat] = useState<string>('');
   const [photo, setPhoto] = useState<File | null>(null);
   const [alergene_array, setAlergeneArray] = useState<alergene[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -18,9 +18,9 @@ export default function PlatCreateForm() {
     const file = e.target.files?.[0];
     if (file) {
       if (file.size > MAX_SIZE) {
-        setErrorMessage("Le fichier est trop volumineux (2 Mo maximum).");
+        setErrorMessage('Le fichier est trop volumineux (2 Mo maximum).');
         setPhoto(null);
-        e.target.value = "";
+        e.target.value = '';
         return;
       }
       setErrorMessage(null);
@@ -29,10 +29,10 @@ export default function PlatCreateForm() {
   };
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/alergene.php")
+    fetch('http://localhost:8000/api/alergene.php')
       .then((res) => res.json())
       .then((data) => setAlergenes(data))
-      .catch((err) => console.error("Erreur chargement :", err));
+      .catch((err) => console.error('Erreur chargement :', err));
   }, []);
 
   const handleCheckboxChange = (currentAlergene: alergene) => {
@@ -56,14 +56,14 @@ export default function PlatCreateForm() {
 
     try {
       const formData = new FormData();
-      formData.append("plat_nom", plat_nom);
-      formData.append("type_plat", type_plat);
+      formData.append('plat_nom', plat_nom);
+      formData.append('type_plat', type_plat);
       if (photo) {
-        formData.append("photo", photo);
+        formData.append('photo', photo);
       }
 
-      const responsePlat = await fetch("http://localhost:8000/api/plat.php", {
-        method: "POST",
+      const responsePlat = await fetch('http://localhost:8000/api/plat.php', {
+        method: 'POST',
         body: formData,
       });
 
@@ -71,17 +71,17 @@ export default function PlatCreateForm() {
 
       if (!responsePlat.ok) {
         throw new Error(
-          dataPlat.message || "Erreur lors de la création du plat",
+          dataPlat.message || 'Erreur lors de la création du plat',
         );
       }
 
       const nouveauPlatId = dataPlat.plat_id;
 
       const responseLiaison = await fetch(
-        "http://localhost:8000/api/plat_alergene.php",
+        'http://localhost:8000/api/plat_alergene.php',
         {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             plat_id: nouveauPlatId,
             alergene_ids: alergene_array.map((a) => a.alergene_id),
@@ -92,14 +92,14 @@ export default function PlatCreateForm() {
         throw new Error("Erreur lors de l'association des allergènes");
       }
 
-      console.log("Plat et allergènes enregistrés avec succès !");
+      console.log('Plat et allergènes enregistrés avec succès !');
 
-      setNomPlat("");
-      setTypePlat("");
+      setNomPlat('');
+      setTypePlat('');
       setPhoto(null);
       setAlergeneArray([]);
     } catch (error) {
-      console.error("Erreur:", error);
+      console.error('Erreur:', error);
     }
   };
 
@@ -123,7 +123,7 @@ export default function PlatCreateForm() {
           accept="image/*"
           onChange={(e) => handleFileChange(e)}
         />
-        {errorMessage && <div style={{ color: "red" }}>{errorMessage}</div>}
+        {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
       </div>
       <div>
         <label htmlFor="typePlat">Types de plat</label>

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { DishType, type Plat } from '../../interfaces/plat';
-import CustomButton from '../global/button_global';
+import CustomButton from '../global/styles/button_global';
 import type { Theme } from '../../interfaces/theme';
 import type { MenuDetail } from '../../interfaces/menus';
 import type { Regime } from '../../interfaces/regime';

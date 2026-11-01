@@ -1,6 +1,6 @@
 /** @format */
 
-import CustomButton from '../global/button_global';
+import CustomButton from '../global/styles/button_global';
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';

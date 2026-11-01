@@ -1,9 +1,9 @@
 /** @format */
 
-import ZoneText from "../global/Zone_Text";
-import tabText from "../../utils/text_présentation.json";
+import ZoneText from '../global/styles/Zone_Text';
+import tabText from '../../utils/text_présentation.json';
 
-import ListAvisComposant from "./ListAvis";
+import ListAvisComposant from './ListAvis';
 
 export default function Accueil_coposant() {
   return (

@@ -1,28 +1,28 @@
 /** @format */
 
-import CustomButton from "../global/button_global";
-import { useState } from "react";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
-import type { utilisateur } from "../../interfaces/utilisateur";
+import CustomButton from '../global/styles/button_global';
+import { useState } from 'react';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import type { utilisateur } from '../../interfaces/utilisateur';
 
-const inputAsset = "bg-white border-2 p-2";
+const inputAsset = 'bg-white border-2 p-2';
 const filesetAsset =
-  "border-2 grid grid-cols-2  text-left p-4 mt-4 gap-4 bg-[rgba(245,245,245,0.7)]";
+  'border-2 grid grid-cols-2  text-left p-4 mt-4 gap-4 bg-[rgba(245,245,245,0.7)]';
 
 export default function CreateCompte() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [utilisateur, setUtilisateur] = useState<utilisateur>({
-    email: "",
-    password: "",
-    prenom: "",
-    nom: "",
-    telephone: "",
+    email: '',
+    password: '',
+    prenom: '',
+    nom: '',
+    telephone: '',
     adresse_postale: {
       numero_rue: 0,
-      street: "",
-      ville: "",
+      street: '',
+      ville: '',
       code_postal: 10000,
-      pays: "",
+      pays: '',
     },
     is_actif: false,
     role_id: 2,
@@ -44,11 +44,11 @@ export default function CreateCompte() {
     const { name, value } = e.target;
 
     const adresseFields = [
-      "numero_rue",
-      "street",
-      "ville",
-      "code_postal",
-      "pays",
+      'numero_rue',
+      'street',
+      'ville',
+      'code_postal',
+      'pays',
     ];
 
     if (adresseFields.includes(name)) {
@@ -56,7 +56,7 @@ export default function CreateCompte() {
         ...prev,
         adresse_postale: {
           ...prev.adresse_postale,
-          [name]: ["numero_rue", "code_postal"].includes(name)
+          [name]: ['numero_rue', 'code_postal'].includes(name)
             ? Number(value)
             : value,
         },
@@ -74,7 +74,7 @@ export default function CreateCompte() {
 
     // test des conditions de mot de passe
     if (!(hasMinLength && hasUpper && hasLower && hasNumber && hasSpecial)) {
-      alert("Le mot de passe ne respecte pas les critères de sécurité.");
+      alert('Le mot de passe ne respecte pas les critères de sécurité.');
       return;
     }
 
@@ -99,45 +99,45 @@ export default function CreateCompte() {
     //envoie pour traitement back
     try {
       const response = await fetch(
-        "http://localhost:8000/api/utilisateur.php",
+        'http://localhost:8000/api/utilisateur.php',
         {
-          method: "POST",
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify(preload),
         },
       );
 
       if (!response.ok) {
-        throw new Error("Erreur HTTP : " + response.status);
+        throw new Error('Erreur HTTP : ' + response.status);
       }
 
       const result = await response.json();
-      console.log("Utilisateur créé avec succès :", result);
+      console.log('Utilisateur créé avec succès :', result);
 
       //faire envoie de mail ici
-      alert("Utilisateur ajouté");
+      alert('Utilisateur ajouté');
 
       //réinitialisation du formulaire
       setUtilisateur({
-        email: "",
-        password: "",
-        prenom: "",
-        nom: "",
-        telephone: "",
+        email: '',
+        password: '',
+        prenom: '',
+        nom: '',
+        telephone: '',
         adresse_postale: {
           numero_rue: 0,
-          street: "",
-          ville: "",
+          street: '',
+          ville: '',
           code_postal: 10000,
-          pays: "",
+          pays: '',
         },
         is_actif: false,
         role_id: 2,
       });
     } catch (error) {
-      console.error("Erreur lors de la soumission :", error);
+      console.error('Erreur lors de la soumission :', error);
     }
   };
 
@@ -165,7 +165,7 @@ export default function CreateCompte() {
           <label htmlFor="password">Mot de passe</label>
           <div className="flex flex-row gap-2">
             <input
-              type={showPassword ? "text" : "password"}
+              type={showPassword ? 'text' : 'password'}
               name="password"
               id="password"
               className={inputAsset}
@@ -177,20 +177,20 @@ export default function CreateCompte() {
               {!showPassword ? <FaEye /> : <FaEyeSlash />}
             </button>
             <ul className="text-xs flex flex-col gap-1 text-gray-700">
-              <li style={{ color: hasMinLength ? "green" : "red" }}>
-                {hasMinLength ? "✔" : "✖"} 10 caractères minimum
+              <li style={{ color: hasMinLength ? 'green' : 'red' }}>
+                {hasMinLength ? '✔' : '✖'} 10 caractères minimum
               </li>
-              <li style={{ color: hasUpper ? "green" : "red" }}>
-                {hasUpper ? "✔" : "✖"} Une majuscule
+              <li style={{ color: hasUpper ? 'green' : 'red' }}>
+                {hasUpper ? '✔' : '✖'} Une majuscule
               </li>
-              <li style={{ color: hasLower ? "green" : "red" }}>
-                {hasLower ? "✔" : "✖"} Une minuscule
+              <li style={{ color: hasLower ? 'green' : 'red' }}>
+                {hasLower ? '✔' : '✖'} Une minuscule
               </li>
-              <li style={{ color: hasNumber ? "green" : "red" }}>
-                {hasNumber ? "✔" : "✖"} Un chiffre
+              <li style={{ color: hasNumber ? 'green' : 'red' }}>
+                {hasNumber ? '✔' : '✖'} Un chiffre
               </li>
-              <li style={{ color: hasSpecial ? "green" : "red" }}>
-                {hasSpecial ? "✔" : "✖"} Un caractère spécial
+              <li style={{ color: hasSpecial ? 'green' : 'red' }}>
+                {hasSpecial ? '✔' : '✖'} Un caractère spécial
               </li>
             </ul>
           </div>

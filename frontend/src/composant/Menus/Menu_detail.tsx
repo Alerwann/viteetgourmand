@@ -3,7 +3,7 @@
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import type { MenuDetail } from '../../interfaces/menus';
-import CustomButton from '../global/button_global';
+import CustomButton from '../global/styles/button_global';
 
 export default function MenuDetail() {
   const { id } = useParams();
