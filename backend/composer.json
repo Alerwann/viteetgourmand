@@ -10,7 +10,8 @@
       "\\App\\Repository\\": "Repository/",
       "App\\Entity\\": "Entity/",
       "App\\Enum\\": "Enum/",
-      "App\\Services\\": "Service/"
+      "App\\Services\\": "Service/",
+      "App\\Middleware\\": "Middleware/"
     }
   }
 }

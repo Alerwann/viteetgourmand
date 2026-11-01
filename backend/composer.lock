@@ -54,7 +54,8 @@
           "App\\Repository\\": "Repository/",
           "App\\Entity\\": "Entity/",
           "App\\Enum\\": "Enum/",
-          "App\\Services\\": "service/"
+          "App\\Services\\": "service/",
+          "App\\Middleware\\": "Middleware/"
         }
       },
       "notification-url": "https://packagist.org/downloads/",

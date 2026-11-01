@@ -2,6 +2,12 @@
 
 require_once __DIR__ . '/../../vendor/autoload.php';
 
+use App\Repository\Users\SqlUserRepository;
+use App\Repository\Auth\SqlAuthRepository;
+
+use App\Services\AuthService;
+use App\Services\MailerService;
+
 use App\Controller\AuthController;
 
 header("Access-Control-Allow-Origin: *");
@@ -17,14 +23,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 require_once __DIR__ . '/../../config/db_init.php';
 
 
-$controller = new AuthController($pdo);
+$userRepository = new SqlUserRepository($pdo);
+
+$authRepo = new SqlAuthRepository($pdo);
+
+
+$mailerService = new MailerService();
+
+$authService = new AuthService($userRepository, $authRepo, $mailerService);
+
+$controller = new AuthController($authService);
 
 $method = $_SERVER['REQUEST_METHOD'];
 
 switch ($method) {
-    case 'DELETE':
-        $controller->logout();
-        break;
+
     case 'PUT':
         $controller->updatePassword();
         break;
