@@ -1,6 +1,9 @@
 /** @format */
 import { useState } from 'react';
 import CustomButton from '../global/styles/button_global';
+import FormStyle from '../global/styles/Formulaire/FormStyle';
+import { InputStyle } from '../global/styles/Formulaire/InputStyle';
+import { FieldsetStyle } from '../global/styles/Formulaire/FieldsetStyle';
 
 interface ContactFormData {
   title: string;
@@ -44,9 +47,8 @@ export default function Contact_composant() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 py-12 px-4 sm:px-6 lg:px-8 flex flex-col justify-center">
-      <div className="max-w-2xl mx-auto w-full bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100 p-8 sm:p-10">
-        {/* En-tête */}
+    <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 flex flex-col justify-center">
+      <div className="">
         <div className="text-center mb-8">
           <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">
             Besoin d'informations supplémentaires ?
@@ -56,45 +58,31 @@ export default function Contact_composant() {
           </p>
         </div>
 
-        {/* Formulaire */}
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Objet */}
-          <div>
-            <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
-              Objet
-            </label>
-            <input
+        <FormStyle onSubmit={handleSubmit}>
+          <FieldsetStyle legend="Contact">
+            <InputStyle
+              label="Objet"
+              id="title"
               type="text"
               name="title"
               value={formData.title}
               onChange={handleChange}
               required
-              className="w-full bg-slate-50 border border-slate-200 p-3 rounded-xl text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               placeholder="Sujet de votre demande"
             />
-          </div>
 
-          {/* Email */}
-          <div>
-            <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
-              Votre email
-            </label>
-            <input
+            <InputStyle
+              id="email"
+              label="Email"
               type="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
               required
-              className="w-full bg-slate-50 border border-slate-200 p-3 rounded-xl text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               placeholder="votre.email@exemple.com"
             />
-          </div>
 
-          {/* Description */}
-          <div>
-            <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
-              Description
-            </label>
+            <label className="">Description</label>
             <textarea
               name="description"
               value={formData.description}
@@ -102,15 +90,14 @@ export default function Contact_composant() {
               required
               rows={5}
               maxLength={250}
-              className="w-full bg-slate-50 border border-slate-200 p-3 rounded-xl text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"
+              className="w-full bg-white border-2 p-2 rounded-md pr-10 focus:outline-2 focus:outline-indigo-600  resize-none"
               placeholder="Votre message (250 caractères max)"
             />
             <div className="mt-1 text-right text-xs text-slate-400">
               {formData.description.length} / 250 caractères
             </div>
-          </div>
+          </FieldsetStyle>
 
-          {/* Bouton de validation & Statut */}
           <div className="flex flex-col items-center gap-4 pt-4">
             <CustomButton label="Envoyer le message" type="submit" />
 
@@ -122,7 +109,7 @@ export default function Contact_composant() {
               </p>
             )}
           </div>
-        </form>
+        </FormStyle>
       </div>
     </div>
   );

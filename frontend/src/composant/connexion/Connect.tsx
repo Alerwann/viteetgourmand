@@ -5,10 +5,8 @@ import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import type { IdentConnexion } from '../../interfaces/identConnexion';
-
-const inputAsset = 'bg-white border-2 p-2';
-const filesetAsset =
-  'border-2 grid grid-cols-2  text-left p-4 mt-4 gap-4 bg-[rgba(245,245,245,0.7)]';
+import { FieldsetStyle } from '../global/styles/Formulaire/FieldsetStyle';
+import { InputStyle } from '../global/styles/Formulaire/InputStyle';
 
 export default function Connect_composant() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -70,35 +68,34 @@ export default function Connect_composant() {
         onSubmit={handleSubmit}
         className="flex flex-col items-center gap-5 mb-4"
       >
-        <fieldset className={filesetAsset}>
-          <legend>Connexion</legend>
-          <label htmlFor="email">E-mail</label>
-          <div>
-            <input
-              type="email"
-              name="email"
-              id="email"
-              className={inputAsset}
-              value={identConnexion.email}
-              onChange={handleChange}
-            />
-          </div>
+        <FieldsetStyle legend="Connexion">
+          <InputStyle
+            label="Email"
+            type="email"
+            name="email"
+            id="email"
+            value={identConnexion.email}
+            onChange={handleChange}
+          />
 
-          <label htmlFor="password">Mot de passe</label>
-          <div className="flex flex-row gap-2">
-            <input
-              type={showPassword ? 'text' : 'password'}
-              name="password"
-              id="password"
-              className={inputAsset}
-              value={identConnexion.password}
-              onChange={handleChange}
-            />
-            <button type="button" onClick={onClikPass}>
-              {!showPassword ? <FaEye /> : <FaEyeSlash />}
-            </button>
-          </div>
-        </fieldset>
+          <InputStyle
+            label="Mot de passe"
+            type={showPassword ? 'text' : 'password'}
+            name="password"
+            id="password"
+            value={identConnexion.password}
+            onChange={handleChange}
+            rightIcon={
+              <button
+                type="button"
+                onClick={onClikPass}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                {!showPassword ? <FaEye /> : <FaEyeSlash />}
+              </button>
+            }
+          />
+        </FieldsetStyle>
         <CustomButton label="Connexion" type="submit" />
       </form>
       <section className="flex flex-col text-center gap-2 mb-4">
