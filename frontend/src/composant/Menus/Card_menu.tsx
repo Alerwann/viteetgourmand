@@ -1,6 +1,6 @@
 /** @format */
-import { Link } from "react-router-dom";
-import type { PlatDetail } from "../../interfaces/menus";
+import { Link } from 'react-router-dom';
+import type { PlatDetail } from '../../interfaces/menus';
 
 interface MenuData {
   menu_id: number;
@@ -19,14 +19,12 @@ export default function CardMenu({
   price_by_person,
   detail_plat,
 }: MenuData) {
-  // Collecte et fusion unique de tous les allergènes du menu
   const allAllergens = Array.from(
     new Set(detail_plat?.flatMap((plat) => plat.alergenes) || []),
   );
 
   return (
     <div className="bg-white rounded-2xl border border-slate-100 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between h-full overflow-hidden group">
-      {/* En-tête de la carte */}
       <div className="p-6 pb-4 flex flex-col gap-3">
         <div className="flex justify-between items-start gap-2">
           <h3 className="text-xl font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">
@@ -42,9 +40,7 @@ export default function CardMenu({
         </p>
       </div>
 
-      {/* Corps de la carte (Plats & Allergènes) */}
       <div className="px-6 py-3 bg-slate-50/50 border-t border-b border-slate-100 flex flex-col gap-3 grow">
-        {/* Liste condensée des plats */}
         <div className="space-y-1">
           <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
             Composition
@@ -63,7 +59,7 @@ export default function CardMenu({
           <div className="flex items-center gap-1.5 text-xs text-amber-800 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-lg w-fit">
             <span>⚠️</span>
             <span className="font-medium truncate max-w-50">
-              {allAllergens.join(", ")}
+              {allAllergens.join(', ')}
             </span>
           </div>
         )}

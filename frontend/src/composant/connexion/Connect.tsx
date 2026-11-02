@@ -53,8 +53,7 @@ export default function Connect_composant() {
       }
       const data = await response.json();
 
-      const redirectTo = location.state?.from || '/';
-
+      const redirectTo = location.state?.from ?? '/';
       localStorage.setItem('token', data.token);
       navigate(redirectTo, { replace: true });
     } catch (error) {

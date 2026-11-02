@@ -1,19 +1,19 @@
 /** @format */
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
 interface ButtonProps {
   label: string;
   to?: string;
   onClick?: () => void;
-  type?: "button" | "submit";
+  type?: 'button' | 'submit';
 }
 
 const CustomButton: React.FC<ButtonProps> = ({
   label,
   to,
   onClick,
-  type = "button",
+  type = 'button',
 }) => {
   const navigate = useNavigate();
 
