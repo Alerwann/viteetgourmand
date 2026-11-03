@@ -2,7 +2,8 @@
   "name": "viteetgourmand/backend",
   "description": "Backend PHP pour mon application",
   "require": {
-    "phpmailer/phpmailer": "^6.9"
+    "phpmailer/phpmailer": "^6.9",
+    "mongodb/mongodb": "^2.5"
   },
   "autoload": {
     "psr-4": {

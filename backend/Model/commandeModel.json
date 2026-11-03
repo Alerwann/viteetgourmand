@@ -1,0 +1,19 @@
+{
+  "sql_order_id": 1042,
+  "createdAt": "2026-06-06T12:00:00Z",
+  "totalAmount": 42.0,
+  "items": [
+    {
+      "menuId": "m_1",
+      "menuName": "Menu Burger",
+      "quantity": 2,
+      "unitPrice": 15.0
+    },
+    {
+      "menuId": "m_3",
+      "menuName": "Menu Salade",
+      "quantity": 1,
+      "unitPrice": 12.0
+    }
+  ]
+}
