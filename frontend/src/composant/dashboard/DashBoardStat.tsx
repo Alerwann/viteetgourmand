@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -49,32 +49,34 @@ export default function DashboardStats() {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
 
-  const fetchStats = () => {
+  const handleSyncAndFetch = async () => {
     setLoading(true);
-    // Construction de l'URL avec les paramètres de filtres s'ils existent
-    const params = new URLSearchParams();
-    if (selectedMenu) params.append('menuId', selectedMenu);
-    if (startDate) params.append('startDate', startDate);
-    if (endDate) params.append('endDate', endDate);
+    try {
+      // 1. Déclencher la synchronisation MySQL -> MongoDB
+      await fetch('http://localhost:8000/api/sync.php');
 
-    const url = `http://localhost:8000/api/stats.php${params.toString() ? `?${params.toString()}` : ''}`;
+      // 2. Récupérer les statistiques à jour
+      const params = new URLSearchParams();
+      if (selectedMenu) params.append('menuId', selectedMenu);
+      if (startDate) params.append('startDate', startDate);
+      if (endDate) params.append('endDate', endDate);
 
-    fetch(url)
-      .then((res) => res.json())
-      .then((data: StatsData) => {
-        if (data.success) {
-          setChartData(data);
-        }
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error('Erreur lors de la récupération des stats :', err);
-        setLoading(false);
-      });
+      const url = `http://localhost:8000/api/stats.php${params.toString() ? `?${params.toString()}` : ''}`;
+      const res = await fetch(url);
+      const data: StatsData = await res.json();
+
+      if (data.success) {
+        setChartData(data);
+      }
+    } catch (err) {
+      console.error('Erreur lors de la synchronisation/récupération :', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
-    fetchStats();
+    handleSyncAndFetch();
   }, [selectedMenu, startDate, endDate]);
 
   if (!chartData && loading)
@@ -168,7 +170,14 @@ export default function DashboardStats() {
             className="border border-gray-300 rounded-lg p-2 text-sm w-32"
           />
         </div>
-        <div className="ml-auto">
+        <div className="ml-auto flex gap-2">
+          <button
+            onClick={handleSyncAndFetch}
+            disabled={loading}
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700 transition flex items-center gap-2 disabled:opacity-50"
+          >
+            {loading ? 'Synchronisation...' : '🔄 Actualiser / Synchroniser'}
+          </button>
           <button
             onClick={() => {
               setSelectedMenu('');
