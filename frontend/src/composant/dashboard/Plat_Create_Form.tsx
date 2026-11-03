@@ -1,10 +1,11 @@
 /** @format */
-import { use, useEffect, useState, type ChangeEvent } from 'react';
+import { useEffect, useState, type ChangeEvent } from 'react';
 import { DishType } from '../../interfaces/plat';
 import type { alergene } from '../../interfaces/alergene';
 import CustomButton from '../global/styles/button_global';
 import FormStyle from '../global/styles/Formulaire/FormStyle';
 import { InputStyle } from '../global/styles/Formulaire/InputStyle';
+import Loading from '../loading/Loading';
 
 export default function PlatCreateForm() {
   const [alergenes, setAlergenes] = useState<alergene[]>([]);
@@ -111,6 +112,9 @@ export default function PlatCreateForm() {
     }
   };
 
+  if (isLoading) {
+    return <Loading />;
+  }
   return (
     <FormStyle onSubmit={handleSubmit}>
       <InputStyle
