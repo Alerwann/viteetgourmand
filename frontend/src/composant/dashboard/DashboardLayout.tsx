@@ -1,5 +1,6 @@
 /** @format */
 
+import Loading from '../loading/Loading';
 import DashboardStats from './DashBoardStat';
 import Horaires from './Horaire';
 import MenuCreateForm from './Menu_Create_Form';
@@ -11,7 +12,8 @@ export default function DashboardLayout() {
       {/* <Horaires /> */}
       {/* <PlatCreateForm /> */}
       {/* <MenuCreateForm /> */}
-      <DashboardStats />
+      {/* <DashboardStats /> */}
+      <Loading />
     </div>
   );
 }
