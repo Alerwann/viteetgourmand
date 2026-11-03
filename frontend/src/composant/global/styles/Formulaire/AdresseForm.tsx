@@ -1,15 +1,12 @@
 /** @format */
 
-import type { adressePostale } from '../../../../interfaces/utilisateur';
+import type { AdresseFormInterface } from '../../../../interfaces/AdresseForm';
 import { InputStyle } from './InputStyle';
-interface AdresseForm {
-  adresse_postale: adressePostale;
-  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}
+
 export default function AdresseForm({
   adresse_postale,
   handleChange,
-}: AdresseForm) {
+}: AdresseFormInterface) {
   return (
     <div className="contents">
       <InputStyle

@@ -5,15 +5,20 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { type Commande } from '../../interfaces/commande';
 import { type utilisateurAuth } from '../../interfaces/utilisateur';
 import FormStyle from '../global/styles/Formulaire/FormStyle';
-import { FieldsetStyle } from '../global/styles/Formulaire/FieldsetStyle';
-import { InputStyle } from '../global/styles/Formulaire/InputStyle';
-import AdresseForm from '../global/styles/Formulaire/AdresseForm';
+import FormIdentity from './FormIdentity';
+import FormMenuCommmande from './FormMenuCommande';
+import type { MenuDetail } from '../../interfaces/menus';
 
 export default function FormCommande() {
   const { menuid } = useParams();
   const token = localStorage.getItem('token');
   const navigate = useNavigate();
+
   const menu_id = menuid ? parseInt(menuid) : -1;
+
+  const [pageIndex, setPageIndex] = useState<number>(0);
+  const [allMenus, setAllMenus] = useState<MenuDetail[]>([]);
+  const [namesMenu, setNamesMenu] = useState<String[]>([]);
   const [utilisateur, setUtilisateur] = useState<utilisateurAuth>({
     utilisateur_id: -1,
     email: '',
@@ -46,7 +51,7 @@ export default function FormCommande() {
       navigate('/connect', { state: { from: `/commande/${menu_id}` } });
       return;
     }
-    // 1. Premier appel : Sécurité + récupération de l'ID utilisateur via l'API commande
+
     fetch('http://localhost:8000/api/commande.php', {
       method: 'GET',
       headers: {
@@ -93,44 +98,67 @@ export default function FormCommande() {
       });
   }, [token, navigate]);
 
-  if (loading) {
-    return <p>Chargement de votre espace sécurisé...</p>;
-  }
+  useEffect(() => {
+    fetch('http://localhost:8000/api/menus.php')
+      .then((res) => res.json())
+      .then((data) => setAllMenus(data))
+      .catch((err) => console.error('Erreur fetch menus:', err));
+  }, []);
+
   const handleChange = () => {};
-  const handleSubmit = (event: SubmitEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault();
     console.log('Tu soummets');
   };
 
+  const handlePageChange = () => {
+    if (pageIndex < 2) {
+      const indexAct = pageIndex;
+      setPageIndex(indexAct + 1);
+    }
+  };
+
+  const handleBackPage = () => {
+    if (pageIndex > 0) {
+      const indexAct = pageIndex;
+      setPageIndex(indexAct - 1);
+    }
+  };
+
+  if (loading) {
+    return <p>Chargement de votre espace sécurisé...</p>;
+  }
   return (
     <div>
-      <h1>Formulaire de commande</h1>
-      <p>{utilisateur.nom}</p>
       <FormStyle onSubmit={handleSubmit}>
-        <FieldsetStyle legend="Client">
-          <InputStyle label={'Nom'} id={'nom'} disabled />
-          <InputStyle label={'Prenom'} id={'prenom'} disabled />
-          <InputStyle label={'Email'} id={'email'} disabled />
-          <InputStyle label={'Téléphone'} id={'telephone'} disabled />
-        </FieldsetStyle>
-        <FieldsetStyle legend="Le Repas">
-          <InputStyle label={'Nom du menu'} id={'nomMenu'} />
-          <InputStyle
-            label="Nombre de pars"
-            id="nb_pars"
-            type="number"
-            min="0"
-          />
-        </FieldsetStyle>
-        <FieldsetStyle legend="Adresse de livraison">
-          <InputStyle label="Heure de livraison" id="heure" type="time" />
-          <InputStyle label="Date de livraison" id="date" type="date" />
-          <AdresseForm
-            handleChange={handleChange}
+        {pageIndex === 0 && (
+          <FormIdentity
             adresse_postale={commande.commande_presta.prestation_adresse}
-          ></AdresseForm>
-        </FieldsetStyle>
+            utilisateur={utilisateur}
+            handleChange={handleChange}
+          />
+        )}
+
+        {pageIndex == 1 && <FormMenuCommmande />}
       </FormStyle>
+      <div className="mb-8 w-full flex justify-center gap-10">
+        <button
+          type="button"
+          onClick={handleBackPage}
+          disabled={pageIndex == 0}
+          className="p-5 rounded-2xl bg-amber-100 border-2 border-red-500 disabled:bg-gray-200 disabled:border-gray-500 disabled:text-gray-400"
+        >
+          Retour
+        </button>
+        <button
+          type="button"
+          onClick={handlePageChange}
+          disabled={pageIndex == 2}
+          className="p-5 rounded-2xl bg-amber-100 border-2 border-green-500 disabled:bg-gray-200 disabled:border-gray-500 disabled:text-gray-400"
+        >
+          Continuer
+        </button>
+      </div>
     </div>
   );
 }
