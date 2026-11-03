@@ -1,6 +1,6 @@
 /** @format */
 
-import { Star } from "lucide-react";
+import { Star } from 'lucide-react';
 
 interface AvisProps {
   note: number;
@@ -13,7 +13,6 @@ export default function AvisCard({ note, description }: AvisProps) {
 
   return (
     <div className="h-full w-full max-w-sm p-6 bg-white rounded-2xl shadow-md hover:shadow-xl border border-slate-100 flex flex-col justify-between gap-4 transition-all duration-300 group">
-      {/* Étoiles */}
       <div className="flex items-center gap-1">
         {Array.from({ length: validNote }).map((_, i) => (
           <Star
@@ -29,7 +28,6 @@ export default function AvisCard({ note, description }: AvisProps) {
         ))}
       </div>
 
-      {/* Description / Témoignage */}
       <p className="text-slate-700 text-sm leading-relaxed italic grow">
         "{description}"
       </p>

@@ -7,9 +7,12 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import type { IdentConnexion } from '../../interfaces/identConnexion';
 import { FieldsetStyle } from '../global/styles/Formulaire/FieldsetStyle';
 import { InputStyle } from '../global/styles/Formulaire/InputStyle';
+import Loading from '../loading/Loading';
 
 export default function Connect_composant() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const [identConnexion, setIdentConnexion] = useState<IdentConnexion>({
     email: '',
     password: '',
@@ -31,6 +34,8 @@ export default function Connect_composant() {
 
   const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
+
+    setIsLoading(true);
 
     const preload = {
       email: identConnexion.email,
@@ -56,11 +61,16 @@ export default function Connect_composant() {
       const redirectTo = location.state?.from ?? '/';
       localStorage.setItem('token', data.token);
       navigate(redirectTo, { replace: true });
+      setIsLoading(false);
     } catch (error) {
       console.error('Erreur lors de la soumission :', error);
+      setIsLoading(false);
     }
   };
 
+  if (isLoading) {
+    return <Loading />;
+  }
   return (
     <div className="flex flex-col items-center gap-4">
       <form

@@ -4,6 +4,7 @@ import CustomButton from '../global/styles/button_global';
 import FormStyle from '../global/styles/Formulaire/FormStyle';
 import { InputStyle } from '../global/styles/Formulaire/InputStyle';
 import { FieldsetStyle } from '../global/styles/Formulaire/FieldsetStyle';
+import Loading from '../loading/Loading';
 
 interface ContactFormData {
   title: string;
@@ -18,6 +19,7 @@ export default function Contact_composant() {
     email: '',
   });
   const [status, setStatus] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -27,6 +29,7 @@ export default function Contact_composant() {
 
   const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       const response = await fetch(
         'http://localhost:8000/api/contact_request.php',
@@ -41,10 +44,16 @@ export default function Contact_composant() {
 
       setStatus('Message envoyé avec succès !');
       setFormData({ title: '', description: '', email: '' });
+      setIsLoading(false);
     } catch (err) {
       setStatus('Une erreur est survenue.');
+      setIsLoading(false);
     }
   };
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 flex flex-col justify-center">

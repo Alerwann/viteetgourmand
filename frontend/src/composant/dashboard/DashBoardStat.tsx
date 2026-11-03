@@ -12,6 +12,7 @@ import {
   ArcElement,
 } from 'chart.js';
 import { Bar, Doughnut } from 'react-chartjs-2';
+import Loading from '../loading/Loading';
 
 ChartJS.register(
   CategoryScale,
@@ -79,12 +80,7 @@ export default function DashboardStats() {
     handleSyncAndFetch();
   }, [selectedMenu, startDate, endDate]);
 
-  if (!chartData && loading)
-    return (
-      <div className="p-6 text-center text-gray-500">
-        Chargement des statistiques...
-      </div>
-    );
+  if (!chartData && loading) return <Loading />;
   if (!chartData)
     return (
       <div className="p-6 text-center text-red-500">

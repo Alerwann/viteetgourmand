@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import creat_hour_array from '../../utils/init_array';
 import type { Horaire } from '../../interfaces/horaires';
 import FormStyle from '../global/styles/Formulaire/FormStyle';
+import Loading from '../loading/Loading';
 
 export default function Horaires() {
   const [daysChoice, setDaysChoice] = useState<string>('');
@@ -12,7 +13,7 @@ export default function Horaires() {
   const [isClose, setIsClose] = useState<boolean>(false);
   const [arrayClose, setArrayClose] = useState<number[]>([]);
   const [horaireList, setHorairesList] = useState<Horaire[]>([]);
-
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const heuresOptions = Array.from({ length: 24 }, (_, index) => index);
 
   const daysOption = [
@@ -26,10 +27,12 @@ export default function Horaires() {
   ];
 
   useEffect(() => {
+    setIsLoading(true);
     fetch('http://localhost:8000/api/horaires.php')
       .then((res) => res.json())
       .then((data) => setHorairesList(data))
       .catch((err) => console.error('Erreur chargement :', err));
+    setIsLoading(false);
   }, []);
 
   useEffect(() => {
@@ -50,6 +53,7 @@ export default function Horaires() {
 
   const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setIsLoading(true);
 
     if (!daysChoice) {
       alert('Veuillez choisir un jour.');
@@ -81,9 +85,11 @@ export default function Horaires() {
       } else {
         alert('Erreur : ' + result.message);
       }
+      setIsLoading(false);
     } catch (error) {
       console.error('Erreur réseau :', error);
       alert('Impossible de joindre le serveur.');
+      setIsLoading(false);
     }
   };
 
@@ -99,6 +105,9 @@ export default function Horaires() {
     }
   };
 
+  if (isLoading) {
+    return <Loading />;
+  }
   return (
     <FormStyle onSubmit={handleSubmit}>
       <div>

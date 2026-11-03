@@ -1,5 +1,5 @@
 /** @format */
-import { useEffect, useState, type ChangeEvent } from 'react';
+import { use, useEffect, useState, type ChangeEvent } from 'react';
 import { DishType } from '../../interfaces/plat';
 import type { alergene } from '../../interfaces/alergene';
 import CustomButton from '../global/styles/button_global';
@@ -13,6 +13,8 @@ export default function PlatCreateForm() {
   const [photo, setPhoto] = useState<File | null>(null);
   const [alergene_array, setAlergeneArray] = useState<alergene[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const MAX_SIZE = 2 * 1024 * 1024;
 
@@ -55,6 +57,8 @@ export default function PlatCreateForm() {
 
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    setIsLoading(true);
 
     try {
       const formData = new FormData();
@@ -100,8 +104,10 @@ export default function PlatCreateForm() {
       setTypePlat('');
       setPhoto(null);
       setAlergeneArray([]);
+      setIsLoading(false);
     } catch (error) {
       console.error('Erreur:', error);
+      setIsLoading(false);
     }
   };
 

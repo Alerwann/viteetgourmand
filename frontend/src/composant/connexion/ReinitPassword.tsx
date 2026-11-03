@@ -2,6 +2,7 @@
 import { useState } from 'react';
 
 import CustomButton from '../global/styles/button_global';
+import Loading from '../loading/Loading';
 
 /** @format */
 const inputAsset = 'bg-white border-2 p-2';
@@ -10,12 +11,14 @@ const filesetAsset =
 
 export default function ReinitPassword() {
   const [email, setEmail] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
   };
   const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
+    setIsLoading(true);
 
     try {
       const response = await fetch('http://localhost:8000/api/auth.php', {
@@ -29,10 +32,16 @@ export default function ReinitPassword() {
       if (!response.ok) {
         throw new Error('Erreur HTTP : ' + response.status);
       }
+      setIsLoading(false);
     } catch (error) {
       console.error('Erreur lors de la soumission :', error);
+      setIsLoading(true);
     }
   };
+
+  if (isLoading) {
+    return <Loading />;
+  }
   return (
     <div className="m-8 flex flex-col items-center ">
       <p>

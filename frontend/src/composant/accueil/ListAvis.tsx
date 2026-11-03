@@ -1,13 +1,15 @@
 /** @format */
 
-import { useState, useEffect } from "react";
-import AvisCard from "./AvisCard";
-import type { Avis } from "../../interfaces/avis";
+import { useState, useEffect } from 'react';
+import AvisCard from './AvisCard';
+import type { Avis } from '../../interfaces/avis';
+import Loading from '../loading/Loading';
 
 export default function ListAvisComposant() {
   const [listeAvis, setListAvis] = useState<Avis[]>([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [itemsVisible, setItemsVisible] = useState(3);
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const [itemsVisible, setItemsVisible] = useState<number>(3);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handlePrev = () => {
     setCurrentIndex((prev) => Math.max(prev - 1, 0));
@@ -29,8 +31,8 @@ export default function ListAvisComposant() {
     };
 
     updateItemsVisible();
-    window.addEventListener("resize", updateItemsVisible);
-    return () => window.removeEventListener("resize", updateItemsVisible);
+    window.addEventListener('resize', updateItemsVisible);
+    return () => window.removeEventListener('resize', updateItemsVisible);
   }, []);
 
   const maxIndex = Math.max(0, listeAvis.length - itemsVisible);
@@ -42,11 +44,19 @@ export default function ListAvisComposant() {
   }, [maxIndex, currentIndex]);
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/avis.php?status=publie")
+    setIsLoading(true);
+
+    fetch('http://localhost:8000/api/avis.php?status=publie')
       .then((res) => res.json())
       .then((data) => setListAvis(data))
-      .catch((err) => console.error("Erreur fetch avis:", err));
+      .catch((err) => console.error('Erreur fetch avis:', err));
+
+    setIsLoading(false);
   }, []);
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   if (listeAvis.length === 0) {
     return (

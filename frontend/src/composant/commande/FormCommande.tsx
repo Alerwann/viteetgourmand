@@ -8,6 +8,7 @@ import FormStyle from '../global/styles/Formulaire/FormStyle';
 import FormIdentity from './FormIdentity';
 import FormMenuCommmande from './FormMenuCommande';
 import type { MenuDetail } from '../../interfaces/menus';
+import Loading from '../loading/Loading';
 
 export default function FormCommande() {
   const { menuid } = useParams();
@@ -99,10 +100,12 @@ export default function FormCommande() {
   }, [token, navigate]);
 
   useEffect(() => {
+    setLoading(true);
     fetch('http://localhost:8000/api/menus.php')
       .then((res) => res.json())
       .then((data) => setAllMenus(data))
       .catch((err) => console.error('Erreur fetch menus:', err));
+    setLoading(false);
   }, []);
 
   const handleChange = () => {};
@@ -126,7 +129,7 @@ export default function FormCommande() {
   };
 
   if (loading) {
-    return <p>Chargement de votre espace sécurisé...</p>;
+    return <Loading />;
   }
   return (
     <div>

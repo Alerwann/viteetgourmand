@@ -9,6 +9,7 @@ import type { Regime } from '../../interfaces/regime';
 import { FieldsetStyle } from '../global/styles/Formulaire/FieldsetStyle';
 import FormStyle from '../global/styles/Formulaire/FormStyle';
 import { InputStyle } from '../global/styles/Formulaire/InputStyle';
+import Loading from '../loading/Loading';
 
 const inputAsset = 'bg-white border-2 p-2';
 
@@ -16,6 +17,7 @@ export default function MenuCreateFor() {
   const [array_plats, setArrayPlats] = useState<Plat[]>([]);
   const [array_theme, setArrayTheme] = useState<Theme[]>([]);
   const [array_regime, setArrayRegime] = useState<Regime[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const [menuData, setMenuData] = useState<MenuDetail>({
     menu_nom: '',
@@ -32,6 +34,8 @@ export default function MenuCreateFor() {
   const [plats, setPlats] = useState<Record<string, string>>({});
 
   useEffect(() => {
+    setIsLoading(true);
+
     fetch('http://localhost:8000/api/plat.php')
       .then((res) => res.json())
       .then((data) => setArrayPlats(data))
@@ -46,6 +50,7 @@ export default function MenuCreateFor() {
       .then((res) => res.json())
       .then((data) => setArrayRegime(data))
       .catch((err) => console.error('Erreur chargement :', err));
+    setIsLoading(false);
   }, []);
 
   const listPlatsByType = array_plats.reduce<Record<string, Plat[]>>(
@@ -114,7 +119,7 @@ export default function MenuCreateFor() {
       quantite_restante: menuData.quantite_restante,
       plats: platsIds,
     };
-
+    setIsLoading(true);
     try {
       const response = await fetch('http://localhost:8000/api/menus.php', {
         method: 'POST',
@@ -144,11 +149,15 @@ export default function MenuCreateFor() {
         plats_details: [],
       });
       setPlats({});
+      setIsLoading(false);
     } catch (error) {
       console.error('Erreur lors de la soumission :', error);
+      setIsLoading(false);
     }
   };
-
+  if (isLoading) {
+    return <Loading />;
+  }
   return (
     <FormStyle onSubmit={handleSubmit}>
       <FieldsetStyle legend="Intitulé">

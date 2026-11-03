@@ -4,6 +4,7 @@ import CustomButton from '../global/styles/button_global';
 import { useState } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import type { utilisateur } from '../../interfaces/utilisateur';
+import Loading from '../loading/Loading';
 
 const inputAsset = 'bg-white border-2 p-2';
 const filesetAsset =
@@ -11,6 +12,7 @@ const filesetAsset =
 
 export default function CreateCompte() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [utilisateur, setUtilisateur] = useState<utilisateur>({
     email: '',
     password: '',
@@ -72,13 +74,13 @@ export default function CreateCompte() {
   const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
 
-    // test des conditions de mot de passe
+    setIsLoading(true);
+
     if (!(hasMinLength && hasUpper && hasLower && hasNumber && hasSpecial)) {
       alert('Le mot de passe ne respecte pas les critères de sécurité.');
       return;
     }
 
-    //création de l'objet utilisateur
     const preload = {
       email: utilisateur.email,
       password: utilisateur.password,
@@ -96,7 +98,6 @@ export default function CreateCompte() {
       role_id: 2,
     };
 
-    //envoie pour traitement back
     try {
       const response = await fetch(
         'http://localhost:8000/api/utilisateur.php',
@@ -116,10 +117,8 @@ export default function CreateCompte() {
       const result = await response.json();
       console.log('Utilisateur créé avec succès :', result);
 
-      //faire envoie de mail ici
-      alert('Utilisateur ajouté');
+      alert('Votre compte a été créé avec succès');
 
-      //réinitialisation du formulaire
       setUtilisateur({
         email: '',
         password: '',
@@ -136,11 +135,16 @@ export default function CreateCompte() {
         is_actif: false,
         role_id: 2,
       });
+      setIsLoading(false);
     } catch (error) {
       console.error('Erreur lors de la soumission :', error);
+      setIsLoading(false);
     }
   };
 
+  if (isLoading) {
+    return <Loading />;
+  }
   return (
     <div className="flex flex-col items-center gap-4">
       <form
