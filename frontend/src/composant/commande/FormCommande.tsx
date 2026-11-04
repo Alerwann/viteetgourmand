@@ -1,6 +1,6 @@
 /** @format */
 
-import { useEffect, useState, type SubmitEvent } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { type Commande } from '../../interfaces/commande';
 import { type utilisateurAuth } from '../../interfaces/utilisateur';
@@ -9,6 +9,8 @@ import FormIdentity from './FormIdentity';
 import FormMenuCommmande from './FormMenuCommande';
 import type { MenuDetail } from '../../interfaces/menus';
 import Loading from '../global/styles/loading/Loading';
+import { getShippingForAddress } from '../../utils/distance_calcul';
+import CustomButton from '../global/styles/button_global';
 
 export default function FormCommande() {
   const { menuid } = useParams();
@@ -19,7 +21,7 @@ export default function FormCommande() {
 
   const [pageIndex, setPageIndex] = useState<number>(0);
   const [allMenus, setAllMenus] = useState<MenuDetail[]>([]);
-  // const [namesMenu, setNamesMenu] = useState<String[]>([]);
+  const [menuChoose, setMenuChoose] = useState<MenuDetail>();
   const [utilisateur, setUtilisateur] = useState<utilisateurAuth>({
     utilisateur_id: -1,
     email: '',
@@ -106,17 +108,47 @@ export default function FormCommande() {
 
   useEffect(() => {
     setLoading(true);
-    fetch('http://localhost:8000/api/menus.php')
-      .then((res) => res.json())
-      .then((data) => setAllMenus(data))
-      .catch((err) => console.error('Erreur fetch menus:', err));
-    setLoading(false);
-  }, []);
+
+    Promise.all([
+      fetch('http://localhost:8000/api/menus.php').then((res) => res.json()),
+      fetch(`http://localhost:8000/api/menus.php?id=${menu_id}`).then((res) =>
+        res.json(),
+      ),
+    ])
+      .then(([menusData, menuData]) => {
+        setAllMenus(menusData);
+        setMenuChoose({
+          menu_nom: menuData['menu_nom'],
+          menu_prix: menuData['menu_prix'],
+          nb_perso_min: menuData['nb_perso_min'],
+          description: menuData['descritption'],
+          quantite_restante: menuData['quantite_restante'],
+          regime_nom: menuData['regime_nom'],
+          theme_nom: menuData['theme_nom'],
+          plats_details: menuData['plat_detail'],
+        });
+      })
+      .catch((err) => console.error('Erreur fetch:', err))
+      .finally(() => setLoading(false));
+  }, [menu_id]);
 
   const handleChange = () => {};
-  const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log('Tu soummets');
+    try {
+      const adresse_postale = {
+        numero_rue: 2,
+        street: 'rue du lubéron',
+        ville: 'bordeau',
+        code_postal: 21110,
+        pays: 'france',
+      };
+
+      const resultGetCoord = getShippingForAddress(adresse_postale);
+      console.log(resultGetCoord);
+    } catch (error) {}
+
     setcommande({
       commande_ref: '',
       commande_date: new Date().toISOString(),
@@ -164,7 +196,16 @@ export default function FormCommande() {
           />
         )}
 
-        {pageIndex == 1 && <FormMenuCommmande />}
+        {pageIndex == 1 && (
+          <FormMenuCommmande
+            menuData={menuChoose!}
+            handleChange={handleChange}
+          />
+        )}
+
+        {pageIndex === 2 && (
+          <CustomButton label="Soumet le formulaire" type="submit" />
+        )}
       </FormStyle>
       <div className="mb-8 w-full flex justify-center gap-10">
         <button
