@@ -1,6 +1,7 @@
 /** @format */
 import { Link } from 'react-router-dom';
 import type { PlatDetail } from '../../interfaces/menus';
+import CardComposant from '../global/styles/card';
 
 interface MenuData {
   menu_id: number;
@@ -24,7 +25,7 @@ export default function CardMenu({
   );
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-100 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between h-full overflow-hidden group">
+    <CardComposant>
       <div className="p-6 pb-4 flex flex-col gap-3">
         <div className="flex justify-between items-start gap-2">
           <h3 className="text-xl font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">
@@ -66,7 +67,7 @@ export default function CardMenu({
       </div>
 
       {/* Pied de carte (Infos min. convives + Bouton) */}
-      <div className="p-6 pt-4 flex items-center justify-between gap-4 bg-white">
+      <div className="p-6 pt-4 flex items-center justify-between gap-4 ">
         <div className="text-xs text-slate-500 flex items-center gap-1 font-medium">
           <span>👥</span> Min. {nb_minimal} pers.
         </div>
@@ -78,6 +79,6 @@ export default function CardMenu({
           Voir le détail
         </Link>
       </div>
-    </div>
+    </CardComposant>
   );
 }

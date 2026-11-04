@@ -1,9 +1,10 @@
 /** @format */
-import type { MenuDetail } from "../../interfaces/menus";
-import type { Theme } from "../../interfaces/theme";
-import type { Regime } from "../../interfaces/regime";
-import { useState, useEffect, useMemo } from "react";
-import CardMenu from "./Card_menu";
+import type { MenuDetail } from '../../interfaces/menus';
+import type { Theme } from '../../interfaces/theme';
+import type { Regime } from '../../interfaces/regime';
+import { useState, useEffect, useMemo } from 'react';
+import CardMenu from './Card_menu';
+import CardComposant from '../global/styles/card';
 
 export default function Menus_composant() {
   const [allMenus, setAllMenus] = useState<MenuDetail[]>([]);
@@ -11,27 +12,27 @@ export default function Menus_composant() {
   const [allRegime, setAllRegime] = useState<Regime[]>([]);
 
   // États des filtres (fusion du prix max et de la fourchette en un seul filtre cohérent)
-  const [minPrice, setMinPrice] = useState<string>("");
-  const [maxPrice, setMaxPrice] = useState<string>("");
-  const [selectedTheme, setSelectedTheme] = useState<string>("all");
-  const [selectedDiet, setSelectedDiet] = useState<string>("all");
-  const [minGuests, setMinGuests] = useState<string>("");
+  const [minPrice, setMinPrice] = useState<string>('');
+  const [maxPrice, setMaxPrice] = useState<string>('');
+  const [selectedTheme, setSelectedTheme] = useState<string>('all');
+  const [selectedDiet, setSelectedDiet] = useState<string>('all');
+  const [minGuests, setMinGuests] = useState<string>('');
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/menus.php")
+    fetch('http://localhost:8000/api/menus.php')
       .then((res) => res.json())
       .then((data) => setAllMenus(data))
-      .catch((err) => console.error("Erreur fetch menus:", err));
+      .catch((err) => console.error('Erreur fetch menus:', err));
 
-    fetch("http://localhost:8000/api/theme.php")
+    fetch('http://localhost:8000/api/theme.php')
       .then((res) => res.json())
       .then((data) => setAllTheme(data))
-      .catch((err) => console.error("Erreur fetch theme:", err));
+      .catch((err) => console.error('Erreur fetch theme:', err));
 
-    fetch("http://localhost:8000/api/regime.php")
+    fetch('http://localhost:8000/api/regime.php')
       .then((res) => res.json())
       .then((data) => setAllRegime(data))
-      .catch((err) => console.error("Erreur fetch regime:", err));
+      .catch((err) => console.error('Erreur fetch regime:', err));
   }, []);
 
   const filteredMenus = useMemo(() => {
@@ -39,31 +40,31 @@ export default function Menus_composant() {
       const price = menu.menu_prix;
       const guests = menu.nb_perso_min;
 
-      if (minPrice !== "" && price < Number(minPrice)) return false;
-      if (maxPrice !== "" && price > Number(maxPrice)) return false;
-      if (selectedTheme !== "all" && menu.theme_nom !== selectedTheme)
+      if (minPrice !== '' && price < Number(minPrice)) return false;
+      if (maxPrice !== '' && price > Number(maxPrice)) return false;
+      if (selectedTheme !== 'all' && menu.theme_nom !== selectedTheme)
         return false;
-      if (selectedDiet !== "all" && menu.regime_nom !== selectedDiet)
+      if (selectedDiet !== 'all' && menu.regime_nom !== selectedDiet)
         return false;
-      if (minGuests !== "" && guests < Number(minGuests)) return false;
+      if (minGuests !== '' && guests < Number(minGuests)) return false;
 
       return true;
     });
   }, [allMenus, minPrice, maxPrice, selectedTheme, selectedDiet, minGuests]);
 
   const resetFilters = () => {
-    setMinPrice("");
-    setMaxPrice("");
-    setSelectedTheme("all");
-    setSelectedDiet("all");
-    setMinGuests("");
+    setMinPrice('');
+    setMaxPrice('');
+    setSelectedTheme('all');
+    setSelectedDiet('all');
+    setMinGuests('');
   };
 
   const hasActiveFilters =
     minPrice ||
     maxPrice ||
-    selectedTheme !== "all" ||
-    selectedDiet !== "all" ||
+    selectedTheme !== 'all' ||
+    selectedDiet !== 'all' ||
     minGuests;
 
   return (
@@ -80,7 +81,7 @@ export default function Menus_composant() {
         </div>
 
         {/* Barre de filtres moderne */}
-        <div className="bg-white p-6 rounded-2xl shadow-xl border border-slate-100 flex flex-col gap-4">
+        <CardComposant hoverChoice={false}>
           <div className="flex flex-wrap items-center justify-between gap-4">
             <h2 className="text-sm font-semibold uppercase tracking-wider text-slate-400">
               Filtrer les résultats
@@ -156,11 +157,11 @@ export default function Menus_composant() {
               min={1}
             />
           </div>
-        </div>
+        </CardComposant>
 
         {/* Grille d'affichage ou état vide */}
         {filteredMenus.length > 0 ? (
-          <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 w-full">
+          <ul className="grid grid-cols-1  lg:grid-cols-2 xl:grid-cols-3 gap-6 w-full">
             {filteredMenus.map((menu) => (
               <li key={menu.menu_id} className="h-full">
                 <CardMenu

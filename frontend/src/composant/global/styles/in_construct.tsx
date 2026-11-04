@@ -1,6 +1,10 @@
 /** @format */
+import { useEffect } from 'react';
 import construction from '../../../assets/construction.png';
 export default function InContruct() {
+  useEffect(() => {
+    document.title = 'Page en construction';
+  }, []);
   return (
     <div className="h-screen flex flex-col items-center my-20 gap-10">
       <h2 className="text-3xl text-black font-extrabold">

@@ -40,9 +40,9 @@ export default function MenuDetail() {
   );
   console.log(dataMenu);
   return (
-    <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100 flex flex-col items-center gap-4 my-8 pt-2">
+    <div className="max-w-4xl mx-auto bg-[#69e68c99] shadow-xl border-2 border-[RGB(240,175,70)] rounded-2xl overflow-hidden  flex flex-col items-center gap-4 my-8 pt-2">
       <CustomButton label="Commander" type="button" to={`/commande/${id}`} />
-      <div className="bg-[RGBA(105,230,140,1)] w-full text-black px-8 py-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div className="bg-[RGB(205,240,200)] w-full text-black px-8 py-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <span className="inline-block px-3 py-1 text-xs font-semibold uppercase tracking-wider bg-indigo-100 rounded-full mb-3">
             {dataMenu.theme_nom}
@@ -59,9 +59,9 @@ export default function MenuDetail() {
         </div>
       </div>
 
-      <div className="p-8 space-y-8">
+      <div className="p-8 bg-[RGB(205,240,200)] space-y-8 w-full">
         <div>
-          <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-2">
+          <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wider mb-2">
             Description
           </h2>
           <p className="text-slate-700 leading-relaxed text-lg">
@@ -100,8 +100,8 @@ export default function MenuDetail() {
         </div>
 
         {/* Composition du menu par type de plat ordonné */}
-        <div className="space-y-6">
-          <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-wider">
+        <div className="space-y-6  ">
+          <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wider">
             Composition du menu
           </h2>
 
