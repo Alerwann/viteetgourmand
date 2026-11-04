@@ -1,10 +1,10 @@
 /** @format */
 
 import Loading from '../loading/Loading';
-import DashboardStats from './DashBoardStat';
-import Horaires from './Horaire';
-import MenuCreateForm from './Menu_Create_Form';
-import PlatCreateForm from './Plat_Create_Form';
+// import DashboardStats from './DashBoardStat';
+// import Horaires from './Horaire';
+// import MenuCreateForm from './Menu_Create_Form';
+// import PlatCreateForm from './Plat_Create_Form';
 
 export default function DashboardLayout() {
   return (
