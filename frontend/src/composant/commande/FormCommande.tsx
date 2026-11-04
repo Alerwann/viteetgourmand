@@ -19,7 +19,7 @@ export default function FormCommande() {
 
   const [pageIndex, setPageIndex] = useState<number>(0);
   const [allMenus, setAllMenus] = useState<MenuDetail[]>([]);
-  const [namesMenu, setNamesMenu] = useState<String[]>([]);
+  // const [namesMenu, setNamesMenu] = useState<String[]>([]);
   const [utilisateur, setUtilisateur] = useState<utilisateurAuth>({
     utilisateur_id: -1,
     email: '',
@@ -52,6 +52,8 @@ export default function FormCommande() {
       navigate('/connect', { state: { from: `/commande/${menu_id}` } });
       return;
     }
+
+    console.log(`${allMenus} `);
 
     fetch('http://localhost:8000/api/commande.php', {
       method: 'GET',
@@ -112,6 +114,22 @@ export default function FormCommande() {
   const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log('Tu soummets');
+    setcommande({
+      commande_ref: '',
+      commande_date: new Date().toISOString(),
+      nombre_personne: 1,
+      menu_id: menu_id,
+      utilisateur_id: utilisateur.utilisateur_id ?? -1,
+      commande_presta: {
+        prestation_date: '',
+        prestation_heure: '',
+        prestation_adresse: {} as any,
+        livraison_prix: 0,
+        pret_materiel: false,
+        restitution_materiel: false,
+      },
+      commande_status: 'Création',
+    });
   };
 
   const handlePageChange = () => {
@@ -131,6 +149,7 @@ export default function FormCommande() {
   if (loading) {
     return <Loading />;
   }
+
   return (
     <div>
       <FormStyle onSubmit={handleSubmit}>
