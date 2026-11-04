@@ -8,8 +8,6 @@ import { InputStyle } from '../global/styles/Formulaire/InputStyle';
 
 /** @format */
 const inputAsset = 'bg-white border-2 p-2';
-const filesetAsset =
-  'border-2 grid grid-cols-2  text-left p-4 mt-4 gap-4 bg-[rgba(245,245,245,0.7)]';
 
 export default function ReinitPassword() {
   const [email, setEmail] = useState<string>('');
