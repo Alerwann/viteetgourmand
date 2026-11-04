@@ -3,6 +3,8 @@ import { useState } from 'react';
 
 import CustomButton from '../global/styles/button_global';
 import Loading from '../global/styles/loading/Loading';
+import { FieldsetStyle } from '../global/styles/Formulaire/FieldsetStyle';
+import { InputStyle } from '../global/styles/Formulaire/InputStyle';
 
 /** @format */
 const inputAsset = 'bg-white border-2 p-2';
@@ -43,19 +45,18 @@ export default function ReinitPassword() {
     return <Loading />;
   }
   return (
-    <div className="m-8 flex flex-col items-center ">
-      <p>
+    <div className="mx-8 min-h-[60vh] gap-16  flex flex-col justify-center items-center">
+      <p className="text-2xl font-medium">
         Un lien vous sera envoyé par email pour réinitialiser votre mot de
         passe.
       </p>
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col items-center gap-5 mb-4"
+        className="flex flex-col items-center gap-16 mb-4"
       >
-        <fieldset className={filesetAsset}>
-          <legend>Réinitialisation du mot de passe</legend>
-          <label htmlFor="email">Votre email</label>
-          <input
+        <FieldsetStyle legend="Réinitialisation de mot de passe">
+          <InputStyle
+            label="Votre E-mail"
             type="email"
             className={inputAsset}
             id="email"
@@ -63,7 +64,7 @@ export default function ReinitPassword() {
             onChange={handleChange}
             required
           />
-        </fieldset>
+        </FieldsetStyle>
         <CustomButton label="Connexion" type="submit" />
       </form>
     </div>

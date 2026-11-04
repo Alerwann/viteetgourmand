@@ -72,7 +72,7 @@ export default function Connect_composant() {
     return <Loading />;
   }
   return (
-    <div className="flex flex-col items-center gap-4">
+    <div className="flex flex-col items-center gap-4 min-h-[60vh] justify-center">
       <form
         onSubmit={handleSubmit}
         className="flex flex-col items-center gap-5 mb-4"

@@ -8,7 +8,7 @@ import Loading from '../global/styles/loading/Loading';
 
 const inputAsset = 'bg-white border-2 p-2';
 const filesetAsset =
-  'border-2 grid grid-cols-2  text-left p-4 mt-4 gap-4 bg-[rgba(245,245,245,0.7)]';
+  'p-4 rounded-2xl bg-[RGB(205,240,200)] shadow-xl border-2 border-[RGB(240,175,70)] grid grid-cols-2 items-center text-center gap-4 w-full mt-4';
 
 export default function CreateCompte() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
