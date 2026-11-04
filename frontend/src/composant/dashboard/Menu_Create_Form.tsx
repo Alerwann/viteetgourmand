@@ -9,7 +9,7 @@ import type { Regime } from '../../interfaces/regime';
 import { FieldsetStyle } from '../global/styles/Formulaire/FieldsetStyle';
 import FormStyle from '../global/styles/Formulaire/FormStyle';
 import { InputStyle } from '../global/styles/Formulaire/InputStyle';
-import Loading from '../loading/Loading';
+import Loading from '../global/styles/loading/Loading';
 
 const inputAsset = 'bg-white border-2 p-2';
 

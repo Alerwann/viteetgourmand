@@ -2,7 +2,7 @@
 import { useState } from 'react';
 
 import CustomButton from '../global/styles/button_global';
-import Loading from '../loading/Loading';
+import Loading from '../global/styles/loading/Loading';
 
 /** @format */
 const inputAsset = 'bg-white border-2 p-2';

@@ -4,7 +4,7 @@ import CustomButton from '../global/styles/button_global';
 import { useState } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import type { utilisateur } from '../../interfaces/utilisateur';
-import Loading from '../loading/Loading';
+import Loading from '../global/styles/loading/Loading';
 
 const inputAsset = 'bg-white border-2 p-2';
 const filesetAsset =

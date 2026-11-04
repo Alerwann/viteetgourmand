@@ -5,7 +5,7 @@ export default function IdentityComposant() {
   return (
     <div>
       <div>©️ 2026 Guehl marie</div>
-      <div>Hébergé par .......</div>
+      <div>Hébergé par Vercel</div>
     </div>
   );
 }

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import AvisCard from './AvisCard';
 import type { Avis } from '../../interfaces/avis';
-import Loading from '../loading/Loading';
+import Loading from '../global/styles/loading/Loading';
 
 export default function ListAvisComposant() {
   const [listeAvis, setListAvis] = useState<Avis[]>([]);

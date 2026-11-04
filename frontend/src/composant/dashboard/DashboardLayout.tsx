@@ -1,6 +1,7 @@
 /** @format */
 
-import Loading from '../loading/Loading';
+import InContruct from '../global/styles/in_construct';
+// import Loading from '../global/styles/loading/Loading';
 // import DashboardStats from './DashBoardStat';
 // import Horaires from './Horaire';
 // import MenuCreateForm from './Menu_Create_Form';
@@ -13,7 +14,8 @@ export default function DashboardLayout() {
       {/* <PlatCreateForm /> */}
       {/* <MenuCreateForm /> */}
       {/* <DashboardStats /> */}
-      <Loading />
+      {/* <Loading /> */}
+      <InContruct />
     </div>
   );
 }

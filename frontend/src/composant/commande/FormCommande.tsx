@@ -8,7 +8,7 @@ import FormStyle from '../global/styles/Formulaire/FormStyle';
 import FormIdentity from './FormIdentity';
 import FormMenuCommmande from './FormMenuCommande';
 import type { MenuDetail } from '../../interfaces/menus';
-import Loading from '../loading/Loading';
+import Loading from '../global/styles/loading/Loading';
 
 export default function FormCommande() {
   const { menuid } = useParams();

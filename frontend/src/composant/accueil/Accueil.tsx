@@ -1,11 +1,14 @@
 /** @format */
-
+import { useEffect } from 'react';
 import ZoneText from '../global/styles/Zone_Text';
 import tabText from '../../utils/text_présentation.json';
 
 import ListAvisComposant from './ListAvis';
 
 export default function Accueil_coposant() {
+  useEffect(() => {
+    document.title = 'Vite & gourmand';
+  }, []);
   return (
     <div className="flex flex-col items-center  ">
       {tabText.map((items, index) => (
