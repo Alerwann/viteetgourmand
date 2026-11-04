@@ -1,5 +1,5 @@
 /** @format */
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import CustomButton from '../global/styles/button_global';
 import FormStyle from '../global/styles/Formulaire/FormStyle';
 import { InputStyle } from '../global/styles/Formulaire/InputStyle';
@@ -20,6 +20,10 @@ export default function Contact_composant() {
   });
   const [status, setStatus] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    document.title = 'Contact Vite & Gourmand';
+  }, []);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,

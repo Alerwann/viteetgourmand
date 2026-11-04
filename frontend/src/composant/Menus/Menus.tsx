@@ -11,12 +11,15 @@ export default function Menus_composant() {
   const [allTheme, setAllTheme] = useState<Theme[]>([]);
   const [allRegime, setAllRegime] = useState<Regime[]>([]);
 
-  // États des filtres (fusion du prix max et de la fourchette en un seul filtre cohérent)
   const [minPrice, setMinPrice] = useState<string>('');
   const [maxPrice, setMaxPrice] = useState<string>('');
   const [selectedTheme, setSelectedTheme] = useState<string>('all');
   const [selectedDiet, setSelectedDiet] = useState<string>('all');
   const [minGuests, setMinGuests] = useState<string>('');
+
+  useEffect(() => {
+    document.title = 'Menus Vite & Gourmand';
+  }, []);
 
   useEffect(() => {
     fetch('http://localhost:8000/api/menus.php')

@@ -1,5 +1,5 @@
 /** @format */
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import CustomButton from '../global/styles/button_global';
 import Loading from '../global/styles/loading/Loading';
@@ -12,6 +12,10 @@ const inputAsset = 'bg-white border-2 p-2';
 export default function ReinitPassword() {
   const [email, setEmail] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    document.title = 'Reinititialisation mot de passe';
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);

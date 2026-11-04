@@ -1,7 +1,7 @@
 /** @format */
 
 import CustomButton from '../global/styles/button_global';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import type { utilisateur } from '../../interfaces/utilisateur';
 import Loading from '../global/styles/loading/Loading';
@@ -37,6 +37,9 @@ export default function CreateCompte() {
   const hasNumber = /\d/.test(pwd);
   const hasSpecial = /[^A-Za-z0-9]/.test(pwd);
 
+  useEffect(() => {
+    document.title = 'Création compte Vite & Gourmand';
+  }, []);
   const onClikPass = () => {
     const newStatePass = !showPassword;
     setShowPassword(newStatePass);

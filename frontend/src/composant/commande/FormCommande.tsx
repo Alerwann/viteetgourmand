@@ -46,6 +46,9 @@ export default function FormCommande() {
   });
 
   const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    document.title = 'Commande Vite & Gourmand';
+  }, []);
 
   useEffect(() => {
     if (!token) {

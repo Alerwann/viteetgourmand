@@ -1,7 +1,7 @@
 /** @format */
 
 import CustomButton from '../global/styles/button_global';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import type { IdentConnexion } from '../../interfaces/identConnexion';
@@ -27,6 +27,10 @@ export default function Connect_composant() {
     const newStatePass = !showPassword;
     setShowPassword(newStatePass);
   };
+
+  useEffect(() => {
+    document.title = 'Connexion Vite & Gourmand';
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIdentConnexion({ ...identConnexion, [e.target.name]: e.target.value });
