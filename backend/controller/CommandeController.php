@@ -129,48 +129,77 @@ class CommandeController
             return;
         }
 
-        $requiredKeys = [
+        // 1. Clés obligatoires à la racine
+        $requiredRootKeys = [
             'commande_ref',
             'nombre_personne',
             'menu_id',
             'utilisateur_id',
             'commande_status',
+            'commande_presta'
+        ];
+
+        foreach ($requiredRootKeys as $key) {
+            if (!isset($data[$key])) {
+                http_response_code(400);
+                echo json_encode(["message" => "Champ racine obligatoire manquant : $key"]);
+                return;
+            }
+        }
+
+        // 2. Clés obligatoires dans commande_presta
+        $presta = $data['commande_presta'];
+        $requiredPrestaKeys = [
             'prestation_date',
             'prestation_heure',
             'livraison_prix',
             'pret_materiel',
             'restitution_materiel',
-            'street',
-            'ville',
-            'pays',
-            'numero_rue',
-            'code_postal'
+            'prestation_adresse'
         ];
 
-        foreach ($requiredKeys as $key) {
-            if (!isset($data[$key])) {
+        foreach ($requiredPrestaKeys as $key) {
+            if (!isset($presta[$key])) {
                 http_response_code(400);
-                echo json_encode(["message" => "Champ obligatoire manquant : $key"]);
+                echo json_encode(["message" => "Champ de prestation obligatoire manquant : $key"]);
+                return;
+            }
+        }
+
+
+        $adresse = $presta['prestation_adresse'];
+        $requiredAdresseKeys = [
+            'numero_rue',
+            'street',
+            'code_postal',
+            'ville',
+            'pays'
+        ];
+
+        foreach ($requiredAdresseKeys as $key) {
+            if (!isset($adresse[$key])) {
+                http_response_code(400);
+                echo json_encode(["message" => "Champ d'adresse obligatoire manquant : $key"]);
                 return;
             }
         }
 
         try {
             $prestation_adresse = new AdressePostale(
-                street: $data['street'],
-                ville: $data['ville'],
-                pays: $data['pays'],
-                numero_rue: $data['numero_rue'],
-                code_postal: $data['code_postal']
+                street: $adresse['street'],
+                ville: $adresse['ville'],
+                pays: $adresse['pays'],
+                numero_rue: $adresse['numero_rue'],
+                code_postal: $adresse['code_postal']
             );
 
             $presta_Detail = new PrestationDetail(
-                prestation_date: $data['prestation_date'],
-                prestation_heure: $data['prestation_heure'],
+                prestation_date: $presta['prestation_date'] ?? "essai",
+                prestation_heure: $presta['prestation_heure'],
                 prestation_adresse: $prestation_adresse,
-                livraison_prix: $data['livraison_prix'],
-                pret_materiel: $data['pret_materiel'],
-                restitution_materiel: $data['restitution_materiel']
+                livraison_prix: (int) $presta['livraison_prix'],
+                pret_materiel: $presta['pret_materiel'],
+                restitution_materiel: $presta['restitution_materiel']
             );
 
             $commande = new Commande(

@@ -197,8 +197,42 @@ export default function FormCommande() {
     e.preventDefault();
 
     try {
-      const resultGetCoord = getShippingForAddress(adresse_postale);
-      console.log(resultGetCoord);
+      const resultGetCoord = await getShippingForAddress(
+        commande.commande_presta.prestation_adresse,
+      );
+      console.log(typeof resultGetCoord);
+      const playLoad = {
+        commande_ref: 'REF-1',
+        nombre_personne: commande.nombre_personne,
+        menu_id: menu_id,
+        utilisateur_id: utilisateur.utilisateur_id ?? -1,
+        commande_presta: {
+          prestation_date: commande.commande_presta.prestation_date,
+          prestation_heure: commande.commande_presta.prestation_heure,
+          prestation_adresse: commande.commande_presta.prestation_adresse,
+          livraison_prix: resultGetCoord.fraisDePort,
+          pret_materiel: false,
+          restitution_materiel: false,
+        },
+        commande_status: 'accepte',
+      };
+
+      const response = await fetch('http://localhost:8000/api/commande.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(playLoad),
+      });
+
+      if (!response.ok) {
+        throw new Error('Erreur HTTP : ' + response.status);
+      }
+
+      const result = await response.json();
+      console.log('Menu créé avec succès :', result);
+      alert('Menu ajouté');
     } catch (error) {}
 
     setcommande({
