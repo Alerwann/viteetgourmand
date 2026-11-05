@@ -21,7 +21,7 @@ export default function FormMenuCommmande({
         id={'nomMenu'}
         value={menuData.menu_nom}
         name="menu_nom"
-        onChange={handleChange}
+        disabled
       />
       <InputStyle
         label="Nombre de pars"

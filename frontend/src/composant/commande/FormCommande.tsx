@@ -2,8 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { type Commande } from '../../interfaces/commande';
-import { type utilisateurAuth } from '../../interfaces/utilisateur';
+import { initCommande, type Commande } from '../../interfaces/commande';
+import {
+  initUtilisateurAuth,
+  type utilisateurAuth,
+} from '../../interfaces/utilisateur';
 import FormStyle from '../global/styles/Formulaire/FormStyle';
 import FormIdentity from './FormIdentity';
 import FormMenuCommmande from './FormMenuCommande';
@@ -12,61 +15,37 @@ import Loading from '../global/styles/loading/Loading';
 import { getShippingForAddress } from '../../utils/distance_calcul';
 import CustomButton from '../global/styles/button_global';
 import VerifCommande from './VerifCommande';
+import createREfCommande from '../../utils/create_ref_commande';
 
 export default function FormCommande() {
   const { menuid } = useParams();
   const token = localStorage.getItem('token');
   const navigate = useNavigate();
-
-  const menu_id = menuid ? parseInt(menuid) : -1;
-
-  const [pageIndex, setPageIndex] = useState<number>(0);
-  const [allMenus, setAllMenus] = useState<MenuDetail[]>([]);
-  const [menuChoose, setMenuChoose] = useState<MenuDetail>();
-  const [utilisateur, setUtilisateur] = useState<utilisateurAuth>({
-    utilisateur_id: -1,
-    email: '',
-    prenom: '',
-    nom: '',
-    telephone: '',
-  });
-  const adresse_postale = {
-    numero_rue: 0,
-    street: '',
-    ville: '',
-    code_postal: 0,
-    pays: 'France',
-  };
-
-  const [commande, setcommande] = useState<Commande>({
-    commande_ref: '',
-    commande_date: new Date().toISOString(),
-    nombre_personne: menuChoose?.nb_perso_min ?? 0,
-    menu_id: menu_id,
-    utilisateur_id: utilisateur.utilisateur_id ?? -1,
-    commande_presta: {
-      prestation_date: '',
-      prestation_heure: '',
-      prestation_adresse: adresse_postale,
-      livraison_prix: 0,
-      pret_materiel: false,
-      restitution_materiel: false,
-    },
-    commande_status: 'Création',
-  });
-
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     document.title = 'Commande Vite & Gourmand';
   }, []);
+
+  const menu_id = menuid ? parseInt(menuid) : -1;
+  const [pageIndex, setPageIndex] = useState<number>(0);
+  const [allMenus, setAllMenus] = useState<MenuDetail[]>([]);
+  const [menuChoose, setMenuChoose] = useState<MenuDetail>();
+  const [utilisateur, setUtilisateur] =
+    useState<utilisateurAuth>(initUtilisateurAuth);
+  console.log(allMenus);
+  const initialeCommande = initCommande(
+    menuChoose?.nb_perso_min,
+    menu_id,
+    utilisateur.utilisateur_id,
+  );
+
+  const [commande, setcommande] = useState<Commande>(initialeCommande);
 
   useEffect(() => {
     if (!token) {
       navigate('/connect', { state: { from: `/commande/${menu_id}` } });
       return;
     }
-
-    console.log(`${allMenus} `);
 
     fetch('http://localhost:8000/api/commande.php', {
       method: 'GET',
@@ -201,8 +180,14 @@ export default function FormCommande() {
         commande.commande_presta.prestation_adresse,
       );
       console.log(typeof resultGetCoord);
+
+      const commandeREf = createREfCommande(
+        utilisateur.utilisateur_id!,
+        menu_id,
+      );
+
       const playLoad = {
-        commande_ref: 'REF-1',
+        commande_ref: commandeREf,
         nombre_personne: commande.nombre_personne,
         menu_id: menu_id,
         utilisateur_id: utilisateur.utilisateur_id ?? -1,
@@ -231,26 +216,11 @@ export default function FormCommande() {
       }
 
       const result = await response.json();
-      console.log('Menu créé avec succès :', result);
+      console.log('Commande passée avec succès :', result);
       alert('Menu ajouté');
     } catch (error) {}
 
-    setcommande({
-      commande_ref: '',
-      commande_date: new Date().toISOString(),
-      nombre_personne: 1,
-      menu_id: menu_id,
-      utilisateur_id: utilisateur.utilisateur_id ?? -1,
-      commande_presta: {
-        prestation_date: '',
-        prestation_heure: '',
-        prestation_adresse: {} as any,
-        livraison_prix: 0,
-        pret_materiel: false,
-        restitution_materiel: false,
-      },
-      commande_status: 'Création',
-    });
+    setcommande(initialeCommande);
   };
 
   const handlePageChange = () => {
