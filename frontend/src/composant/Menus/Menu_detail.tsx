@@ -16,8 +16,6 @@ export default function MenuDetail() {
       .catch((err) => console.error('Erreur fetch menu:', err));
   }, [id]);
 
-  console.log(dataMenu?.plats_details);
-
   if (!dataMenu) {
     return (
       <div className="flex h-screen items-center justify-center bg-gray-50 text-gray-500">
@@ -38,11 +36,12 @@ export default function MenuDetail() {
     },
     {} as Record<string, typeof dataMenu.plats_details>,
   );
-  console.log(dataMenu);
   return (
     <div className="max-w-4xl mx-auto bg-[#69e68c99] shadow-xl border-2 border-[RGB(240,175,70)] rounded-2xl overflow-hidden  flex flex-col items-center gap-4 my-8 pt-2">
       <CustomButton label="Commander" type="button" to={`/commande/${id}`} />
-      <p>Merci de se connecter ou créer un compte pour commander</p>
+
+      <p>Un compte client est nécessaire pour toute commande</p>
+
       <div className="bg-[RGB(205,240,200)] w-full text-black px-8 py-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <span className="inline-block px-3 py-1 text-xs font-semibold uppercase tracking-wider bg-indigo-100 rounded-full mb-3">

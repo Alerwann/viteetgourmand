@@ -26,3 +26,11 @@ export interface utilisateurAuth {
   nom: string;
   telephone: string;
 }
+
+export const initUtilisateurAuth: utilisateurAuth = {
+  utilisateur_id: -1,
+  email: '',
+  prenom: '',
+  nom: '',
+  telephone: '',
+};

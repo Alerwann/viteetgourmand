@@ -183,8 +183,8 @@ class SqlCommandeRepository implements CommandeRepositoryInterface
             ':nombre_personne' => $commande->getNombrePersonne(),
             ':livraison_prix' => $prestation_detail->getLivraisonPrix(),
             ':commande_status' => $commande->getStatus()->value ?? $commande->getStatus(),
-            ':pret_materiel' => $prestation_detail->getPretMateriel(),
-            ':restitution_materiel' => $prestation_detail->getRestitutionMateriel(),
+            ':pret_materiel' => $prestation_detail->getPretMateriel() !== \null ? (int) filter_var($prestation_detail->getPretMateriel(), FILTER_VALIDATE_BOOLEAN) : 0,
+            ':restitution_materiel' => $prestation_detail->getRestitutionMateriel() !== \null ? (int) filter_var($prestation_detail->getRestitutionMateriel(), FILTER_VALIDATE_BOOLEAN) : 0,
             ':utilisateur_id' => $commande->getUtilisateurId(),
             ':menu_id' => $commande->getMenuId()
         ];

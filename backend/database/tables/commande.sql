@@ -1,7 +1,7 @@
 -- Initialisation de la table commande
 CREATE TABLE commande (
     commande_id INT AUTO_INCREMENT PRIMARY KEY,
-    commande_ref VARCHAR(50) NOT NULL,
+    commande_ref VARCHAR(255) NOT NULL,
     prestation_date DATE NOT NULL,
     prestation_heure VARCHAR(50) NOT NULL,
     numero_rue INT DEFAULT NULL,

@@ -6,6 +6,7 @@ interface ButtonProps {
   label: string;
   to?: string;
   onClick?: () => void;
+  disabled?: boolean;
   type?: 'button' | 'submit';
 }
 
@@ -14,6 +15,7 @@ const CustomButton: React.FC<ButtonProps> = ({
   to,
   onClick,
   type = 'button',
+  disabled,
 }) => {
   const navigate = useNavigate();
 
@@ -29,7 +31,8 @@ const CustomButton: React.FC<ButtonProps> = ({
     <button
       type={type}
       onClick={handleClick}
-      className="p-3 bg-[#69e68c] border-black shadow-[0px_0px_10px_#10860c] rounded-xl"
+      disabled={disabled}
+      className="p-3 bg-[#69e68c] border-black shadow-[0px_0px_10px_#10860c] rounded-xl disabled:bg-gray-200 disabled:border-gray-500 disabled:text-gray-400"
     >
       {label}
     </button>

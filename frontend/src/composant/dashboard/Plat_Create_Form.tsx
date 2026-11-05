@@ -99,8 +99,6 @@ export default function PlatCreateForm() {
         throw new Error("Erreur lors de l'association des allergènes");
       }
 
-      console.log('Plat et allergènes enregistrés avec succès !');
-
       setNomPlat('');
       setTypePlat('');
       setPhoto(null);
