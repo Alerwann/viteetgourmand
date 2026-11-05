@@ -7,15 +7,6 @@ interface Coordinates {
   lng: number;
 }
 
-// interface HereGeocodeResponse {
-//   items: Array<{
-//     position: {
-//       lat: number;
-//       lng: number;
-//     };
-//   }>;
-// }
-
 interface ShippingResult {
   distanceKm: number;
   fraisDePort: number;
@@ -32,11 +23,9 @@ export async function getCoordinatesFromAddress(
     );
   }
 
-  // Construction d'une chaîne d'adresse propre
   const numero = adresse.numero_rue ? `${adresse.numero_rue} ` : '';
   const adresseComplete = `${numero}${adresse.street}, ${adresse.code_postal} ${adresse.ville}, ${adresse.pays}`;
 
-  // On utilise le paramètre 'q' obligatoire
   const params = new URLSearchParams({
     apiKey: apiKey,
     q: adresseComplete,
