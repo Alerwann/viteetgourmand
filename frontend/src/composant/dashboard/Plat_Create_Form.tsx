@@ -5,7 +5,7 @@ import type { alergene } from '../../interfaces/alergene';
 import CustomButton from '../global/styles/button_global';
 import FormStyle from '../global/styles/Formulaire/FormStyle';
 import { InputStyle } from '../global/styles/Formulaire/InputStyle';
-import Loading from '../global/styles/loading/Loading';
+import Loading from '../global/loading/Loading';
 
 export default function PlatCreateForm() {
   const [alergenes, setAlergenes] = useState<alergene[]>([]);

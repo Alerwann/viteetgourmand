@@ -11,11 +11,15 @@ import FormStyle from '../global/styles/Formulaire/FormStyle';
 import FormIdentity from './FormIdentity';
 import FormMenuCommmande from './FormMenuCommande';
 import type { MenuDetail } from '../../interfaces/menus';
-import Loading from '../global/styles/loading/Loading';
-import { getShippingForAddress } from '../../utils/distance_calcul';
+import Loading from '../global/loading/Loading';
+import {
+  getShippingForAddress,
+  type ShippingResult,
+} from '../../utils/distance_calcul';
 import CustomButton from '../global/styles/button_global';
 import VerifCommande from './VerifCommande';
 import createREfCommande from '../../utils/create_ref_commande';
+import TitleCommandeSection from '../global/styles/title_commande_section';
 
 export default function FormCommande() {
   const { menuid } = useParams();
@@ -28,11 +32,10 @@ export default function FormCommande() {
 
   const menu_id = menuid ? parseInt(menuid) : -1;
   const [pageIndex, setPageIndex] = useState<number>(0);
-  const [allMenus, setAllMenus] = useState<MenuDetail[]>([]);
   const [menuChoose, setMenuChoose] = useState<MenuDetail>();
   const [utilisateur, setUtilisateur] =
     useState<utilisateurAuth>(initUtilisateurAuth);
-  console.log(allMenus);
+
   const initialeCommande = initCommande(
     menuChoose?.nb_perso_min,
     menu_id,
@@ -40,6 +43,10 @@ export default function FormCommande() {
   );
 
   const [commande, setcommande] = useState<Commande>(initialeCommande);
+  const [resultGetCoord, setResulGetCoor] = useState<ShippingResult>({
+    fraisDePort: 0,
+    distanceKm: 0,
+  });
 
   useEffect(() => {
     if (!token) {
@@ -75,8 +82,6 @@ export default function FormCommande() {
       })
       .then((response) => response.json())
       .then((userData) => {
-        console.log("Informations complètes de l'utilisateur :", userData);
-
         setUtilisateur({
           utilisateur_id: userData.utilisateur_id,
           email: userData.email,
@@ -96,14 +101,9 @@ export default function FormCommande() {
   useEffect(() => {
     setLoading(true);
 
-    Promise.all([
-      fetch('http://localhost:8000/api/menus.php').then((res) => res.json()),
-      fetch(`http://localhost:8000/api/menus.php?id=${menu_id}`).then((res) =>
-        res.json(),
-      ),
-    ])
-      .then(([menusData, menuData]) => {
-        setAllMenus(menusData);
+    fetch(`http://localhost:8000/api/menus.php?id=${menu_id}`)
+      .then((res) => res.json())
+      .then((menuData) => {
         setMenuChoose({
           menu_nom: menuData['menu_nom'],
           menu_prix: menuData['menu_prix'],
@@ -112,7 +112,9 @@ export default function FormCommande() {
           quantite_restante: menuData['quantite_restante'],
           regime_nom: menuData['regime_nom'],
           theme_nom: menuData['theme_nom'],
-          plats_details: menuData['plat_detail'] ? menuData['plat_detail'] : [],
+          plats_details: menuData['plats_details']
+            ? menuData['plats_details']
+            : [],
         });
 
         setcommande((prev) => ({
@@ -179,7 +181,6 @@ export default function FormCommande() {
       const resultGetCoord = await getShippingForAddress(
         commande.commande_presta.prestation_adresse,
       );
-      console.log(typeof resultGetCoord);
 
       const commandeREf = createREfCommande(
         utilisateur.utilisateur_id!,
@@ -223,7 +224,24 @@ export default function FormCommande() {
     setcommande(initialeCommande);
   };
 
-  const handlePageChange = () => {
+  const handlePageChange = async () => {
+    if (pageIndex === 0) {
+      if (
+        commande.commande_presta.prestation_adresse.street === '' ||
+        commande.commande_presta.prestation_adresse.code_postal === 0 ||
+        commande.commande_presta.prestation_adresse.ville === ''
+      ) {
+        alert('Addresse incomplète');
+      } else {
+        const GetCoord = await getShippingForAddress(
+          commande.commande_presta.prestation_adresse,
+        );
+        if (GetCoord !== undefined) {
+          setResulGetCoor(GetCoord);
+          console.log(GetCoord.fraisDePort);
+        }
+      }
+    }
     if (pageIndex < 2) {
       const indexAct = pageIndex;
       setPageIndex(indexAct + 1);
@@ -246,7 +264,7 @@ export default function FormCommande() {
       <FormStyle onSubmit={handleSubmit}>
         {pageIndex === 0 && (
           <div>
-            <h2>Étape 1/3 : Identité et adresse de livraison</h2>
+            <TitleCommandeSection title="Étape 1/3 : Identité et adresse de livraison" />
             <FormIdentity
               utilisateur={utilisateur}
               handleChange={handleChange}
@@ -259,7 +277,7 @@ export default function FormCommande() {
           // cette étape peut être amélioré en ajoutant un possible commantaire
 
           <div>
-            <h2>Étape 2/3 : La commande</h2>
+            <TitleCommandeSection title="Étape 2/3 : La commande" />
             <FormMenuCommmande
               menuData={menuChoose!}
               handleChange={handleChange}
@@ -270,8 +288,12 @@ export default function FormCommande() {
 
         {pageIndex === 2 && (
           <>
-            <h2>Étape 3/3 : Vérification et validation pour calcul du prix</h2>
-            <VerifCommande commande={commande} menuData={menuChoose!} />
+            <TitleCommandeSection title="Étape 3/3 : Vérification et validation pour calcul du prix" />
+            <VerifCommande
+              commande={commande}
+              menuData={menuChoose!}
+              coutLivraison={resultGetCoord!.fraisDePort}
+            />
           </>
         )}
 

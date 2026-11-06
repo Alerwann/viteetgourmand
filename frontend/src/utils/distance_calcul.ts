@@ -7,7 +7,7 @@ interface Coordinates {
   lng: number;
 }
 
-interface ShippingResult {
+export interface ShippingResult {
   distanceKm: number;
   fraisDePort: number;
 }

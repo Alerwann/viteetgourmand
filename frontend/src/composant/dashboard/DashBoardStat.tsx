@@ -12,7 +12,7 @@ import {
   ArcElement,
 } from 'chart.js';
 import { Bar, Doughnut } from 'react-chartjs-2';
-import Loading from '../global/styles/loading/Loading';
+import Loading from '../global/loading/Loading';
 
 ChartJS.register(
   CategoryScale,

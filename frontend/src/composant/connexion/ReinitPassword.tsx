@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 
 import CustomButton from '../global/styles/button_global';
-import Loading from '../global/styles/loading/Loading';
+import Loading from '../global/loading/Loading';
 import { FieldsetStyle } from '../global/styles/Formulaire/FieldsetStyle';
 import { InputStyle } from '../global/styles/Formulaire/InputStyle';
 

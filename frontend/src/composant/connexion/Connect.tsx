@@ -7,7 +7,7 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import type { IdentConnexion } from '../../interfaces/identConnexion';
 import { FieldsetStyle } from '../global/styles/Formulaire/FieldsetStyle';
 import { InputStyle } from '../global/styles/Formulaire/InputStyle';
-import Loading from '../global/styles/loading/Loading';
+import Loading from '../global/loading/Loading';
 
 export default function Connect_composant() {
   const [showPassword, setShowPassword] = useState<boolean>(false);

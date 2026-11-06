@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import creat_hour_array from '../../utils/init_array';
 import type { Horaire } from '../../interfaces/horaires';
 import FormStyle from '../global/styles/Formulaire/FormStyle';
-import Loading from '../global/styles/loading/Loading';
+import Loading from '../global/loading/Loading';
 
 export default function Horaires() {
   const [daysChoice, setDaysChoice] = useState<string>('');

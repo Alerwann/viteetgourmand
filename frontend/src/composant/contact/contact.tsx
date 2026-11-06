@@ -4,7 +4,7 @@ import CustomButton from '../global/styles/button_global';
 import FormStyle from '../global/styles/Formulaire/FormStyle';
 import { InputStyle } from '../global/styles/Formulaire/InputStyle';
 import { FieldsetStyle } from '../global/styles/Formulaire/FieldsetStyle';
-import Loading from '../global/styles/loading/Loading';
+import Loading from '../global/loading/Loading';
 
 interface ContactFormData {
   title: string;
