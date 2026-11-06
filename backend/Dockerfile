@@ -15,12 +15,12 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
+COPY . .
 
-COPY composer.json ./
 RUN composer dump-autoload --optimize --no-dev --classmap-authoritative
 
 
-COPY . .
+
 RUN echo 'server { \
     listen 10000; \
     root /var/www/html/public; \
