@@ -48,10 +48,7 @@ export default function Connect_composant() {
     };
 
     try {
-      const response = await api.post(
-        'http://localhost:8000/api/auth.php',
-        preload,
-      );
+      const response = await api.post('api/auth.php', preload);
 
       setShowError(false);
       const data = response.data;
