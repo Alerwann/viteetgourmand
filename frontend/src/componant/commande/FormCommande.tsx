@@ -208,22 +208,12 @@ export default function FormCommande() {
         commande_status: 'accepte',
       };
 
-      const response = await fetch('http://localhost:8000/api/commande.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify(playLoad),
-      });
+      const response = await api.post('api/commande.php', playLoad);
 
-      if (!response.ok) {
-        throw new Error('Erreur HTTP : ' + response.status);
-      }
+      const data = response.data;
 
-      const result = await response.json();
-      console.log('Commande passée avec succès :', result);
-      alert('Menu ajouté');
+      console.log('Commande passée avec succès :', data);
+      alert('Commande crée');
     } catch (error) {
       console.error('Erreur lors de la soumission :', error);
     }

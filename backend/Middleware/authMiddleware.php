@@ -16,8 +16,8 @@ class AuthMiddleware
     public function handle(): int
     {
         // Récupération des headers de la requête
-        $headers = getallheaders();
-        $authHeader = $headers['Authorization'] ?? $headers['authorization'] ?? '';
+        $headers = array_change_key_case(getallheaders(), CASE_LOWER);
+        $authHeader = $headers['authorization'] ?? '';
 
         // Vérification du format "Bearer <token>"
         if (!preg_match('/Bearer\s(\S+)/', $authHeader, $matches)) {
@@ -37,7 +37,7 @@ class AuthMiddleware
             exit;
         }
 
-        return $userId;
+        return (int) $userId;
     }
 
 

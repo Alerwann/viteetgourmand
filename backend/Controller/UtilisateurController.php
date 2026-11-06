@@ -60,7 +60,7 @@ class UtilisateurController
             echo json_encode(["message" => "Données incomplètes."]);
             return;
         } else {
-            $id = $_GET['id'];
+            $id = (int) $_GET['id'];
         }
         try {
             $user = $this->userRepository->findById($id);
