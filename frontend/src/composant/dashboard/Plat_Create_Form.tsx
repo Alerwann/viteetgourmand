@@ -6,13 +6,13 @@ import CustomButton from '../global/styles/button_global';
 import FormStyle from '../global/styles/Formulaire/FormStyle';
 import { InputStyle } from '../global/styles/Formulaire/InputStyle';
 import Loading from '../global/loading/Loading';
+import api from '../../services/api';
 
 export default function PlatCreateForm() {
   const [alergenes, setAlergenes] = useState<alergene[]>([]);
   const [plat_nom, setNomPlat] = useState<string>('');
   const [type_plat, setTypePlat] = useState<string>('');
   const [photo, setPhoto] = useState<File | null>(null);
-  const [alergene_array, setAlergeneArray] = useState<alergene[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -34,14 +34,14 @@ export default function PlatCreateForm() {
   };
 
   useEffect(() => {
-    fetch('http://localhost:8000/api/alergene.php')
-      .then((res) => res.json())
-      .then((data) => setAlergenes(data))
+    api
+      .get('api/alergene.php')
+      .then((res) => setAlergenes(res.data))
       .catch((err) => console.error('Erreur chargement :', err));
   }, []);
 
   const handleCheckboxChange = (currentAlergene: alergene) => {
-    setAlergeneArray((prevSelected) => {
+    setAlergenes((prevSelected) => {
       const exists = prevSelected.some(
         (item) => item.alergene_id === currentAlergene.alergene_id,
       );
@@ -69,43 +69,18 @@ export default function PlatCreateForm() {
         formData.append('photo', photo);
       }
 
-      const responsePlat = await fetch('http://localhost:8000/api/plat.php', {
-        method: 'POST',
-        body: formData,
-      });
+      const data = await api.post('api/plat.php', formData);
 
-      const dataPlat = await responsePlat.json();
-
-      if (!responsePlat.ok) {
-        throw new Error(
-          dataPlat.message || 'Erreur lors de la création du plat',
-        );
-      }
-
-      const nouveauPlatId = dataPlat.plat_id;
-
-      const responseLiaison = await fetch(
-        'http://localhost:8000/api/plat_alergene.php',
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            plat_id: nouveauPlatId,
-            alergene_ids: alergene_array.map((a) => a.alergene_id),
-          }),
-        },
-      );
-      if (!responseLiaison.ok) {
-        throw new Error("Erreur lors de l'association des allergènes");
-      }
+      const nouveauPlatId = data.data.plat_id;
+      await api.post('api/plat_alergene.php', nouveauPlatId);
 
       setNomPlat('');
       setTypePlat('');
       setPhoto(null);
-      setAlergeneArray([]);
-      setIsLoading(false);
+      setAlergenes([]);
     } catch (error) {
       console.error('Erreur:', error);
+    } finally {
       setIsLoading(false);
     }
   };

@@ -5,6 +5,7 @@ import creat_hour_array from '../../utils/init_array';
 import type { Horaire } from '../../interfaces/horaires';
 import FormStyle from '../global/styles/Formulaire/FormStyle';
 import Loading from '../global/loading/Loading';
+import api from '../../services/api';
 
 export default function Horaires() {
   const [daysChoice, setDaysChoice] = useState<string>('');
@@ -28,9 +29,9 @@ export default function Horaires() {
 
   useEffect(() => {
     setIsLoading(true);
-    fetch('http://localhost:8000/api/horaires.php')
-      .then((res) => res.json())
-      .then((data) => setHorairesList(data))
+    api
+      .get('api/horaires.php')
+      .then((res) => setHorairesList(res.data))
       .catch((err) => console.error('Erreur chargement :', err));
     setIsLoading(false);
   }, []);
@@ -70,25 +71,11 @@ export default function Horaires() {
     };
 
     try {
-      const response = await fetch('http://localhost:8000/api/horaires.php', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      const result = await response.json();
-
-      if (response.ok) {
-        alert('Horaire mis à jour avec succès !');
-      } else {
-        alert('Erreur : ' + result.message);
-      }
-      setIsLoading(false);
+      await api.post('api/horaires.php', formData);
     } catch (error) {
       console.error('Erreur réseau :', error);
       alert('Impossible de joindre le serveur.');
+    } finally {
       setIsLoading(false);
     }
   };

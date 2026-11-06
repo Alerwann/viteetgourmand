@@ -13,6 +13,7 @@ import {
 } from 'chart.js';
 import { Bar, Doughnut } from 'react-chartjs-2';
 import Loading from '../global/loading/Loading';
+import api from '../../services/api'; // Ajuste le chemin vers ton instance Axios si nécessaire
 
 ChartJS.register(
   CategoryScale,
@@ -53,23 +54,24 @@ export default function DashboardStats() {
   const handleSyncAndFetch = async () => {
     setLoading(true);
     try {
-      // 1. Déclencher la synchronisation MySQL -> MongoDB
-      await fetch('http://localhost:8000/api/sync.php');
+      // 1. Déclencher la synchronisation MySQL -> MongoDB via Axios
+      await api.get('api/sync.php');
 
-      // 2. Récupérer les statistiques à jour
-      const params = new URLSearchParams();
-      if (selectedMenu) params.append('menuId', selectedMenu);
-      if (startDate) params.append('startDate', startDate);
-      if (endDate) params.append('endDate', endDate);
+      const params: Record<string, string> = {};
+      if (selectedMenu) params.menuId = selectedMenu;
+      if (startDate) params.startDate = startDate;
+      if (endDate) params.endDate = endDate;
 
-      const url = `http://localhost:8000/api/stats.php${params.toString() ? `?${params.toString()}` : ''}`;
-      const res = await fetch(url);
-      const data: StatsData = await res.json();
+      const response = await api.get<StatsData>('api/stats.php', {
+        params,
+      });
+
+      const data = response.data;
 
       if (data.success) {
         setChartData(data);
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('Erreur lors de la synchronisation/récupération :', err);
     } finally {
       setLoading(false);

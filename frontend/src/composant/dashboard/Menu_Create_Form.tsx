@@ -10,6 +10,7 @@ import { FieldsetStyle } from '../global/styles/Formulaire/FieldsetStyle';
 import FormStyle from '../global/styles/Formulaire/FormStyle';
 import { InputStyle } from '../global/styles/Formulaire/InputStyle';
 import Loading from '../global/loading/Loading';
+import api from '../../services/api';
 
 const inputAsset = 'bg-white border-2 p-2';
 
@@ -36,19 +37,19 @@ export default function MenuCreateFor() {
   useEffect(() => {
     setIsLoading(true);
 
-    fetch('http://localhost:8000/api/plat.php')
-      .then((res) => res.json())
-      .then((data) => setArrayPlats(data))
+    api
+      .get('api/plat.php')
+      .then((res) => setArrayPlats(res.data))
       .catch((err) => console.error('Erreur chargement :', err));
 
-    fetch('http://localhost:8000/api/theme.php')
-      .then((res) => res.json())
-      .then((data) => setArrayTheme(data))
+    api
+      .get('api/theme.php')
+      .then((res) => setArrayTheme(res.data))
       .catch((err) => console.error('Erreur chargement :', err));
 
-    fetch('http://localhost:8000/api/regime.php')
-      .then((res) => res.json())
-      .then((data) => setArrayRegime(data))
+    api
+      .get('pi/regime.php')
+      .then((res) => setArrayRegime(res.data))
       .catch((err) => console.error('Erreur chargement :', err));
     setIsLoading(false);
   }, []);
@@ -121,20 +122,9 @@ export default function MenuCreateFor() {
     };
     setIsLoading(true);
     try {
-      const response = await fetch('http://localhost:8000/api/menus.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      });
+      await api.post('api/menus.php', payload);
 
-      if (!response.ok) {
-        throw new Error('Erreur HTTP : ' + response.status);
-      }
-
-      const result = await response.json();
-      console.log('Menu créé avec succès :', result);
+      console.log('Menu créé avec succès ');
       alert('Menu ajouté');
 
       setMenuData({
@@ -149,9 +139,9 @@ export default function MenuCreateFor() {
         plats_details: [],
       });
       setPlats({});
-      setIsLoading(false);
     } catch (error) {
       console.error('Erreur lors de la soumission :', error);
+    } finally {
       setIsLoading(false);
     }
   };

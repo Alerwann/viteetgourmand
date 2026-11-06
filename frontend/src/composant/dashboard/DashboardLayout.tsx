@@ -1,8 +1,8 @@
 /** @format */
 
-import InContruct from '../global/styles/in_construct';
+// import InContruct from '../global/styles/in_construct';
 // import Loading from '../global/styles/loading/Loading';
-// import DashboardStats from './DashBoardStat';
+import DashboardStats from './DashBoardStat';
 // import Horaires from './Horaire';
 // import MenuCreateForm from './Menu_Create_Form';
 // import PlatCreateForm from './Plat_Create_Form';
@@ -13,9 +13,9 @@ export default function DashboardLayout() {
       {/* <Horaires /> */}
       {/* <PlatCreateForm /> */}
       {/* <MenuCreateForm /> */}
-      {/* <DashboardStats /> */}
+      <DashboardStats />
       {/* <Loading /> */}
-      <InContruct />
+      {/* <InContruct /> */}
     </div>
   );
 }

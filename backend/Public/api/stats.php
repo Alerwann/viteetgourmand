@@ -7,7 +7,7 @@ $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 if ($origin === 'https://viteetgourmand.vercel.app' || preg_match('/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/', $origin)) {
     header("Access-Control-Allow-Origin: " . $origin);
     header("Access-Control-Allow-Credentials: true");
-    header("Access-Control-Allow-Methods: GET, POST,DELETE, OPTIONS");
+    header("Access-Control-Allow-Methods: GET, OPTIONS");
     header("Access-Control-Allow-Headers: Content-Type, Authorization");
 }
 
@@ -27,10 +27,13 @@ use MongoDB\Client as MongoClient;
 
 try {
     $mongoUri = getenv('MONGO_URI') ?: 'mongodb+srv://alerwann411_db_user:4bit8fGglQfuSjZr@cluster0.ht7ylsp.mongodb.net/';
+
+
+
     $mongoClient = new MongoClient($mongoUri);
     $collection = $mongoClient->selectDatabase('vite_gourmand')->selectCollection('commande');
 
-    // Récupération des filtres optionnels passés dans l'URL (ex: ?menuId=2&startDate=2026-01-01&endDate=2026-12-31)
+
     $filterMenuId = isset($_GET['menuId']) && $_GET['menuId'] !== '' ? (int) $_GET['menuId'] : null;
     $startDate   = isset($_GET['startDate']) && $_GET['startDate'] !== '' ? $_GET['startDate'] . 'T00:00:00Z' : null;
     $endDate     = isset($_GET['endDate']) && $_GET['endDate'] !== '' ? $_GET['endDate'] . 'T23:59:59Z' : null;

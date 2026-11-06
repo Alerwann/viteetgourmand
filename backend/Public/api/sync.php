@@ -18,11 +18,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 header('Content-Type: application/json');
+require __DIR__ . '/../../scripts/run_sync_internal.php';
 
 try {
-
-    require __DIR__ . '/../../scripts/run_sync_internal.php';
-
     echo json_encode([
         'success' => true,
         'message' => 'Synchronisation effectuée avec succès.'

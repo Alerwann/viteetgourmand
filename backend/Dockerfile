@@ -10,17 +10,16 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-enable mongodb \
     && rm -rf /var/lib/apt/lists/*
 
-
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
+COPY composer.json composer.lock* ./
+
+RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 COPY . .
 
-RUN composer dump-autoload --optimize --no-dev --classmap-authoritative
-
-
-
+# Configuration Nginx
 RUN echo 'server { \
     listen 10000; \
     root /var/www/html/Public; \
@@ -35,6 +34,5 @@ RUN echo 'server { \
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name; \
     } \
 }' > /etc/nginx/sites-available/default
-
 
 CMD service nginx start && php-fpm
