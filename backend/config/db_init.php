@@ -1,9 +1,9 @@
 <?php
 try {
-    $host = 'mysql';
-    $db_name = getenv('MYSQL_DATABASE');
-    $username = getenv('MYSQL_USER');
-    $password = getenv('MYSQL_PASSWORD');
+    $host = getenv('DB_HOST');
+    $db_name = getenv('DB_NAME');
+    $username = getenv('DB_USER');
+    $password = getenv('DB_PASSWORD');
 
     $pdo = new PDO("mysql:host=$host;dbname=$db_name;charset=utf8mb4", $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
