@@ -1,9 +1,5 @@
 <?php
 
-require_once __DIR__ . '/../../vendor/autoload.php';
-
-use App\Repository\Horaire\SqlHoraireRepository;
-use App\Controller\HoraireController;
 
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 
@@ -26,6 +22,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 
 require_once __DIR__ . '/../../config/db_init.php';
+
+require_once __DIR__ . '/../../vendor/autoload.php';
+
+use App\Repository\Horaire\SqlHoraireRepository;
+use App\Controller\HoraireController;
 
 
 $horaireRepo = new SqlHoraireRepository($pdo);
