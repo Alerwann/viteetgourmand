@@ -63,7 +63,7 @@ export default function FormCommande() {
           },
         });
 
-        const userId = parseInt(responseCommande.data.id);
+        const userId = responseCommande.data.id;
 
         const responseUser = await api.get(`api/utilisateur.php?id=${userId}`, {
           headers: {
