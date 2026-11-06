@@ -1,27 +1,26 @@
 <?php
-require_once __DIR__ . '/../../vendor/autoload.php';
 
-use App\Repository\Commande\SqlCommandeRepository;
-use App\Repository\Users\SqlUserRepository;
-use App\Repository\Auth\SqlAuthRepository;
-use App\Services\AuthService;
-use App\Services\MailerService;
-use App\Middleware\AuthMiddleware;
-use App\Controller\CommandeController;
+$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: Content-Type, Authorization");
-header("Access-Control-Allow-Methods: GET, POST, DELETE, OPTIONS");
-header("Content-Type: application/json; charset=utf8mb4");
+
+if ($origin === 'https://viteetgourmand.vercel.app' || preg_match('/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/', $origin)) {
+    header("Access-Control-Allow-Origin: " . $origin);
+    header("Access-Control-Allow-Credentials: true");
+    header("Access-Control-Allow-Methods: GET, POST,DELETE, OPTIONS");
+    header("Access-Control-Allow-Headers: Content-Type, Authorization");
+}
+
+header("Content-Type: application/json; charset=UTF-8");
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
-    exit;
+    exit();
 }
+require_once __DIR__ . '/../../vendor/autoload.php';
 
 require_once __DIR__ . '/../../config/db_init.php';
 
-// 1. Initialisation des dépendances pour l'authentification
 $userRepo = new SqlUserRepository($pdo);
 $authRepo = new SqlAuthRepository($pdo);
 $mailer = new MailerService();
