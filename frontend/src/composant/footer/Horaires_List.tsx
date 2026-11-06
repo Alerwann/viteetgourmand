@@ -1,14 +1,15 @@
 /** @format */
 import { useEffect, useState } from 'react';
 import type { Horaire } from '../../interfaces/horaires';
+import api from '../../services/api';
 
 export default function HorairesList() {
   const [horaires, setHoraires] = useState<Horaire[]>([]);
 
   useEffect(() => {
-    fetch('http://localhost:8000/api/horaires.php')
-      .then((res) => res.json())
-      .then((data) => setHoraires(data))
+    api
+      .get('/horaires.php')
+      .then((res) => setHoraires(res.data))
       .catch((err) => console.error('Erreur fetch horaires:', err));
   }, []);
   return (
