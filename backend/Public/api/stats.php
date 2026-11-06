@@ -28,6 +28,13 @@ use MongoDB\Client as MongoClient;
 try {
     $mongoUri = getenv('MONGO_URI') ?: 'mongodb+srv://alerwann411_db_user:4bit8fGglQfuSjZr@cluster0.ht7ylsp.mongodb.net/';
 
+    $options = [
+        'tls' => true,
+        'tlsAllowInvalidCertificates' => true,
+    ];
+
+    $mongoClient = new MongoClient($mongoUri, [], $options);
+
 
 
     $mongoClient = new MongoClient($mongoUri);
