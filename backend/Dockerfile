@@ -16,11 +16,11 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/html
 
 
-COPY . .
+COPY composer.json ./
 RUN composer install --no-dev --optimize-autoloader
 
 
-
+COPY . .
 RUN echo 'server { \
     listen 10000; \
     root /var/www/html/public; \
