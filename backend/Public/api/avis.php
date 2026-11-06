@@ -1,9 +1,4 @@
 <?php
-require_once __DIR__ . '/../../vendor/autoload.php';
-
-use App\Repository\Avis\SqlAvisRepository;
-use App\Controller\AvisController;
-
 
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 
@@ -27,6 +22,8 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 
 require_once __DIR__ . '/../../config/db_init.php';
 
+use App\Repository\Avis\SqlAvisRepository;
+use App\Controller\AvisController;
 
 $aviRepository = new SqlAvisRepository($pdo);
 $controller = new AvisController($aviRepository);
