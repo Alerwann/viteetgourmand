@@ -8,6 +8,7 @@ import type { IdentConnexion } from '../../interfaces/identConnexion';
 import { FieldsetStyle } from '../global/styles/Formulaire/FieldsetStyle';
 import { InputStyle } from '../global/styles/Formulaire/InputStyle';
 import Loading from '../global/loading/Loading';
+import api from '../../services/api';
 
 export default function Connect_composant() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -47,27 +48,25 @@ export default function Connect_composant() {
     };
 
     try {
-      const response = await fetch('http://localhost:8000/api/auth.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(preload),
-      });
+      const response = await api.post(
+        'http://localhost:8000/api/auth.php',
+        preload,
+      );
 
-      response.status === 401 ? setShowError(true) : setShowError(false);
-
-      if (!response.ok) {
-        throw new Error('Erreur HTTP : ' + response.status);
-      }
-      const data = await response.json();
-
+      setShowError(false);
+      const data = response.data;
       const redirectTo = location.state?.from ?? '/';
       localStorage.setItem('token', data.token);
       navigate(redirectTo, { replace: true });
-      setIsLoading(false);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Erreur lors de la soumission :', error);
+      if (error && typeof error === 'object' && 'response' in error) {
+        const err = error as { response?: { status?: number } };
+        if (err.response?.status === 401) {
+          setShowError(true);
+        }
+      }
+    } finally {
       setIsLoading(false);
     }
   };
