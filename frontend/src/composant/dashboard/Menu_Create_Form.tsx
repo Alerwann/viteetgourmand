@@ -48,7 +48,7 @@ export default function MenuCreateFor() {
       .catch((err) => console.error('Erreur chargement :', err));
 
     api
-      .get('pi/regime.php')
+      .get('api/regime.php')
       .then((res) => setArrayRegime(res.data))
       .catch((err) => console.error('Erreur chargement :', err));
     setIsLoading(false);
