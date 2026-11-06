@@ -7,6 +7,7 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import type { IdentConnexion } from '../../interfaces/identConnexion';
 import { FieldsetStyle } from '../global/styles/Formulaire/FieldsetStyle';
 import { InputStyle } from '../global/styles/Formulaire/InputStyle';
+import FormStyle from '../global/styles/Formulaire/FormStyle';
 import Loading from '../global/loading/Loading';
 import api from '../../services/api';
 
@@ -25,21 +26,19 @@ export default function Connect_composant() {
   const location = useLocation();
 
   const onClikPass = () => {
-    const newStatePass = !showPassword;
-    setShowPassword(newStatePass);
+    setShowPassword(!showPassword);
   };
 
   useEffect(() => {
-    document.title = 'Connexion Vite & Gourmand';
+    document.title = 'Connexion | Vite & Gourmand';
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIdentConnexion({ ...identConnexion, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: React.SubmitEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     setIsLoading(true);
 
     const preload = {
@@ -49,7 +48,6 @@ export default function Connect_composant() {
 
     try {
       const response = await api.post('api/auth.php', preload);
-
       setShowError(false);
       const data = response.data;
       const redirectTo = location.state?.from ?? '/';
@@ -71,53 +69,59 @@ export default function Connect_composant() {
   if (isLoading) {
     return <Loading />;
   }
-  return (
-    <div className="flex flex-col items-center gap-4 min-h-[60vh] justify-center">
-      <form
-        onSubmit={handleSubmit}
-        className="flex flex-col items-center gap-5 mb-4"
-      >
-        <FieldsetStyle legend="Connexion">
-          <InputStyle
-            label="Email"
-            type="email"
-            name="email"
-            id="email"
-            value={identConnexion.email}
-            onChange={handleChange}
-          />
 
-          <InputStyle
-            label="Mot de passe"
-            type={showPassword ? 'text' : 'password'}
-            name="password"
-            id="password"
-            value={identConnexion.password}
-            onChange={handleChange}
-            rightIcon={
-              <button
-                type="button"
-                onClick={onClikPass}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                {!showPassword ? <FaEye /> : <FaEyeSlash />}
-              </button>
-            }
-          />
-        </FieldsetStyle>
-        <CustomButton label="Connexion" type="submit" />
-      </form>
-      <section className="flex flex-col text-center gap-2 mb-4">
-        {showError && (
-          <span className="text-red-500 text-lg">
-            Mail ou mot de passe incorrect
-          </span>
-        )}
-        <a href="/reinit" className="">
-          Mot de passe oublié
+  return (
+    <FormStyle title="Connexion" onSubmit={handleSubmit}>
+      <FieldsetStyle legend="Vos identifiants">
+        <InputStyle
+          label="Email"
+          type="email"
+          name="email"
+          id="email"
+          value={identConnexion.email}
+          onChange={handleChange}
+          required
+        />
+
+        <InputStyle
+          label="Mot de passe"
+          type={showPassword ? 'text' : 'password'}
+          name="password"
+          id="password"
+          value={identConnexion.password}
+          onChange={handleChange}
+          required
+          rightIcon={
+            <button
+              type="button"
+              onClick={onClikPass}
+              className="text-[#888888] hover:text-[#2C2C2C] transition-colors"
+            >
+              {!showPassword ? <FaEye /> : <FaEyeSlash />}
+            </button>
+          }
+        />
+      </FieldsetStyle>
+
+      {showError && (
+        <p className="text-[#D95D39] text-sm font-medium bg-amber-50 p-3 rounded-xl border border-amber-200 w-full text-center">
+          Mail ou mot de passe incorrect.
+        </p>
+      )}
+
+      <CustomButton label="Se connecter" type="submit" />
+
+      <div className="flex flex-col sm:flex-row justify-between w-full text-sm text-[#666666] pt-2 gap-2">
+        <a href="/reinit" className="hover:text-[#D95D39] transition-colors">
+          Mot de passe oublié ?
         </a>
-        <a href="/createcompte">Créer un compte</a>
-      </section>
-    </div>
+        <a
+          href="/createcompte"
+          className="hover:text-[#D95D39] transition-colors font-medium"
+        >
+          Créer un compte
+        </a>
+      </div>
+    </FormStyle>
   );
 }

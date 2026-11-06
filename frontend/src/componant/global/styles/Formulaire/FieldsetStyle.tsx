@@ -12,11 +12,13 @@ export function FieldsetStyle({
   className = '',
 }: FormFieldsetProps) {
   const fieldset =
-    'p-4 rounded-2xl bg-[RGB(205,240,200)] shadow-xl border-2 border-[RGB(240,175,70)] grid grid-cols-2 items-center text-center gap-4 w-full mt-4';
+    'p-6 rounded-2xl bg-white shadow-sm border border-[#EFECE6] grid grid-cols-1 md:grid-cols-2 items-center gap-6 w-full mt-4 transition-all hover:border-[#D95D39]/50';
 
   return (
     <fieldset className={`${fieldset} ${className}`}>
-      <legend className="px-2 font-extrabold text-gray-800">{legend}</legend>
+      <legend className="px-3 font-serif font-semibold text-lg text-[#2C2C2C] bg-[#FDFBF7] border border-[#EFECE6] rounded-lg py-1">
+        {legend}
+      </legend>
       {children}
     </fieldset>
   );

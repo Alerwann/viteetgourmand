@@ -1,5 +1,4 @@
 /** @format */
-
 import { useState, useEffect } from 'react';
 import AvisCard from './AvisCard';
 import type { Avis } from '../../interfaces/avis';
@@ -50,9 +49,8 @@ export default function ListAvisComposant() {
     api
       .get('api/avis.php?status=publie')
       .then((res) => setListAvis(res.data))
-      .catch((err) => console.error('Erreur fetch avis:', err));
-
-    setIsLoading(false);
+      .catch((err) => console.error('Erreur fetch avis:', err))
+      .finally(() => setIsLoading(false));
   }, []);
 
   if (isLoading) {
@@ -61,29 +59,20 @@ export default function ListAvisComposant() {
 
   if (listeAvis.length === 0) {
     return (
-      <div className="py-16 text-center text-slate-500">
+      <div className="py-16 text-center text-[#666666] font-sans">
         Aucun avis publié pour le moment.
       </div>
     );
   }
 
   return (
-    <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
-      <div className="text-center mb-10">
-        <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">
-          Ce que nos clients disent
-        </h2>
-        <p className="mt-2 text-slate-600">
-          Découvrez les retours d'expérience de nos convives.
-        </p>
-      </div>
-
+    <section className="py-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
       <div className="relative flex items-center">
         {/* Bouton Précédent */}
         <button
           onClick={handlePrev}
           disabled={currentIndex === 0}
-          className="absolute -left-4 sm:-left-6 z-10 p-3 bg-white border border-slate-200 text-slate-700 rounded-full shadow-lg hover:bg-slate-50 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+          className="absolute -left-2 sm:-left-6 z-10 p-3 bg-white border border-[#EFECE6] text-[#2C2C2C] rounded-full shadow-md hover:bg-[#D95D39] hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
           aria-label="Avis précédent"
         >
           ◀
@@ -102,10 +91,12 @@ export default function ListAvisComposant() {
                 key={avis.avis_id}
                 className="shrink-0"
                 style={{
-                  width: `calc(${100 / itemsVisible}% - ${(24 * (itemsVisible - 1)) / itemsVisible}px)`,
+                  width: `calc(${100 / itemsVisible}% - ${
+                    (24 * (itemsVisible - 1)) / itemsVisible
+                  }px)`,
                 }}
               >
-                <div className="h-full">
+                <div className="h-full bg-white rounded-xl p-6 shadow-sm border border-[#EFECE6] hover:border-[#D95D39] transition-all">
                   <AvisCard note={avis.note} description={avis.description} />
                 </div>
               </li>
@@ -117,7 +108,7 @@ export default function ListAvisComposant() {
         <button
           onClick={handleNext}
           disabled={currentIndex >= maxIndex}
-          className="absolute -right-4 sm:-right-6 z-10 p-3 bg-white border border-slate-200 text-slate-700 rounded-full shadow-lg hover:bg-slate-50 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+          className="absolute -right-2 sm:-right-6 z-10 p-3 bg-white border border-[#EFECE6] text-[#2C2C2C] rounded-full shadow-md hover:bg-[#D95D39] hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
           aria-label="Avis suivant"
         >
           ▶

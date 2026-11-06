@@ -27,8 +27,9 @@ export default function FormCommande() {
   const token = localStorage.getItem('token');
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    document.title = 'Commande Vite & Gourmand';
+    document.title = 'Commande | Vite & Gourmand';
   }, []);
 
   const menu_id = menuid ? parseInt(menuid) : -1;
@@ -95,7 +96,6 @@ export default function FormCommande() {
     fetchUserData();
   }, [token, navigate, menu_id]);
 
-  // 2. Récupération du menu choisi
   useEffect(() => {
     setLoading(true);
 
@@ -224,7 +224,9 @@ export default function FormCommande() {
       const result = await response.json();
       console.log('Commande passée avec succès :', result);
       alert('Menu ajouté');
-    } catch (error) {}
+    } catch (error) {
+      console.error('Erreur lors de la soumission :', error);
+    }
 
     setcommande(initialeCommande);
   };
@@ -236,7 +238,8 @@ export default function FormCommande() {
         commande.commande_presta.prestation_adresse.code_postal === 0 ||
         commande.commande_presta.prestation_adresse.ville === ''
       ) {
-        alert('Addresse incomplète');
+        alert('Adresse incomplète');
+        return;
       } else {
         const GetCoord = await getShippingForAddress(
           commande.commande_presta.prestation_adresse,
@@ -265,10 +268,10 @@ export default function FormCommande() {
   }
 
   return (
-    <div>
+    <div className="bg-[#FDFBF7] min-h-screen py-6">
       <FormStyle onSubmit={handleSubmit}>
         {pageIndex === 0 && (
-          <div>
+          <div className="w-full">
             <TitleCommandeSection title="Étape 1/3 : Identité et adresse de livraison" />
             <FormIdentity
               utilisateur={utilisateur}
@@ -278,10 +281,8 @@ export default function FormCommande() {
           </div>
         )}
 
-        {pageIndex == 1 && (
-          // cette étape peut être amélioré en ajoutant un possible commantaire
-
-          <div>
+        {pageIndex === 1 && (
+          <div className="w-full">
             <TitleCommandeSection title="Étape 2/3 : La commande" />
             <FormMenuCommmande
               menuData={menuChoose!}
@@ -292,34 +293,32 @@ export default function FormCommande() {
         )}
 
         {pageIndex === 2 && (
-          <>
+          <div className="w-full">
             <TitleCommandeSection title="Étape 3/3 : Vérification et validation pour calcul du prix" />
             <VerifCommande
               commande={commande}
               menuData={menuChoose!}
               coutLivraison={resultGetCoord!.fraisDePort}
             />
-          </>
+          </div>
         )}
 
         {pageIndex === 2 && (
-          <div className="flex flex-col gap-8">
+          <div className="flex flex-col gap-6 w-full mt-4">
             {testPrestaKo && (
-              <p className="text-xl font-bold text-center">
+              <p className="text-base font-medium text-center text-[#D95D39] bg-amber-50 p-4 rounded-xl border border-amber-200">
                 Tous les champs ne sont pas remplis. Merci de modifier votre
-                commande
+                commande.
               </p>
             )}
-            <div className="mb-8 w-full flex justify-center gap-10">
-              <button
+            <div className="w-full flex justify-center items-center gap-6">
+              <CustomButton
+                label="Retour"
                 type="button"
                 onClick={handleBackPage}
-                className="p-5 rounded-2xl bg-amber-100 border-2 border-red-500 disabled:bg-gray-200 disabled:border-gray-500 disabled:text-gray-400"
-              >
-                Retour
-              </button>
+              />
               <CustomButton
-                label="Calculer le prix"
+                label="Valider et commander"
                 type="submit"
                 disabled={testPrestaKo}
               />
@@ -327,24 +326,21 @@ export default function FormCommande() {
           </div>
         )}
       </FormStyle>
+
       {pageIndex < 2 && (
-        <div className="mb-8 w-full flex justify-center gap-10">
-          <button
+        <div className="w-full max-w-2xl mx-auto flex justify-center items-center gap-6 px-6 mt-6">
+          <CustomButton
+            label="Retour"
             type="button"
             onClick={handleBackPage}
-            disabled={pageIndex == 0}
-            className="p-5 rounded-2xl bg-amber-100 border-2 border-red-500 disabled:bg-gray-200 disabled:border-gray-500 disabled:text-gray-400"
-          >
-            Retour
-          </button>
-          <button
+            disabled={pageIndex === 0}
+          />
+          <CustomButton
+            label="Continuer"
             type="button"
             onClick={handlePageChange}
-            disabled={pageIndex == 2}
-            className="p-5 rounded-2xl bg-amber-100 border-2 border-green-500 disabled:bg-gray-200 disabled:border-gray-500 disabled:text-gray-400"
-          >
-            Continuer
-          </button>
+            disabled={pageIndex === 2}
+          />
         </div>
       )}
     </div>

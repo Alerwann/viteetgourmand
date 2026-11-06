@@ -2,15 +2,15 @@
 
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import RootLayout from './RootLayout';
-import Accueil_coposant from './composant/accueil/Accueil';
-import DashboardLayout from './composant/dashboard/DashboardLayout';
-import Contact_composant from './composant/contact/contact';
-import Menus_composant from './composant/Menus/Menus';
-import MenuDetail from './composant/Menus/Menu_detail';
-import Connect_composant from './composant/connexion/Connect';
-import CreateCompte from './composant/connexion/CreateCompte';
-import ReinitPassword from './composant/connexion/ReinitPassword';
-import FormCommande from './composant/commande/FormCommande';
+import Accueil_coposant from './componant/accueil/Accueil';
+import DashboardLayout from './componant/dashboard/DashboardLayout';
+import Contact_composant from './componant/contact/contact';
+import Menus_composant from './componant/Menus/Menus';
+import MenuDetail from './componant/Menus/Menu_detail';
+import Connect_composant from './componant/connexion/Connect';
+import CreateCompte from './componant/connexion/CreateCompte';
+import ReinitPassword from './componant/connexion/ReinitPassword';
+import FormCommande from './componant/commande/FormCommande';
 
 const router = createBrowserRouter([
   {

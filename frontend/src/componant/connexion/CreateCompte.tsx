@@ -4,12 +4,11 @@ import CustomButton from '../global/styles/button_global';
 import { useState, useEffect } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import type { utilisateur } from '../../interfaces/utilisateur';
+import FormStyle from '../global/styles/Formulaire/FormStyle';
+import { FieldsetStyle } from '../global/styles/Formulaire/FieldsetStyle';
+import { InputStyle } from '../global/styles/Formulaire/InputStyle';
 import Loading from '../global/loading/Loading';
 import api from '../../services/api';
-
-const inputAsset = 'bg-white border-2 p-2';
-const filesetAsset =
-  'p-4 rounded-2xl bg-[RGB(205,240,200)] shadow-xl border-2 border-[RGB(240,175,70)] grid grid-cols-2 items-center text-center gap-4 w-full mt-4';
 
 export default function CreateCompte() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -39,16 +38,15 @@ export default function CreateCompte() {
   const hasSpecial = /[^A-Za-z0-9]/.test(pwd);
 
   useEffect(() => {
-    document.title = 'Création compte Vite & Gourmand';
+    document.title = 'Création de compte | Vite & Gourmand';
   }, []);
+
   const onClikPass = () => {
-    const newStatePass = !showPassword;
-    setShowPassword(newStatePass);
+    setShowPassword(!showPassword);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-
     const adresseFields = [
       'numero_rue',
       'street',
@@ -75,13 +73,13 @@ export default function CreateCompte() {
     }
   };
 
-  const handleSubmit = async (e: React.SubmitEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     setIsLoading(true);
 
     if (!(hasMinLength && hasUpper && hasLower && hasNumber && hasSpecial)) {
       alert('Le mot de passe ne respecte pas les critères de sécurité.');
+      setIsLoading(false);
       return;
     }
 
@@ -104,10 +102,7 @@ export default function CreateCompte() {
 
     try {
       const response = await api.post('api/utilisateur.php', preload);
-
-      const result = response.data;
-      console.log('Utilisateur créé avec succès :', result);
-
+      console.log('Utilisateur créé avec succès :', response.data);
       alert('Votre compte a été créé avec succès');
 
       setUtilisateur({
@@ -136,144 +131,156 @@ export default function CreateCompte() {
   if (isLoading) {
     return <Loading />;
   }
-  return (
-    <div className="flex flex-col items-center gap-4">
-      <form
-        action=""
-        className="flex flex-col items-center gap-5 mb-4"
-        onSubmit={handleSubmit}
-      >
-        <fieldset className={filesetAsset}>
-          <legend>Connexion</legend>
-          <label htmlFor="email">E-mail</label>
-          <div>
-            <input
-              type="email"
-              name="email"
-              id="email"
-              className={inputAsset}
-              value={utilisateur.email}
-              onChange={handleChange}
-            />
-          </div>
 
-          <label htmlFor="password">Mot de passe</label>
-          <div className="flex flex-row gap-2">
-            <input
-              type={showPassword ? 'text' : 'password'}
-              name="password"
-              id="password"
-              className={inputAsset}
-              value={utilisateur.password}
-              onChange={handleChange}
-              pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{10,}"
-            />
-            <button type="button" onClick={onClikPass}>
-              {!showPassword ? <FaEye /> : <FaEyeSlash />}
-            </button>
-            <ul className="text-xs flex flex-col gap-1 text-gray-700">
-              <li style={{ color: hasMinLength ? 'green' : 'red' }}>
+  return (
+    <FormStyle title="Créer un compte" onSubmit={handleSubmit}>
+      <FieldsetStyle legend="Informations personnelles">
+        <InputStyle
+          label="E-mail"
+          type="email"
+          name="email"
+          id="email"
+          value={utilisateur.email}
+          onChange={handleChange}
+          required
+        />
+
+        <div className="contents">
+          <label
+            htmlFor="password"
+            className="text-sm font-medium text-[#2C2C2C]"
+          >
+            Mot de passe
+          </label>
+          <div className="flex flex-col gap-2 w-full">
+            <div className="relative w-full">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                name="password"
+                id="password"
+                className="bg-[#FDFBF7] border border-[#EFECE6] p-3 rounded-xl w-full pr-10 text-[#2C2C2C] focus:outline-none focus:border-[#D95D39] transition-all"
+                value={utilisateur.password}
+                onChange={handleChange}
+                required
+              />
+              <button
+                type="button"
+                onClick={onClikPass}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#888888] hover:text-[#2C2C2C]"
+              >
+                {!showPassword ? <FaEye /> : <FaEyeSlash />}
+              </button>
+            </div>
+            {/* Liste des critères de mot de passe */}
+            <ul className="text-xs flex flex-col gap-1 text-[#666666] bg-[#FDFBF7] p-3 rounded-xl border border-[#EFECE6]">
+              <li style={{ color: hasMinLength ? '#10B981' : '#D95D39' }}>
                 {hasMinLength ? '✔' : '✖'} 10 caractères minimum
               </li>
-              <li style={{ color: hasUpper ? 'green' : 'red' }}>
+              <li style={{ color: hasUpper ? '#10B981' : '#D95D39' }}>
                 {hasUpper ? '✔' : '✖'} Une majuscule
               </li>
-              <li style={{ color: hasLower ? 'green' : 'red' }}>
+              <li style={{ color: hasLower ? '#10B981' : '#D95D39' }}>
                 {hasLower ? '✔' : '✖'} Une minuscule
               </li>
-              <li style={{ color: hasNumber ? 'green' : 'red' }}>
+              <li style={{ color: hasNumber ? '#10B981' : '#D95D39' }}>
                 {hasNumber ? '✔' : '✖'} Un chiffre
               </li>
-              <li style={{ color: hasSpecial ? 'green' : 'red' }}>
+              <li style={{ color: hasSpecial ? '#10B981' : '#D95D39' }}>
                 {hasSpecial ? '✔' : '✖'} Un caractère spécial
               </li>
             </ul>
           </div>
+        </div>
 
-          <label htmlFor="prenom">Prénom</label>
-          <input
-            type="text"
-            name="prenom"
-            id="prenom"
-            className={inputAsset}
-            value={utilisateur.prenom}
-            onChange={handleChange}
-          />
-          <label htmlFor="nom">Nom</label>
-          <input
-            type="text"
-            name="nom"
-            id="nom"
-            className={inputAsset}
-            value={utilisateur.nom}
-            onChange={handleChange}
-          />
-          <label htmlFor="telephone">Numéro de téléphone</label>
-          <input
-            type="tel"
-            pattern="0[1-9](?:[0-9]{2}){4}"
-            name="telephone"
-            id="telephone"
-            className={inputAsset}
-            value={utilisateur.telephone}
-            onChange={handleChange}
-          />
-          <label htmlFor="numero_rue">Numero de rue</label>
-          <input
-            type="number"
-            name="numero_rue"
-            id="numero_rue"
-            className={inputAsset}
-            value={utilisateur.adresse_postale.numero_rue}
-            onChange={handleChange}
-          />
-          <label htmlFor="street">Nom de la rue</label>
-          <input
-            type="text"
-            name="street"
-            id="street"
-            className={inputAsset}
-            value={utilisateur.adresse_postale.street}
-            onChange={handleChange}
-          />
-          <label htmlFor="code_postal">Code Postal</label>
-          <input
-            type="number"
-            name="code_postal"
-            id="code_postal"
-            className={inputAsset}
-            value={utilisateur.adresse_postale.code_postal}
-            min={10000}
-            max={99999}
-            onChange={handleChange}
-          />
-          <label htmlFor="ville">Ville</label>
-          <input
-            type="text"
-            name="ville"
-            id="ville"
-            className={inputAsset}
-            value={utilisateur.adresse_postale.ville}
-            onChange={handleChange}
-          />
-          <label htmlFor="pays">Pays</label>
-          <input
-            type="text"
-            className={inputAsset}
-            name="pays"
-            id="pays"
-            value={utilisateur.adresse_postale.pays}
-            onChange={handleChange}
-          />
-        </fieldset>
+        <InputStyle
+          label="Prénom"
+          type="text"
+          name="prenom"
+          id="prenom"
+          value={utilisateur.prenom}
+          onChange={handleChange}
+          required
+        />
+
+        <InputStyle
+          label="Nom"
+          type="text"
+          name="nom"
+          id="nom"
+          value={utilisateur.nom}
+          onChange={handleChange}
+          required
+        />
+
+        <InputStyle
+          label="Numéro de téléphone"
+          type="tel"
+          pattern="0[1-9](?:[0-9]{2}){4}"
+          name="telephone"
+          id="telephone"
+          value={utilisateur.telephone}
+          onChange={handleChange}
+          required
+        />
+      </FieldsetStyle>
+
+      <FieldsetStyle legend="Adresse postale">
+        <InputStyle
+          label="Numéro de rue"
+          type="number"
+          name="numero_rue"
+          id="numero_rue"
+          value={utilisateur.adresse_postale.numero_rue}
+          onChange={handleChange}
+          required
+        />
+
+        <InputStyle
+          label="Nom de la rue"
+          type="text"
+          name="street"
+          id="street"
+          value={utilisateur.adresse_postale.street}
+          onChange={handleChange}
+          required
+        />
+
+        <InputStyle
+          label="Code Postal"
+          type="number"
+          name="code_postal"
+          id="code_postal"
+          value={utilisateur.adresse_postale.code_postal}
+          min={10000}
+          max={99999}
+          onChange={handleChange}
+          required
+        />
+
+        <InputStyle
+          label="Ville"
+          type="text"
+          name="ville"
+          id="ville"
+          value={utilisateur.adresse_postale.ville}
+          onChange={handleChange}
+          required
+        />
+
+        <InputStyle
+          label="Pays"
+          type="text"
+          name="pays"
+          id="pays"
+          value={utilisateur.adresse_postale.pays}
+          onChange={handleChange}
+          required
+        />
+      </FieldsetStyle>
+
+      <div className="mt-6">
         <CustomButton label="Créer mon compte" type="submit" />
-      </form>
-      {/* <section className="flex flex-col">
-        <a href="" className="">
-          Mot de passe oublié
-        </a>
-        <a href="">Créer un compte</a>
-      </section> */}
-    </div>
+      </div>
+    </FormStyle>
   );
 }

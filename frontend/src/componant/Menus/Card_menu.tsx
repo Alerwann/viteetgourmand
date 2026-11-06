@@ -25,28 +25,28 @@ export default function CardMenu({
   );
 
   return (
-    <CardComposant>
+    <CardComposant className="border border-[#EFECE6] bg-white hover:border-[#D95D39] transition-all">
       <div className="p-6 pb-4 flex flex-col gap-3">
         <div className="flex justify-between items-start gap-2">
-          <h3 className="text-xl font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">
+          <h3 className="text-xl font-serif font-bold text-[#2C2C2C] group-hover:text-[#D95D39] transition-colors">
             {titre_menu}
           </h3>
-          <span className="text-lg font-extrabold text-indigo-600 whitespace-nowrap">
+          <span className="text-lg font-extrabold text-[#D95D39] whitespace-nowrap">
             {price_by_person} €
           </span>
         </div>
 
-        <p className="text-slate-600 text-sm line-clamp-2 leading-relaxed">
+        <p className="text-[#666666] text-sm line-clamp-2 leading-relaxed font-sans">
           {description}
         </p>
       </div>
 
-      <div className="px-6 py-3 bg-slate-50/50 border-t border-b border-slate-100 flex flex-col gap-3 grow">
+      <div className="px-6 py-3 bg-[#FDFBF7] border-t border-b border-[#EFECE6] flex flex-col gap-3 grow">
         <div className="space-y-1">
-          <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+          <span className="text-xs font-semibold text-[#888888] uppercase tracking-wider">
             Composition
           </span>
-          <ul className="text-sm text-slate-700 space-y-0.5">
+          <ul className="text-sm text-[#2C2C2C] space-y-0.5">
             {detail_plat?.map((plat) => (
               <li key={plat.plat_id} className="truncate">
                 • {plat.nom}
@@ -67,14 +67,14 @@ export default function CardMenu({
       </div>
 
       {/* Pied de carte (Infos min. convives + Bouton) */}
-      <div className="p-6 pt-4 flex items-center justify-between gap-4 ">
-        <div className="text-xs text-slate-500 flex items-center gap-1 font-medium">
+      <div className="p-6 pt-4 flex items-center justify-between gap-4">
+        <div className="text-xs text-[#666666] flex items-center gap-1 font-medium">
           <span>👥</span> Min. {nb_minimal} pers.
         </div>
 
         <Link
           to={`/menus/${menu_id}`}
-          className="px-4 py-2 bg-slate-900 hover:bg-indigo-600 text-white text-sm font-semibold rounded-xl shadow transition-colors"
+          className="px-4 py-2 bg-[#2C2C2C] hover:bg-[#D95D39] text-[#FDFBF7] text-sm font-semibold rounded-xl shadow-sm transition-colors"
         >
           Voir le détail
         </Link>

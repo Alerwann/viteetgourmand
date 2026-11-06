@@ -1,50 +1,56 @@
 /** @format */
 
-"use client";
+'use client';
 
-import { useState } from "react";
-import convertType from "../../utils/convert_type";
+import { useState } from 'react';
+import convertType from '../../utils/convert_type';
 
 export default function Navigation_composant() {
   const [isOpen, setIsOpen] = useState(false);
   const [title, setTitle] = useState<string>(() => {
-    return localStorage.getItem("selectedType") || "Accueil";
+    return localStorage.getItem('selectedType') || 'Accueil';
   });
 
   const handleClick = (type: string) => {
     const newType = convertType(type);
     setTitle(newType);
-    localStorage.setItem("selectedType", newType);
+    localStorage.setItem('selectedType', newType);
     setIsOpen(false);
   };
 
   return (
-    <nav className=" flex flex-row py-1  bg-[#FDD5A4] relative z-50 ">
-      <div className="md:hidden flex justify-center px-2 ">
+    <nav className="flex flex-row items-center py-2 bg-transparent relative z-50">
+      {/* Bouton Menu Burger (Mobile) */}
+      <div className="md:hidden flex items-center px-2">
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="text-2xl p-2 border-2 border-black rounded-lg bg-[#F1DA07]"
+          className="text-xl p-2 border border-[#EFECE6] rounded-xl bg-white text-[#2C2C2C] shadow-sm hover:border-[#D95D39] transition-all"
           aria-label="Toggle menu"
         >
-          {isOpen ? "✕" : "☰"}
+          {isOpen ? '✕' : '☰'}
         </button>
       </div>
-      <div className="flex-2/3 text-3xl text-center md:hidden">{title}</div>
 
+      {/* Titre dynamique mobile */}
+      <div className="flex-1 text-2xl font-serif text-center md:hidden text-[#2C2C2C]">
+        {title}
+      </div>
+
+      {/* Liste des liens */}
       <ul
         className={`
-        ${isOpen ? "flex" : "hidden"} 
-        flex-col items-center gap-4 py-10 absolute top-full left-0 w-80 md:w-full bg-[#FDD5A4] border-b-2 border-black shadow-lg
-        md:static md:flex md:flex-row md:justify-evenly  md:border-none md:shadow-none
+        ${isOpen ? 'flex' : 'hidden'} 
+        flex-col items-center gap-4 py-6 absolute top-full left-0 w-full bg-[#FDFBF7] border-b border-[#EFECE6] shadow-md
+        md:static md:flex md:flex-row md:justify-end md:gap-8 md:bg-transparent md:border-none md:shadow-none md:py-0
         list-none transition-all
       `}
       >
-        {["accueil", "menus", "connect", "contact", "dashboard"].map((type) => (
+        {['accueil', 'menus', 'connect', 'contact', 'dashboard'].map((type) => (
           <li key={type}>
             <a
               onClick={() => handleClick(type)}
-              href={type === "accueil" ? "/" : `/${type}`}
-              className="hover:bg-[RGBA(105,230,140,1)] p-2 rounded-md text-l font-semibold font-marmelad"
+              href={type === 'accueil' ? '/' : `/${type}`}
+              className="text-[#2C2C2C] hover:text-[#D95D39] px-3 py-2 rounded-lg text-base font-medium font-sans transition-all hover:bg-[#F7F4EE] md:hover:bg-transparent"
             >
               {convertType(type)}
             </a>

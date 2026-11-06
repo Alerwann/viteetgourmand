@@ -22,10 +22,15 @@ export function SelectStyle({
 }: SelectStyleProps) {
   return (
     <div className="contents">
-      <label htmlFor={id}>{label}</label>
+      <label
+        htmlFor={id}
+        className="text-sm font-medium text-[#2C2C2C] font-sans"
+      >
+        {label}
+      </label>
       <select
         id={id}
-        className={`bg-white border-2 p-2 rounded-md focus:outline-2 focus:outline-indigo-600 ${className}`}
+        className={`bg-[#FDFBF7] border border-[#EFECE6] p-3 rounded-xl text-[#2C2C2C] focus:outline-none focus:border-[#D95D39] focus:ring-1 focus:ring-[#D95D39] w-full transition-all ${className}`}
         {...props}
       >
         <option value="">{defaultOptionText}</option>

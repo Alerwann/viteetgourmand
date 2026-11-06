@@ -1,6 +1,6 @@
 /** @format */
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate as useReactRouterNavigate } from 'react-router-dom';
 
 interface ButtonProps {
   label: string;
@@ -17,7 +17,7 @@ const CustomButton: React.FC<ButtonProps> = ({
   type = 'button',
   disabled,
 }) => {
-  const navigate = useNavigate();
+  const navigate = useReactRouterNavigate();
 
   const handleClick = () => {
     if (to) {
@@ -27,12 +27,16 @@ const CustomButton: React.FC<ButtonProps> = ({
     }
   };
 
+  // Styles selon la variante (primaire en terracotta, secondaire en anthracite/clair)
+  const baseStyle =
+    'px-6 py-3 rounded-xl font-medium text-sm transition-all shadow-sm flex items-center justify-center gap-2 cursor-pointer bg-[#2C2C2C] text-white hover:bg-[#1a1a1a] shadow-md hover:shadow-lg disabled:bg-gray-100 disabled:text-gray-400 disabled:border-gray-200 disabled:cursor-not-allowed';
+
   return (
     <button
       type={type}
       onClick={handleClick}
       disabled={disabled}
-      className="p-3 bg-[#69e68c] border-black shadow-[0px_0px_10px_#10860c] rounded-xl disabled:bg-gray-200 disabled:border-gray-500 disabled:text-gray-400"
+      className={`${baseStyle} `}
     >
       {label}
     </button>

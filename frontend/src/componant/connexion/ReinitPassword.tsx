@@ -1,27 +1,26 @@
 /** @format */
-import { useState, useEffect } from 'react';
 
+import { useState, useEffect } from 'react';
 import CustomButton from '../global/styles/button_global';
 import Loading from '../global/loading/Loading';
+import FormStyle from '../global/styles/Formulaire/FormStyle';
 import { FieldsetStyle } from '../global/styles/Formulaire/FieldsetStyle';
 import { InputStyle } from '../global/styles/Formulaire/InputStyle';
 import api from '../../services/api';
-
-/** @format */
-const inputAsset = 'bg-white border-2 p-2';
 
 export default function ReinitPassword() {
   const [email, setEmail] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    document.title = 'Reinititialisation mot de passe';
+    document.title = 'Réinitialisation du mot de passe | Vite & Gourmand';
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
   };
-  const handleSubmit = async (e: React.SubmitEvent) => {
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
 
@@ -29,6 +28,9 @@ export default function ReinitPassword() {
       await api.post('api/auth.php', {
         email: email,
       });
+      alert(
+        'Un email de réinitialisation vous a été envoyé si le compte existe.',
+      );
     } catch (error: any) {
       console.error('Erreur lors de la soumission :', error);
     } finally {
@@ -39,29 +41,34 @@ export default function ReinitPassword() {
   if (isLoading) {
     return <Loading />;
   }
+
   return (
-    <div className="mx-8 min-h-[60vh] gap-16  flex flex-col justify-center items-center">
-      <p className="text-2xl font-medium">
-        Un lien vous sera envoyé par email pour réinitialiser votre mot de
-        passe.
-      </p>
-      <form
-        onSubmit={handleSubmit}
-        className="flex flex-col items-center gap-16 mb-4"
-      >
-        <FieldsetStyle legend="Réinitialisation de mot de passe">
+    <div className="min-h-[70vh] flex flex-col justify-center items-center py-12 px-4 bg-[#FDFBF7]">
+      <div className="max-w-xl text-center mb-6">
+        <p className="text-xl font-serif text-[#2C2C2C] leading-relaxed">
+          Un lien vous sera envoyé par e-mail pour réinitialiser votre mot de
+          passe.
+        </p>
+        <div className="w-12 h-1 bg-[#D95D39] mx-auto mt-3 rounded-full"></div>
+      </div>
+
+      <FormStyle onSubmit={handleSubmit}>
+        <FieldsetStyle legend="Réinitialisation">
           <InputStyle
             label="Votre E-mail"
             type="email"
-            className={inputAsset}
             id="email"
             name="email"
+            value={email}
             onChange={handleChange}
             required
           />
         </FieldsetStyle>
-        <CustomButton label="Connexion" type="submit" />
-      </form>
+
+        <div className="mt-4">
+          <CustomButton label="Envoyer le lien" type="submit" />
+        </div>
+      </FormStyle>
     </div>
   );
 }

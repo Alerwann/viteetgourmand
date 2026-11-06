@@ -1,4 +1,5 @@
 /** @format */
+
 import { useState, useEffect } from 'react';
 import CustomButton from '../global/styles/button_global';
 import FormStyle from '../global/styles/Formulaire/FormStyle';
@@ -23,7 +24,7 @@ export default function Contact_composant() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    document.title = 'Contact Vite & Gourmand';
+    document.title = 'Contact | Vite & Gourmand';
   }, []);
 
   const handleChange = (
@@ -32,7 +33,7 @@ export default function Contact_composant() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: React.SubmitEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     try {
@@ -52,19 +53,20 @@ export default function Contact_composant() {
   }
 
   return (
-    <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 flex flex-col justify-center">
-      <div className="">
+    <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 flex flex-col justify-center bg-[#FDFBF7]">
+      <div className="max-w-3xl mx-auto w-full">
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">
+          <h2 className="text-3xl font-serif font-extrabold text-[#2C2C2C] tracking-tight">
             Besoin d'informations supplémentaires ?
           </h2>
-          <p className="mt-2 text-sm text-slate-600">
+          <p className="mt-2 text-sm text-[#666666] font-sans">
             Nous répondrons à votre formulaire dans les plus brefs délais !
           </p>
+          <div className="w-16 h-1 bg-[#D95D39] mx-auto mt-4 rounded-full"></div>
         </div>
 
         <FormStyle onSubmit={handleSubmit}>
-          <FieldsetStyle legend="Contact">
+          <FieldsetStyle legend="Formulaire de contact">
             <InputStyle
               label="Objet"
               id="title"
@@ -87,28 +89,42 @@ export default function Contact_composant() {
               placeholder="votre.email@exemple.com"
             />
 
-            <label className="">Description</label>
-            <textarea
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              required
-              rows={5}
-              maxLength={250}
-              className="w-full bg-white border-2 p-2 rounded-md pr-10 focus:outline-2 focus:outline-indigo-600  resize-none"
-              placeholder="Votre message (250 caractères max)"
-            />
-            <div className="mt-1 text-right text-xs text-slate-400">
-              {formData.description.length} / 250 caractères
+            <div className="contents">
+              <label
+                htmlFor="description"
+                className="text-sm font-medium text-[#2C2C2C] font-sans"
+              >
+                Description
+              </label>
+              <div className="w-full">
+                <textarea
+                  id="description"
+                  name="description"
+                  value={formData.description}
+                  onChange={handleChange}
+                  required
+                  rows={5}
+                  maxLength={250}
+                  className="w-full bg-[#FDFBF7] border border-[#EFECE6] p-3 rounded-xl text-[#2C2C2C] focus:outline-none focus:border-[#D95D39] focus:ring-1 focus:ring-[#D95D39] resize-none transition-all"
+                  placeholder="Votre message (250 caractères max)"
+                />
+                <div className="mt-1 text-right text-xs text-[#888888]">
+                  {formData.description.length} / 250 caractères
+                </div>
+              </div>
             </div>
           </FieldsetStyle>
 
-          <div className="flex flex-col items-center gap-4 pt-4">
+          <div className="flex flex-col items-center gap-4 pt-4 w-full">
             <CustomButton label="Envoyer le message" type="submit" />
 
             {status && (
               <p
-                className={`text-sm font-medium ${status.includes('succès') ? 'text-emerald-600' : 'text-rose-600'}`}
+                className={`text-sm font-medium p-3 rounded-xl border ${
+                  status.includes('succès')
+                    ? 'text-emerald-700 bg-emerald-50 border-emerald-200'
+                    : 'text-[#D95D39] bg-amber-50 border-amber-200'
+                }`}
               >
                 {status}
               </p>
