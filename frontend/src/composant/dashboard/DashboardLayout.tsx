@@ -13,7 +13,7 @@ export default function DashboardLayout() {
       <Horaires />
       <PlatCreateForm />
       <MenuCreateForm />
-      <DashboardStats />
+      {/* <DashboardStats /> */}
       <Loading />
       <InContruct />
     </div>
