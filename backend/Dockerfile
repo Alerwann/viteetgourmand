@@ -16,16 +16,14 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/html
 
 
-COPY composer.json ./
+COPY . .
 RUN composer install --no-dev --optimize-autoloader
 
-
-COPY . .
 
 
 RUN echo 'server { \
     listen 10000; \
-    root /var/www/html; \
+    root /var/www/html/public; \
     index index.php index.html; \
     location / { \
         try_files $uri $uri/ /index.php?$query_string; \

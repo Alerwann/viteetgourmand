@@ -8,7 +8,7 @@ export default function HorairesList() {
 
   useEffect(() => {
     api
-      .get('/horaires.php')
+      .get('api/horaires.php')
       .then((res) => setHoraires(res.data))
       .catch((err) => console.error('Erreur fetch horaires:', err));
   }, []);

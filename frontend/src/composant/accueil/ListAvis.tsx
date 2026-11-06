@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import AvisCard from './AvisCard';
 import type { Avis } from '../../interfaces/avis';
 import Loading from '../global/loading/Loading';
+import api from '../../services/api';
 
 export default function ListAvisComposant() {
   const [listeAvis, setListAvis] = useState<Avis[]>([]);
@@ -46,9 +47,9 @@ export default function ListAvisComposant() {
   useEffect(() => {
     setIsLoading(true);
 
-    fetch('http://localhost:8000/api/avis.php?status=publie')
-      .then((res) => res.json())
-      .then((data) => setListAvis(data))
+    api
+      .get('api/avis.php?status=publie')
+      .then((res) => setListAvis(res.data))
       .catch((err) => console.error('Erreur fetch avis:', err));
 
     setIsLoading(false);
