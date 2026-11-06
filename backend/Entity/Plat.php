@@ -5,7 +5,6 @@ namespace App\Entity;
 use JsonSerializable;
 use App\Enum\TypePlat;
 
-require_once __DIR__ . '/Enum/Enum_type_plat.php';
 
 class Plat implements JsonSerializable
 {
