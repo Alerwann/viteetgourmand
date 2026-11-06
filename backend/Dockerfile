@@ -23,7 +23,7 @@ RUN composer dump-autoload --optimize --no-dev --classmap-authoritative
 
 RUN echo 'server { \
     listen 10000; \
-    root /var/www/html/public; \
+    root /var/www/html/Public; \
     index index.php index.html; \
     location / { \
         try_files $uri $uri/ /index.php?$query_string; \
