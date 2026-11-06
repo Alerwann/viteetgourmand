@@ -328,14 +328,14 @@ INSERT INTO commande (
 
 -- Valeur pour avis
 
-INSERT INTO avis(note, description, status, commande_id) VALUES
-(5, 'Repas exceptionnel, un vrai délice du terroir ! Les portions étaient généreuses et la livraison ponctuelle.', 'Publié', 1),
-(4, 'Très bon menu, le bœuf bourguignon était fondant à souhait. Petit bémol sur le dessert un peu trop sucré.', 'Publié', 2),
-(5, 'Parfait de l''entrée au dessert ! Le service de livraison avec prêt de matériel est un vrai plus.', 'Publié', 3),
-(3, 'Correct dans l''ensemble, mais la prestation est arrivée un peu en retard par rapport à l''horaire prévu.', 'En attente', 4),
-(5, 'Une magnifique découverte. Les saveurs étaient au rendez-vous, je recommande vivement.', 'Publié', 5),
-(2, 'Déçu par la quantité pour le prix demandé, et le plat principal était tiède à l''arrivée.', 'Signalé', 6),
-(4, 'Très bonne qualité des produits locaux. Tout le monde s''est régalé lors de notre repas de groupe.', 'Publié', 7),
-(5, 'Absolument parfait ! Rien à redire, c''était un sans-faute pour notre événement.', 'Publié', 8),
-(1, 'Catastrophique : erreur dans le menu livré et aucune réponse du service client.', 'Signalé', 9),
-(4, 'Très satisfaisant, les saveurs étaient authentiques et bien maîtrisées. À refaire !', 'Publié', 10);
+INSERT INTO avis (note, description, status, commande_id) VALUES
+(5, 'Repas exceptionnel, un vrai délice du terroir ! Les portions étaient généreuses et la livraison ponctuelle.', 'publie', 1),
+(4, 'Très bon menu, le bœuf bourguignon était fondant à souhait. Petit bémol sur le dessert un peu trop sucré.', 'publie', 2),
+(5, 'Parfait de l''entrée au dessert ! Le service de livraison avec prêt de matériel est un vrai plus.', 'publie', 3),
+(3, 'Correct dans l''ensemble, mais la prestation est arrivée un peu en retard par rapport à l''horaire prévu.', 'cree', 4),
+(5, 'Une magnifique découverte. Les saveurs étaient au rendez-vous, je recommande vivement.', 'publie', 5),
+(2, 'Déçu par la quantité pour le prix demandé, et le plat principal était tiède à l''arrivée.', 'non_valide', 6),
+(4, 'Très bonne qualité des produits locaux. Tout le monde s''est régalé lors de notre repas de groupe.', 'publie', 7),
+(5, 'Absolument parfait ! Rien à redire, c''était un sans-faute pour notre événement.', 'publie', 8),
+(1, 'Catastrophique : erreur dans le menu livré et aucune réponse du service client.', 'non_valide', 9),
+(4, 'Très satisfaisant, les saveurs étaient authentiques et bien maîtrisées. À refaire !', 'publie', 10);
