@@ -18,7 +18,7 @@ try {
 
         // Option 2 (alternative si l'option 1 renvoie toujours une erreur SSL) :
         // Décommente la ligne ci-dessous pour autoriser la connexion sans valider strictement le certificat racine si le conteneur en manque
-        // $options[PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] = false;
+        $options[PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] = false;
     }
 
     $dsn = "mysql:host=$host;port=$port;dbname=$db_name;charset=utf8mb4";
