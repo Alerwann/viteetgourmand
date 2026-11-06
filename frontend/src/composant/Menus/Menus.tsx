@@ -24,17 +24,17 @@ export default function Menus_composant() {
 
   useEffect(() => {
     api
-      .get('http://localhost:8000/api/menus.php')
+      .get('api/menus.php')
       .then((res) => setAllMenus(res.data))
       .catch((err) => console.error('Erreur fetch menus:', err));
 
     api
-      .get('http://localhost:8000/api/theme.php')
+      .get('api/theme.php')
       .then((res) => setAllTheme(res.data))
       .catch((err) => console.error('Erreur fetch theme:', err));
 
     api
-      .get('http://localhost:8000/api/regime.php')
+      .get('api/regime.php')
       .then((res) => setAllRegime(res.data))
       .catch((err) => console.error('Erreur fetch regime:', err));
   }, []);
