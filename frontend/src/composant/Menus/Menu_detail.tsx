@@ -4,15 +4,16 @@ import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import type { MenuDetail } from '../../interfaces/menus';
 import CustomButton from '../global/styles/button_global';
+import api from '../../services/api';
 
 export default function MenuDetail() {
   const { id } = useParams();
   const [dataMenu, setDataMenu] = useState<MenuDetail>();
 
   useEffect(() => {
-    fetch(`http://localhost:8000/api/menus.php?id=${id}`)
-      .then((res) => res.json())
-      .then((data) => setDataMenu(data))
+    api
+      .get(`api/menus.php?id=${id}`)
+      .then((res) => setDataMenu(res.data))
       .catch((err) => console.error('Erreur fetch menu:', err));
   }, [id]);
 

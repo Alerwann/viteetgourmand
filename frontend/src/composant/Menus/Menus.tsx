@@ -5,6 +5,7 @@ import type { Regime } from '../../interfaces/regime';
 import { useState, useEffect, useMemo } from 'react';
 import CardMenu from './Card_menu';
 import CardComposant from '../global/styles/card';
+import api from '../../services/api';
 
 export default function Menus_composant() {
   const [allMenus, setAllMenus] = useState<MenuDetail[]>([]);
@@ -22,19 +23,19 @@ export default function Menus_composant() {
   }, []);
 
   useEffect(() => {
-    fetch('http://localhost:8000/api/menus.php')
-      .then((res) => res.json())
-      .then((data) => setAllMenus(data))
+    api
+      .get('http://localhost:8000/api/menus.php')
+      .then((res) => setAllMenus(res.data))
       .catch((err) => console.error('Erreur fetch menus:', err));
 
-    fetch('http://localhost:8000/api/theme.php')
-      .then((res) => res.json())
-      .then((data) => setAllTheme(data))
+    api
+      .get('http://localhost:8000/api/theme.php')
+      .then((res) => setAllTheme(res.data))
       .catch((err) => console.error('Erreur fetch theme:', err));
 
-    fetch('http://localhost:8000/api/regime.php')
-      .then((res) => res.json())
-      .then((data) => setAllRegime(data))
+    api
+      .get('http://localhost:8000/api/regime.php')
+      .then((res) => setAllRegime(res.data))
       .catch((err) => console.error('Erreur fetch regime:', err));
   }, []);
 
