@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import type { utilisateur } from '../../interfaces/utilisateur';
 import Loading from '../global/loading/Loading';
+import api from '../../services/api';
 
 const inputAsset = 'bg-white border-2 p-2';
 const filesetAsset =
@@ -102,22 +103,9 @@ export default function CreateCompte() {
     };
 
     try {
-      const response = await fetch(
-        'http://localhost:8000/api/utilisateur.php',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(preload),
-        },
-      );
+      const response = await api.post('api/utilisateur.php', preload);
 
-      if (!response.ok) {
-        throw new Error('Erreur HTTP : ' + response.status);
-      }
-
-      const result = await response.json();
+      const result = response.data;
       console.log('Utilisateur créé avec succès :', result);
 
       alert('Votre compte a été créé avec succès');
@@ -138,9 +126,9 @@ export default function CreateCompte() {
         is_actif: false,
         role_id: 2,
       });
-      setIsLoading(false);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Erreur lors de la soumission :', error);
+    } finally {
       setIsLoading(false);
     }
   };

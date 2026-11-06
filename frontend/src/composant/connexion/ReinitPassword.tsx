@@ -5,6 +5,7 @@ import CustomButton from '../global/styles/button_global';
 import Loading from '../global/loading/Loading';
 import { FieldsetStyle } from '../global/styles/Formulaire/FieldsetStyle';
 import { InputStyle } from '../global/styles/Formulaire/InputStyle';
+import api from '../../services/api';
 
 /** @format */
 const inputAsset = 'bg-white border-2 p-2';
@@ -25,21 +26,13 @@ export default function ReinitPassword() {
     setIsLoading(true);
 
     try {
-      const response = await fetch('http://localhost:8000/api/auth.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email: email }),
+      await api.post('api/auth.php', {
+        email: email,
       });
-
-      if (!response.ok) {
-        throw new Error('Erreur HTTP : ' + response.status);
-      }
-      setIsLoading(false);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Erreur lors de la soumission :', error);
-      setIsLoading(true);
+    } finally {
+      setIsLoading(false);
     }
   };
 
