@@ -19,11 +19,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
-
+require_once __DIR__ . '/../../vendor/autoload.php';
 
 require_once __DIR__ . '/../../config/db_init.php';
 
-require_once __DIR__ . '/../../vendor/autoload.php';
+
 
 use App\Repository\Horaire\SqlHoraireRepository;
 use App\Controller\HoraireController;
