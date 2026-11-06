@@ -5,6 +5,7 @@ import FormStyle from '../global/styles/Formulaire/FormStyle';
 import { InputStyle } from '../global/styles/Formulaire/InputStyle';
 import { FieldsetStyle } from '../global/styles/Formulaire/FieldsetStyle';
 import Loading from '../global/loading/Loading';
+import api from '../../services/api';
 
 interface ContactFormData {
   title: string;
@@ -35,22 +36,13 @@ export default function Contact_composant() {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const response = await fetch(
-        'http://localhost:8000/api/contact_request.php',
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(formData),
-        },
-      );
-
-      if (!response.ok) throw new Error("Erreur lors de l'envoi");
+      await api.post('api/contact_request.php', formData);
 
       setStatus('Message envoyé avec succès !');
       setFormData({ title: '', description: '', email: '' });
-      setIsLoading(false);
-    } catch (err) {
+    } catch (err: any) {
       setStatus('Une erreur est survenue.');
+    } finally {
       setIsLoading(false);
     }
   };

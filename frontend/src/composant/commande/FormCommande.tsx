@@ -20,6 +20,7 @@ import CustomButton from '../global/styles/button_global';
 import VerifCommande from './VerifCommande';
 import createREfCommande from '../../utils/create_ref_commande';
 import TitleCommandeSection from '../global/styles/title_commande_section';
+import api from '../../services/api';
 
 export default function FormCommande() {
   const { menuid } = useParams();
@@ -54,34 +55,24 @@ export default function FormCommande() {
       return;
     }
 
-    fetch('http://localhost:8000/api/commande.php', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((response) => {
-        if (response.status === 401) {
-          localStorage.removeItem('token');
-          window.location.href = '/connect';
-          throw new Error('Non autorisé');
-        }
-        return response.json();
-      })
-      .then((data) => {
-        const userId = data.id;
-
-        return fetch(`http://localhost:8000/api/utilisateur.php?id=${userId}`, {
-          method: 'GET',
+    const fetchUserData = async () => {
+      try {
+        const responseCommande = await api.get('api/commande.php', {
           headers: {
-            'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
           },
         });
-      })
-      .then((response) => response.json())
-      .then((userData) => {
+
+        const userId = responseCommande.data.id;
+
+        const responseUser = await api.get(`api/utilisateur.php?id=${userId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const userData = responseUser.data;
+
         setUtilisateur({
           utilisateur_id: userData.utilisateur_id,
           email: userData.email,
@@ -89,21 +80,30 @@ export default function FormCommande() {
           nom: userData.nom,
           telephone: userData.telephone,
         });
-
-        setLoading(false);
-      })
-      .catch((error) => {
+      } catch (error: any) {
         console.error('Erreur:', error);
-        setLoading(false);
-      });
-  }, [token, navigate]);
 
+        if (error.response && error.response.status === 401) {
+          localStorage.removeItem('token');
+          window.location.href = '/connect';
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, [token, navigate, menu_id]);
+
+  // 2. Récupération du menu choisi
   useEffect(() => {
     setLoading(true);
 
-    fetch(`http://localhost:8000/api/menus.php?id=${menu_id}`)
-      .then((res) => res.json())
-      .then((menuData) => {
+    const fetchMenu = async () => {
+      try {
+        const response = await api.get(`api/menus.php?id=${menu_id}`);
+        const menuData = response.data;
+
         setMenuChoose({
           menu_nom: menuData['menu_nom'],
           menu_prix: menuData['menu_prix'],
@@ -121,9 +121,14 @@ export default function FormCommande() {
           ...prev,
           nombre_personne: menuData['nb_perso_min'],
         }));
-      })
-      .catch((err) => console.error('Erreur fetch:', err))
-      .finally(() => setLoading(false));
+      } catch (err: any) {
+        console.error('Erreur fetch:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMenu();
   }, [menu_id]);
 
   const testPrestaKo =
