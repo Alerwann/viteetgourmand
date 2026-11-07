@@ -12,9 +12,9 @@ class Plat implements JsonSerializable
     private string $plat_nom;
     private TypePlat $type_plat;
     private ?string $photo;
-    private array $alergenes;
+    private ?array $alergenes;
 
-    public function __construct(?int $plat_id, string $plat_nom, TypePlat $type_plat, ?string $photo, array $alergenes)
+    public function __construct(?int $plat_id, string $plat_nom, TypePlat $type_plat, ?array $alergenes, ?string $photo)
     {
         $this->plat_id = $plat_id;
         $this->plat_nom = $plat_nom;

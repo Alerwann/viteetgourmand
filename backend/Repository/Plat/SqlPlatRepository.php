@@ -97,13 +97,13 @@ class SqlPlatRepository implements PlatRepositoryInterface
         $arrayAlergene = $plat->getAlergenes();
 
         if (!empty($arrayAlergene)) {
-            $sqlJoint = "INSERT INTO plat_alergene (plat_id,alergene_id) VALUES (:plat_id,:alergene_id)";
+            $sqlJoint = "INSERT INTO plat_alergene (plat_id, alergene_id) VALUES (:plat_id, :alergene_id)";
             $stmtJoint = $this->pdo->prepare($sqlJoint);
 
             foreach ($arrayAlergene as $alergeneId) {
                 $stmtJoint->execute([
                     ':plat_id' => $platId,
-                    ':alergene_id' => $alergeneId
+                    ':alergene_id' => (int) $alergeneId // Sécurisation du type entier
                 ]);
             }
         }

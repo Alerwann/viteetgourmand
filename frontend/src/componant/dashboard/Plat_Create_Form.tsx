@@ -1,12 +1,12 @@
 /** @format */
 import { useEffect, useState, type ChangeEvent } from 'react';
-import { DishType } from '../../interfaces/plat';
 import type { alergene } from '../../interfaces/alergene';
 import CustomButton from '../global/styles/button_global';
 import FormStyle from '../global/styles/Formulaire/FormStyle';
 import { InputStyle } from '../global/styles/Formulaire/InputStyle';
 import Loading from '../global/loading/Loading';
 import api from '../../services/api';
+import { SelectStyle } from '../global/styles/Formulaire/SelectStyle';
 
 export default function PlatCreateForm() {
   const [alergenes, setAlergenes] = useState<alergene[]>([]);
@@ -14,6 +14,8 @@ export default function PlatCreateForm() {
   const [type_plat, setTypePlat] = useState<string>('');
   const [photo, setPhoto] = useState<File | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const [arrayAllergene, setArrayAllergene] = useState<alergene[]>([]);
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -41,11 +43,10 @@ export default function PlatCreateForm() {
   }, []);
 
   const handleCheckboxChange = (currentAlergene: alergene) => {
-    setAlergenes((prevSelected) => {
+    setArrayAllergene((prevSelected) => {
       const exists = prevSelected.some(
         (item) => item.alergene_id === currentAlergene.alergene_id,
       );
-
       if (exists) {
         return prevSelected.filter(
           (item) => item.alergene_id !== currentAlergene.alergene_id,
@@ -63,21 +64,19 @@ export default function PlatCreateForm() {
 
     try {
       const formData = new FormData();
+      formData.append('alergenes', JSON.stringify(arrayAllergene));
       formData.append('plat_nom', plat_nom);
       formData.append('type_plat', type_plat);
       if (photo) {
         formData.append('photo', photo);
       }
 
-      const data = await api.post('api/plat.php', formData);
-
-      const nouveauPlatId = data.data.plat_id;
-      await api.post('api/plat_alergene.php', nouveauPlatId);
+      await api.post('api/plat.php', formData);
 
       setNomPlat('');
       setTypePlat('');
       setPhoto(null);
-      setAlergenes([]);
+      setArrayAllergene([]);
     } catch (error) {
       console.error('Erreur:', error);
     } finally {
@@ -108,21 +107,16 @@ export default function PlatCreateForm() {
       />
       {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
 
-      <div>
-        <label htmlFor="typePlat">Types de plat</label>
-        <select
-          id="typePlat"
-          value={type_plat}
-          onChange={(e) => setTypePlat(e.target.value)}
-        >
-          <option value={-1}>-- Choisissez le type de plat --</option>
-          {DishType.map((dish, index) => (
-            <option value={dish} key={index}>
-              {dish}
-            </option>
-          ))}
-        </select>
-      </div>
+      <SelectStyle
+        label={'Types de plat'}
+        id={'typePlat'}
+        options={[
+          { value: 'Entrée', label: 'Entrée' },
+          { value: 'Plat', label: 'Plat' },
+          { value: 'Dessert', label: 'Dessert' },
+        ]}
+        defaultValue={'-- Selectionner le type de plat --'}
+      />
 
       <ul className="grid grid-cols-3">
         {alergenes.map((alergene) => (

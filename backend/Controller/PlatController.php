@@ -74,12 +74,13 @@ class PlatController
     public function save()
     {
 
-        $plat_nom = $_POST['plat_nom'] ?? null;
-        $type_plat = $_POST['type_plat'] ?? null;
-        $alergenes = $_POST['alergenes'] ?? [];
+        $plat_nom = $_POST['plat_nom'];
+        $type_plat = $_POST['type_plat'];
+        $alergenes = json_decode($_POST['alergenes'], true);
         $plat_id = $_POST['plat_id'] ?? \null;
 
         $typeEnum = TypePlat::tryFrom($type_plat);
+
 
         if ($typeEnum === null) {
             throw new \InvalidArgumentException("Statut invalide : " . $type_plat);
@@ -107,7 +108,7 @@ class PlatController
             $plat = new Plat(
                 plat_id: $plat_id,
                 plat_nom: $plat_nom,
-                type_plat: $type_plat,
+                type_plat: $typeEnum,
                 photo: $imageData,
                 alergenes: $alergenes
             );
