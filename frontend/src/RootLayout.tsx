@@ -8,7 +8,7 @@ export default function RootLayout() {
   return (
     <>
       <Header_composant />
-      <main className="flex flex-col bg-[#FDFBF7]   ">
+      <main className="flex flex-col bg-[#FDFBF7] min-h-[60vh]  ">
         <Outlet />
       </main>
       <Footer_composant />

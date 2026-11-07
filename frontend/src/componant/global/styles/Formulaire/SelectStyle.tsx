@@ -17,6 +17,7 @@ export function SelectStyle({
   id,
   options,
   defaultOptionText = '-- Sélectionner --',
+  ...props
 }: SelectStyleProps) {
   return (
     <div className="contents">
@@ -29,6 +30,7 @@ export function SelectStyle({
       <select
         id={id}
         className={`bg-[#FDFBF7] border border-[#EFECE6] p-3 rounded-xl text-[#2C2C2C] focus:outline-none focus:border-[#D95D39] focus:ring-1 focus:ring-[#D95D39] max-w-[60vh] transition-all text-center`}
+        {...props}
       >
         <option value="">{defaultOptionText}</option>
         {options.map((opt) => (

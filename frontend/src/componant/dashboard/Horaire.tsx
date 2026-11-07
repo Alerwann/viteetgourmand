@@ -64,6 +64,10 @@ export default function Horaires() {
       alert('Veuillez choisir un jour.');
       return;
     }
+    if (openHour > closeHour) {
+      alert("Heure de fermeture supérieur à l'heure de fermeture");
+      return;
+    }
 
     const existingHoraire = horaireList.find((h) => h.jour === daysChoice);
 
@@ -74,6 +78,10 @@ export default function Horaires() {
       heure_fermeture: closeHour,
     };
 
+    setIsClose(false);
+    setCloseHour(18);
+    setOpenHour(9);
+    setDaysChoice('');
     try {
       console.log(formData);
       await api.post('api/horaires.php', formData);
@@ -121,7 +129,7 @@ export default function Horaires() {
       />
 
       {!isClose && (
-        <div className="flex md:flex-col gap-4 justify-center content-center ">
+        <div className="flex flex-col md:flex-row gap-4 justify-center content-center ">
           <SelectStyle
             label={"Heure d'ouverture"}
             id={'openHour'}

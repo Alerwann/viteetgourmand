@@ -33,7 +33,7 @@ const CustomButton: React.FC<ButtonProps> = ({
       onClick={handleClick}
       disabled={disabled}
       className="
-      min-w-md
+      max-w-md
       px-6 py-3 
       rounded-xl 
       font-medium text-sm 
