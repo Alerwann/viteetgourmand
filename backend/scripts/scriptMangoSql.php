@@ -8,7 +8,7 @@ use MongoDB\Client as MongoClient;
 
 try {
 
-    $mongoUri = getenv('MONGO_URI') ?: 'mongodb+srv://alerwann411_db_user:4bit8fGglQfuSjZr@cluster0.ht7ylsp.mongodb.net/';
+    $mongoUri = getenv('MONGO_URI');
     $mongoClient = new MongoClient($mongoUri);
     $collection = $mongoClient->selectDatabase('vite_gourmand')->selectCollection('commande');
 
