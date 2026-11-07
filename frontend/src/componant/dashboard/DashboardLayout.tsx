@@ -1,9 +1,6 @@
 /** @format */
 
 import CustomButton from '../global/styles/button_global';
-import DashboardStats from './DashBoardStat';
-import MenuCreateForm from './Menu_Create_Form';
-import PlatCreateForm from './Plat_Create_Form';
 
 export default function DashboardLayout() {
   return (
