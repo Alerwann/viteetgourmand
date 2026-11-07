@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Horaire;
 use App\Repository\Horaire\HoraireRepositoryInterface;
 
 
@@ -51,16 +52,18 @@ class HoraireController
 
     public function updateHoraires(): void
     {
-
         $data = json_decode(file_get_contents("php://input"), true);
-
 
         if (empty($data)) {
             http_response_code(400);
-            echo json_encode(["message" => "Données vide."]);
+            echo json_encode(["message" => "Données vides."]);
             return;
         }
 
+
+        if (isset($data['horaire_id'])) {
+            $data = [$data];
+        }
 
         try {
             foreach ($data as $horaire) {
@@ -69,15 +72,16 @@ class HoraireController
                     echo json_encode(["message" => "Données incomplètes (jour, heure d'ouverture, heure de fermeture)."]);
                     return;
                 }
-                $this->horaireRepo->updateHoraire($horaire);
+                $horaireid = (int)$horaire['horaire_id'];
+                $horaireReturn = new Horaire(jour: $horaire['jour'], heure_ouverture: $horaire['heure_ouverture'], heure_fermeture: $horaire['heure_fermeture'], horaire_id: $horaireid);
+                $this->horaireRepo->updateHoraire($horaireReturn);
             }
+
             http_response_code(200);
             echo json_encode([
-                "message" => "Horaire mis à jour avec succès !",
-                "jour" => $data['jour']
+                "message" => "Horaire(s) mis à jour avec succès !"
             ]);
         } catch (Exception $e) {
-
             http_response_code(500);
             echo json_encode(["message" => "Erreur : " . $e->getMessage()]);
         }

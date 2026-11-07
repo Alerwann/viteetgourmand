@@ -11,6 +11,10 @@ import Connect_composant from './componant/connexion/Connect';
 import CreateCompte from './componant/connexion/CreateCompte';
 import ReinitPassword from './componant/connexion/ReinitPassword';
 import FormCommande from './componant/commande/FormCommande';
+import Horaires from './componant/dashboard/Horaire';
+import PlatCreateForm from './componant/dashboard/Plat_Create_Form';
+import MenuCreateFor from './componant/dashboard/Menu_Create_Form';
+import DashboardStats from './componant/dashboard/DashBoardStat';
 
 const router = createBrowserRouter([
   {
@@ -50,6 +54,11 @@ const router = createBrowserRouter([
       { path: 'reinit/:token', element: <ReinitPassword /> },
 
       { path: 'commande/:menuid', element: <FormCommande /> },
+
+      { path: 'modifHoraire/', element: <Horaires /> },
+      { path: 'creatPlat/', element: <PlatCreateForm /> },
+      { path: 'creatMenu/', element: <MenuCreateFor /> },
+      { path: 'resultDashboard/', element: <DashboardStats /> },
     ],
   },
 ]);

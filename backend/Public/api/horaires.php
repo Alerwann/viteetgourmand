@@ -43,7 +43,7 @@ switch ($method) {
         }
         break;
 
-    case 'PUT':
+    case 'POST':
 
         $controller->updateHoraires();
         break;

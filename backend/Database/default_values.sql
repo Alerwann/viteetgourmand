@@ -102,125 +102,116 @@ INSERT INTO plat(plat_nom,type_plat,photo) VALUES
 
 
 -- Valeur duo Plat Alergène
-INSERT INTO plat_alergene VALUES
--- Poulet de Bresse à la crème
-(1, 7),
-(1, 10),
+INSERT INTO plat_alergene (plat_id, alergene_id) VALUES
+-- Poulet de Bresse à la crème (ID 1)
+(1, 7),  -- Lait
+(1, 10), -- Moutarde
 
--- Bœuf bourguignon
-(2, 9),
+-- Bœuf bourguignon (ID 2)
+(2, 9),  -- Céleri
 
--- Œufs en meurette
-(3, 3),
-(3, 1),
-(3, 7),
+-- Œufs en meurette (ID 3)
+(3, 3),  -- Œufs
+(3, 1),  -- Gluten
+(3, 7),  -- Lait
 
--- Fondue bressane
-(4, 3),
-(4, 7),
+-- Fondue bressane (ID 4)
+(4, 3),  -- Œufs
+(4, 7),  -- Lait
 
--- Gougères au Comté
-(5, 1),
-(5, 3),
-(5, 7),
+-- Gougères au Comté (ID 5)
+(5, 1),  -- Gluten
+(5, 3),  -- Œufs
+(5, 7),  -- Lait
 
--- Gratin dauphinois
-(6, 7),
+-- Blanquette de veau (ID 7)
+(7, 7),  -- Lait
+(7, 9),  -- Céleri
 
--- Quiche lorraine
-(7, 1),
-(7, 3),
-(7, 7),
+-- Pot-au-feu (ID 8)
+(8, 9),  -- Céleri
 
--- Blanquette de veau
-(8, 7),
-(8, 9),
+-- Hachis parmentier (ID 9)
+(9, 7),  -- Lait
 
--- Pot-au-feu
-(9, 9),
+-- Cassoulet (ID 10)
+(10, 1), -- Gluten
 
--- Hachis parmentier
-(10, 7),
+-- Bouillabaisse (ID 11)
+(11, 4), -- Poissons
+(11, 2), -- Crustacés
+(11, 9), -- Céleri
 
--- Cassoulet
-(11, 1),
+-- Galette complète (ID 12)
+(12, 3), -- Œufs
+(12, 7), -- Lait
 
+-- Salade niçoise (ID 13)
+(13, 4), -- Poissons
+(13, 3), -- Œufs
 
+-- Tartiflette (ID 14)
+(14, 7), -- Lait
 
--- Bouillabaisse
-(13, 4),
-(13, 2),
-(13, 9),
+-- Raclette (ID 15)
+(15, 7), -- Lait
 
--- Galette complète
-(14, 3),
-(14, 7),
+-- Choucroute garnie (ID 17)
+(17, 9), -- Céleri
+(17, 10),-- Moutarde
 
--- Salade niçoise
-(15, 4),
-(15, 3),
+-- Tarte tatin (ID 18)
+(18, 1), -- Gluten
+(18, 7), -- Lait
 
--- Tartiflette
-(16, 7),
+-- Crème brûlée (ID 19)
+(19, 3), -- Œufs
+(19, 7), -- Lait
 
--- Raclette
-(17, 7),
+-- Mousse au chocolat (ID 20)
+(20, 3), -- Œufs
+(20, 7), -- Lait
 
+-- Île flottante (ID 21)
+(21, 3), -- Œufs
+(21, 7), -- Lait
 
--- Choucroute garnie
-(19, 9),
-(19, 10),
+-- Profiteroles au chocolat (ID 22)
+(22, 1), -- Gluten
+(22, 3), -- Œufs
+(22, 7), -- Lait
 
--- Tarte tatin
-(20, 1),
-(20, 7),
+-- Tarte au citron meringuée (ID 23)
+(23, 1), -- Gluten
+(23, 3), -- Œufs
+(23, 7), -- Lait
 
--- Crème brûlée
-(21, 3),
-(21, 7),
+-- Éclair au chocolat (ID 24)
+(24, 1), -- Gluten
+(24, 3), -- Œufs
+(24, 7), -- Lait
 
--- Mousse au chocolat
-(22, 3),
-(22, 7),
+-- Fondant au chocolat (ID 25)
+(25, 1), -- Gluten
+(25, 3), -- Œufs
+(25, 7), -- Lait
 
--- Île flottante
-(23, 3),
-(23, 7),
+-- Baba au rhum (ID 26)
+(26, 1), -- Gluten
+(26, 3), -- Œufs
+(26, 7), -- Lait
 
--- Profiteroles au chocolat
-(24, 1),
-(24, 3),
-(24, 7),
+-- Crêpes suzette (ID 27)
+(27, 1), -- Gluten
+(27, 3), -- Œufs
+(27, 7), -- Lait
 
--- Tarte au citron meringuée
-(25, 1),
-(25, 3),
-(25, 7),
+-- Financier aux amandes (ID 28)
+(28, 1), -- Gluten
+(28, 3), -- Œufs
+(28, 7), -- Lait
+(28, 8); -- Fruits à coque
 
--- Éclair au chocolat
-(26, 1),
-(26, 3),
-(26, 7),
-
--- Fondant au chocolat
-(27, 1),
-(27, 3),
-(27, 7),
-
--- Baba au rhum
-(28, 1),
-(28, 3),
-(28, 7),
-
--- Crêpes suzette
-(29, 1),
-(29, 3),
-(29, 7),
-
--- Financier aux amandes
-(30, 1),
-(30, 3),
-(30, 7);
 
 -- Valeur des menus
 INSERT INTO menu(menu_nom, nb_perso_min,menu_prix, description,quantite_restante,note_particuliere, regime_id,theme_id) VALUES
@@ -237,55 +228,55 @@ INSERT INTO menu(menu_nom, nb_perso_min,menu_prix, description,quantite_restante
 
 -- Valeur des menus_plats
 INSERT INTO menu_plat (menu_id, plat_id) VALUES
--- Menu 1 (ID 1): Entrée, Plat, Dessert
+-- Menu 1
 (1, 3),  -- Œufs en meurette (Entrée)
 (1, 1),  -- Poulet de Bresse à la crème (Plat)
-(1, 20), -- Tarte tatin (Dessert)
+(1, 18), -- Tarte tatin (Dessert)
 
--- Menu 2 (ID 2): Entrée, Plat, Dessert
+-- Menu 2
 (2, 5),  -- Gougères au Comté (Entrée)
-(2, 12), -- Ratatouille (Plat - considéré comme plat principal végétarien)
-(2, 21), -- Crème brûlée (Dessert)
+(2, 4),  -- Fondue bressane (Plat)
+(2, 19), -- Crème brûlée (Dessert)
 
--- Menu 3 (ID 3): Entrée, Plat, Dessert
-(3, 7),  -- Quiche lorraine (Entrée)
+-- Menu 3
+(3, 6),  -- Quiche lorraine (Entrée)
 (3, 2),  -- Bœuf bourguignon (Plat)
-(3, 22), -- Mousse au chocolat (Dessert)
+(3, 20), -- Mousse au chocolat (Dessert)
 
--- Menu 4 (ID 4): Entrée, Plat, Dessert
-(4, 15), -- Salade niçoise (Entrée)
-(4, 8),  -- Blanquette de veau (Plat)
-(4, 23), -- Île flottante (Dessert)
+-- Menu 4
+(4, 13), -- Salade niçoise (Entrée)
+(4, 7),  -- Blanquette de veau (Plat)
+(4, 21), -- Île flottante (Dessert)
 
--- Menu 5 (ID 5): Entrée, Plat, Dessert
+-- Menu 5
 (5, 3),  -- Œufs en meurette (Entrée)
-(5, 10), -- Hachis parmentier (Plat)
-(5, 24), -- Profiteroles au chocolat (Dessert)
+(5, 9),  -- Hachis parmentier (Plat)
+(5, 22), -- Profiteroles au chocolat (Dessert)
 
--- Menu 6 (ID 6): Entrée, Plat, Dessert
+-- Menu 6
 (6, 5),  -- Gougères au Comté (Entrée)
-(6, 14), -- Galette complète (Plat)
-(6, 25), -- Tarte au citron meringuée (Dessert)
+(6, 12), -- Galette complète (Plat)
+(6, 23), -- Tarte au citron meringuée (Dessert)
 
--- Menu 7 (ID 7): Entrée, Plat, Dessert
-(7, 7),  -- Quiche lorraine (Entrée)
+-- Menu 7
+(7, 6),  -- Quiche lorraine (Entrée)
 (7, 1),  -- Poulet de Bresse à la crème (Plat)
-(7, 26), -- Éclair au chocolat (Dessert)
+(7, 24), -- Éclair au chocolat (Dessert)
 
--- Menu 8 (ID 8): Entrée, Plat, Dessert
-(8, 15), -- Salade niçoise (Entrée)
-(8, 18), -- Magret de canard (Plat)
-(8, 27), -- Fondant au chocolat (Dessert)
+-- Menu 8
+(8, 13), -- Salade niçoise (Entrée)
+(8, 16), -- Magret de canard (Plat)
+(8, 25), -- Fondant au chocolat (Dessert)
 
--- Menu 9 (ID 9): Entrée, Plat, Dessert
+-- Menu 9
 (9, 3),  -- Œufs en meurette (Entrée)
-(9, 9),  -- Pot-au-feu (Plat)
-(9, 28), -- Baba au rhum (Dessert)
+(9, 8),  -- Pot-au-feu (Plat)
+(9, 26), -- Baba au rhum (Dessert)
 
--- Menu 10 (ID 10): Entrée, Plat, Dessert
+-- Menu 10
 (10, 5), -- Gougères au Comté (Entrée)
-(10, 11),-- Cassoulet (Plat)
-(10, 29);-- Crêpes suzette (Dessert)
+(10, 10),-- Cassoulet (Plat)
+(10, 27);-- Crêpes suzette (Dessert)
 
 -- Valeur de Commande
 

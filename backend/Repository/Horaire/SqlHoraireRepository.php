@@ -40,10 +40,10 @@ class SqlHoraireRepository implements HoraireRepositoryInterface
     #[Override]
     public function updateHoraire(Horaire $horaire): void
     {
-        $query = "UPDATE horaire SET horaire_id= ':horaire_id'  heure_ouverture = :ouverture, heure_fermeture = :fermeture WHERE jour = :jour";
+        $query = "UPDATE horaire SET horaire_id= :horaire_id,  heure_ouverture = :ouverture, heure_fermeture = :fermeture WHERE jour = :jour";
         $stmt = $this->pdo->prepare($query);
         $stmt->execute([
-            'horaire_id' => $horaire->getId(),
+            ':horaire_id' => $horaire->getId(),
             ':jour'      => $horaire->getJour(),
             ':ouverture' => $horaire->getHeureOuverture(),
             ':fermeture' => $horaire->getHeureFermeture()

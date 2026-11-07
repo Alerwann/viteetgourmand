@@ -6,6 +6,10 @@ import type { Horaire } from '../../interfaces/horaires';
 import FormStyle from '../global/styles/Formulaire/FormStyle';
 import Loading from '../global/loading/Loading';
 import api from '../../services/api';
+import CustomButton from '../global/styles/button_global';
+import { SelectStyle } from '../global/styles/Formulaire/SelectStyle';
+
+import { InputCheckbox } from '../global/styles/Formulaire/inputCheckbox';
 
 export default function Horaires() {
   const [daysChoice, setDaysChoice] = useState<string>('');
@@ -71,6 +75,7 @@ export default function Horaires() {
     };
 
     try {
+      console.log(formData);
       await api.post('api/horaires.php', formData);
     } catch (error) {
       console.error('Erreur réseau :', error);
@@ -97,60 +102,50 @@ export default function Horaires() {
   }
   return (
     <FormStyle onSubmit={handleSubmit}>
-      <div>
-        <label htmlFor="days">Jour de la semaine</label>
-        <select id="days" value={daysChoice} onChange={handleChangeDay}>
-          <option value="">-- Choisissez un jour --</option>
-          {daysOption.map((day) => (
-            <option key={day} value={day.toLowerCase()}>
-              {day}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div>
-        <label htmlFor="isClose">Etablissement fermé</label>
-        <input
-          id="isClose"
-          type="checkbox"
-          checked={isClose}
-          onChange={handleChangeIsClose}
-        />
-      </div>
+      <SelectStyle
+        label="Jour de la semaine"
+        id="days"
+        value={daysChoice}
+        onChange={handleChangeDay}
+        defaultOptionText="-- Choisissez un jour --"
+        options={daysOption.map((day) => ({
+          value: day.toLowerCase(),
+          label: day,
+        }))}
+      />
+
+      <InputCheckbox
+        label="Etablissement fermé"
+        id="isClose"
+        onChange={handleChangeIsClose}
+      />
+
       {!isClose && (
-        <>
-          <div>
-            <label htmlFor="openHour">Heure d'ouverture</label>
-            <select id="openHour" value={openHour} onChange={handleChangeOpen}>
-              <option value={-1}>-- Choisissez l'horaire --</option>
-              {heuresOptions.map((heure) => (
-                <option key={heure} value={heure}>
-                  {heure} H
-                </option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label htmlFor="closeHour">Heure de fermeture</label>
-            <select
-              id="closeHour"
-              value={closeHour}
-              onChange={handleChangeClose}
-            >
-              <option value={-1}>-- Choisissez l'horaire --</option>
-              {arrayClose.map((heure) => (
-                <option key={heure} value={heure}>
-                  {heure} H
-                </option>
-              ))}
-            </select>
-          </div>
-        </>
+        <div className="flex md:flex-col gap-4 justify-center content-center ">
+          <SelectStyle
+            label={"Heure d'ouverture"}
+            id={'openHour'}
+            value={openHour}
+            options={heuresOptions.map((heure) => ({
+              value: heure,
+              label: `${heure} H`,
+            }))}
+            onChange={handleChangeOpen}
+          />
+          <SelectStyle
+            label="Heure de fermeture"
+            id="closeHour"
+            value={closeHour}
+            onChange={handleChangeClose}
+            options={arrayClose.map((heure) => ({
+              value: heure,
+              label: `${heure} H`,
+            }))}
+          />
+        </div>
       )}
       <div className="m-3">
-        <button type="submit" className="p-2 bg-amber-300">
-          Valider
-        </button>
+        <CustomButton label="Valider" type="submit" />
       </div>
     </FormStyle>
   );

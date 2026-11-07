@@ -17,21 +17,18 @@ export function SelectStyle({
   id,
   options,
   defaultOptionText = '-- Sélectionner --',
-  className = '',
-  ...props
 }: SelectStyleProps) {
   return (
     <div className="contents">
       <label
         htmlFor={id}
-        className="text-sm font-medium text-[#2C2C2C] font-sans"
+        className="text-sm font-medium text-[#2C2C2C] font-sans text-center"
       >
         {label}
       </label>
       <select
         id={id}
-        className={`bg-[#FDFBF7] border border-[#EFECE6] p-3 rounded-xl text-[#2C2C2C] focus:outline-none focus:border-[#D95D39] focus:ring-1 focus:ring-[#D95D39] w-full transition-all ${className}`}
-        {...props}
+        className={`bg-[#FDFBF7] border border-[#EFECE6] p-3 rounded-xl text-[#2C2C2C] focus:outline-none focus:border-[#D95D39] focus:ring-1 focus:ring-[#D95D39] max-w-[60vh] transition-all text-center`}
       >
         <option value="">{defaultOptionText}</option>
         {options.map((opt) => (
