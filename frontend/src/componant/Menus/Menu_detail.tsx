@@ -1,13 +1,14 @@
 /** @format */
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import type { MenuDetail as MenuDetailType } from '../../interfaces/menus';
+import type { MenuDetail } from '../../interfaces/menus';
 import CustomButton from '../global/styles/button_global';
 import api from '../../services/api';
+import Loading from '../global/loading/Loading';
 
 export default function MenuDetail() {
   const { id } = useParams();
-  const [dataMenu, setDataMenu] = useState<MenuDetailType>();
+  const [dataMenu, setDataMenu] = useState<MenuDetail>();
 
   useEffect(() => {
     api
@@ -17,11 +18,7 @@ export default function MenuDetail() {
   }, [id]);
 
   if (!dataMenu) {
-    return (
-      <div className="flex h-screen items-center justify-center bg-[#FDFBF7] text-[#666666]">
-        Chargement ou erreur...
-      </div>
-    );
+    return <Loading />;
   }
 
   // Groupement des plats par type_plat

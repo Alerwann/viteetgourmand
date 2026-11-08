@@ -17,6 +17,8 @@ export interface MenuDetail {
   quantite_restante: number;
   regime_id: number;
   theme_id: number;
+  regime_nom: string;
+  theme_nom: string;
   note_particuliere?: string;
   plats_details: PlatDetail[];
 }
