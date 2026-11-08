@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Menu;
 use App\Repository\Menu\MenuRepositoryInterface;
 
 
@@ -70,8 +71,8 @@ class MenuController
                 'description' => $menu->getDescription(),
                 'quantite_restante' => $menu->getQuantite(),
                 'plat_id ' => $menu->getPlatId(),
-                'regime_nom' => $menu->getRegimeNom(),
-                'theme_nom' => $menu->getThemeNom(),
+                'regime_id' => $menu->getRegimeId(),
+                'theme_id' => $menu->getThemeId(),
                 'note_particuliere' => $menu->getNoteParticuliere(),
                 'plats_details' => $menu->getPlatsDetails()
             ];
@@ -87,6 +88,22 @@ class MenuController
     public function createMenu(): void
     {
         $data = json_decode(file_get_contents("php://input"), true);
+        if (!isset($data) || !isset(
+            $data['menu_nom'],
+            $data['nb_perso_min'],
+            $data['menu_prix'],
+            $data['description'],
+            $data['plat_id'],
+            $data['regime_id'],
+            $data['theme_id'],
+
+        )) {
+            http_response_code(400);
+            echo json_encode(["message" => "Données incomplètes."]);
+            return;
+        }
+
+
         try {
             $this->menuRepo->save($data);
         } catch (\Exception $e) {

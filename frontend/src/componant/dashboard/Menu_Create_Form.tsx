@@ -26,8 +26,8 @@ export default function MenuCreateFor() {
     menu_prix: 0,
     description: '',
     quantite_restante: 0,
-    regime_nom: '',
-    theme_nom: '',
+    regime_id: -1,
+    theme_id: -1,
     note_particuliere: '',
     plats_details: [],
   });
@@ -97,12 +97,12 @@ export default function MenuCreateFor() {
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (menuData.regime_nom == '') {
+    if (menuData.regime_id === -1) {
       alert('Merci de choisir un régime');
       return;
     }
 
-    if (menuData.theme_nom == '') {
+    if (menuData.theme_id === -1) {
       alert('Merci de choisir un thème');
     }
 
@@ -111,14 +111,16 @@ export default function MenuCreateFor() {
       .map((id) => Number(id));
 
     const payload = {
-      titre: menuData.menu_nom,
-      theme_nom: menuData.theme_nom,
-      regime_nom: menuData.regime_nom,
+      menu_nom: menuData.menu_nom,
+      theme_id: menuData.theme_id,
+      regime_id: menuData.regime_id,
       description: menuData.description,
       nb_perso_min: menuData.nb_perso_min,
       menu_prix: menuData.menu_prix,
       quantite_restante: menuData.quantite_restante,
-      plats: platsIds,
+      plat_id: platsIds,
+      note_particulier: menuData.note_particuliere ?? null,
+      plats_details: menuData.plats_details,
     };
     setIsLoading(true);
     try {
@@ -133,8 +135,8 @@ export default function MenuCreateFor() {
         menu_prix: 0,
         description: '',
         quantite_restante: 0,
-        regime_nom: '',
-        theme_nom: '',
+        regime_id: -1,
+        theme_id: -1,
         note_particuliere: '',
         plats_details: [],
       });
@@ -165,15 +167,15 @@ export default function MenuCreateFor() {
         <label htmlFor="theme_id">Quel est le thème du menu :</label>
         <select
           name="theme_id"
-          id="theme_id"
+          id="theme_nom"
           className={inputAsset}
           onChange={handleChange}
-          value={menuData.theme_nom}
+          value={menuData.theme_id}
           required
         >
           <option value="-1">-- Sélectionner le thème --</option>
           {array_theme.map((theme) => (
-            <option value={theme.theme_nom} key={theme.theme_id}>
+            <option value={theme.theme_id} key={theme.theme_id}>
               {theme.theme_nom}
             </option>
           ))}
@@ -181,15 +183,15 @@ export default function MenuCreateFor() {
         <label htmlFor="regime_id">Quel est le régime du menu :</label>
         <select
           name="regime_id"
-          id="regime_id"
+          id="regime_nom"
           className={inputAsset}
           onChange={handleChange}
-          value={menuData.regime_nom}
+          value={menuData.regime_id}
           required
         >
           <option value="-1">-- Sélectionner le régime --</option>
           {array_regime.map((regime) => (
-            <option value={regime.regime_nom} key={regime.regime_id}>
+            <option value={regime.regime_id} key={regime.regime_id}>
               {regime.regime_nom}
             </option>
           ))}

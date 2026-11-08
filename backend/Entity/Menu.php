@@ -14,8 +14,8 @@ class Menu implements JsonSerializable
     private string $description;
     private int $quantite_restante;
     private array $plat_id;
-    private string $regime_nom;
-    private string $theme_nom;
+    private int $regime_id;
+    private int $theme_id;
     private ?string $note_particuliere;
     private array $plats_details;
 
@@ -27,8 +27,8 @@ class Menu implements JsonSerializable
         string $description,
         int $quantite_restante,
         array $plat_id,
-        string $regime_nom,
-        string $theme_nom,
+        int $regime_id,
+        int $theme_id,
         ?string $note_particuliere = "",
         array $plats_details = []
     ) {
@@ -39,8 +39,8 @@ class Menu implements JsonSerializable
         $this->description = $description;
         $this->quantite_restante = $quantite_restante;
         $this->plat_id = $plat_id;
-        $this->regime_nom = $regime_nom;
-        $this->theme_nom = $theme_nom;
+        $this->regime_id = $regime_id;
+        $this->theme_id = $theme_id;
         $this->note_particuliere = $note_particuliere;
         $this->plats_details = $plats_details;
     }
@@ -125,31 +125,31 @@ class Menu implements JsonSerializable
 
     // GET/SET régime ID
 
-    public function getRegimeNom(): string
+    public function getRegimeId(): int
     {
-        return $this->regime_nom;
+        return $this->regime_id;
     }
 
-    public function setRegimeNom(string $regimeNom): void
+    public function setRegimeId(int $regimeId): void
     {
-        $this->regime_nom = $regimeNom;
+        $this->regime_id = $regimeId;
     }
 
     // GET/SET themeID
 
-    public function getThemeNom(): string
+    public function getThemeID(): int
     {
-        return $this->theme_nom;
+        return $this->theme_id;
     }
 
-    public function setThemeId(string $themeNom): void
+    public function setThemeId(int $themeID): void
     {
-        $this->theme_nom = $themeNom;
+        $this->theme_id = $themeID;
     }
 
     // GET/SET note particuliere
 
-    public function getNoteParticuliere(): string
+    public function getNoteParticuliere(): ?string
     {
         return $this->note_particuliere;
     }
@@ -181,9 +181,10 @@ class Menu implements JsonSerializable
             "description" => $this->description,
             "quantite_restante" => $this->quantite_restante,
             "plat_id" => $this->plat_id,
-            "regime_nom" => $this->regime_nom,
-            "theme_nom" => $this->theme_nom,
+            "regime_id" => $this->regime_id,
+            "theme_id" => $this->theme_id,
             "note_particuliere" => $this->note_particuliere,
+            "plats_details" => $this->plats_details
         ];
     }
 }
