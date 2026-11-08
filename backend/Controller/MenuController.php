@@ -33,6 +33,8 @@ class MenuController
                     'plat_id ' => $menu->getPlatId(),
                     'regime_id' => $menu->getRegimeId(),
                     'theme_id' => $menu->getThemeId(),
+                    'regime_nom' => $menu->getRegimeNom(),
+                    'theme_nom' => $menu->getThemeNom(),
                     'note_particuliere' => $menu->getNoteParticuliere(),
                     'plats_details' => $menu->getPlatsDetails()
                 ];
@@ -73,6 +75,8 @@ class MenuController
                 'plat_id ' => $menu->getPlatId(),
                 'regime_id' => $menu->getRegimeId(),
                 'theme_id' => $menu->getThemeId(),
+                'regime_nom' => $menu->getRegimeNom(),
+                'theme_nom' => $menu->getThemeNom(),
                 'note_particuliere' => $menu->getNoteParticuliere(),
                 'plats_details' => $menu->getPlatsDetails()
             ];

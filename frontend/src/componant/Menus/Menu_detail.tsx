@@ -45,7 +45,10 @@ export default function MenuDetail() {
       <div className="bg-[#FDFBF7] w-full text-[#2C2C2C] px-8 py-6 border-t border-b border-[#EFECE6] flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <span className="inline-block px-3 py-1 text-xs font-semibold uppercase tracking-wider bg-white border border-[#EFECE6] text-[#2C2C2C] rounded-full mb-3 shadow-2xs">
-            {dataMenu.theme_nom}
+            Thème: {dataMenu.theme_nom}
+          </span>
+          <span className="inline-block px-3 py-1 text-xs font-semibold uppercase tracking-wider bg-white border border-[#EFECE6] text-[#2C2C2C] rounded-full mb-3 shadow-2xs">
+            Régime: {dataMenu.regime_nom}
           </span>
           <h1 className="text-3xl font-serif font-bold tracking-tight text-[#2C2C2C]">
             {dataMenu.menu_nom}

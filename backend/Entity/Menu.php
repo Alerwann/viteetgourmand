@@ -16,6 +16,8 @@ class Menu implements JsonSerializable
     private array $plat_id;
     private int $regime_id;
     private int $theme_id;
+    private string $regime_nom;
+    private string $theme_nom;
     private ?string $note_particuliere;
     private array $plats_details;
 
@@ -29,6 +31,8 @@ class Menu implements JsonSerializable
         array $plat_id,
         int $regime_id,
         int $theme_id,
+        string $regime_nom,
+        string $theme_nom,
         ?string $note_particuliere = "",
         array $plats_details = []
     ) {
@@ -41,6 +45,8 @@ class Menu implements JsonSerializable
         $this->plat_id = $plat_id;
         $this->regime_id = $regime_id;
         $this->theme_id = $theme_id;
+        $this->regime_nom = $regime_nom;
+        $this->theme_nom = $theme_nom;
         $this->note_particuliere = $note_particuliere;
         $this->plats_details = $plats_details;
     }
@@ -130,6 +136,12 @@ class Menu implements JsonSerializable
         return $this->regime_id;
     }
 
+
+    public function getRegimeNom(): string
+    {
+        return $this->regime_nom;
+    }
+
     public function setRegimeId(int $regimeId): void
     {
         $this->regime_id = $regimeId;
@@ -140,6 +152,10 @@ class Menu implements JsonSerializable
     public function getThemeID(): int
     {
         return $this->theme_id;
+    }
+    public function getThemeNom(): string
+    {
+        return $this->theme_nom;
     }
 
     public function setThemeId(int $themeID): void
