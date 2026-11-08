@@ -199,6 +199,8 @@ class Menu implements JsonSerializable
             "plat_id" => $this->plat_id,
             "regime_id" => $this->regime_id,
             "theme_id" => $this->theme_id,
+            "theme_nom" => $this->theme_nom,
+            "regime_nom" => $this->regime_nom,
             "note_particuliere" => $this->note_particuliere,
             "plats_details" => $this->plats_details
         ];
