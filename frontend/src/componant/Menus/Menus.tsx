@@ -6,6 +6,7 @@ import { useState, useEffect, useMemo } from 'react';
 import CardMenu from './Card_menu';
 import CardComposant from '../global/styles/card';
 import api from '../../services/api';
+import Loading from '../global/loading/Loading';
 
 export default function Menus_composant() {
   const [allMenus, setAllMenus] = useState<MenuDetail[]>([]);
@@ -79,6 +80,8 @@ export default function Menus_composant() {
     selectedTheme !== -1 ||
     selectedDiet !== -1 ||
     minGuests;
+
+  if (isLoading) return <Loading />;
 
   return (
     <div className="min-h-screen bg-[#FDFBF7] py-12 px-4 sm:px-6 lg:px-8">
