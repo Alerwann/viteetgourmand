@@ -19,13 +19,13 @@ export default function PlatCreateForm() {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const MAX_SIZE = 2 * 1024 * 1024;
+  const MAX_SIZE = 16 * 1024 * 1024;
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       if (file.size > MAX_SIZE) {
-        setErrorMessage('Le fichier est trop volumineux (2 Mo maximum).');
+        setErrorMessage('Le fichier est trop volumineux (16 Mo maximum).');
         setPhoto(null);
         e.target.value = '';
         return;
@@ -61,6 +61,8 @@ export default function PlatCreateForm() {
     e.preventDefault();
 
     setIsLoading(true);
+
+    console.log(type_plat);
 
     try {
       const formData = new FormData();
@@ -109,13 +111,14 @@ export default function PlatCreateForm() {
 
       <SelectStyle
         label={'Types de plat'}
-        id={'typePlat'}
+        id={'type_plat'}
         options={[
           { value: 'Entrée', label: 'Entrée' },
           { value: 'Plat', label: 'Plat' },
           { value: 'Dessert', label: 'Dessert' },
         ]}
         defaultValue={'-- Selectionner le type de plat --'}
+        onChange={(e) => setTypePlat(e.target.value)}
       />
 
       <ul className="grid grid-cols-3">

@@ -23,7 +23,7 @@ export function SelectStyle({
     <div className="contents">
       <label
         htmlFor={id}
-        className="text-sm font-medium text-[#2C2C2C] font-sans text-center"
+        className="text-xl font-medium text-[#2C2C2C] font-sans text-center"
       >
         {label}
       </label>

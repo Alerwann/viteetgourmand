@@ -95,13 +95,19 @@ class PlatController
         $fileTmpPath = $_FILES['photo']['tmp_name'];
 
         if ($_FILES['photo']['error'] !== UPLOAD_ERR_OK) {
+            $errorCode = $_FILES['photo']['error'];
             http_response_code(400);
-            echo json_encode(["message" => "Erreur lors du chargement du fichier."]);
+            echo json_encode([
+                "message" => "Erreur lors du chargement du fichier.",
+                "code" => $errorCode
+            ]);
             exit; // Arrête l'exécution ici
         }
 
         try {
             $fp = fopen($fileTmpPath, 'rb');
+
+
             $imageData = fread($fp, filesize($fileTmpPath));
             fclose($fp);
 

@@ -73,42 +73,56 @@ class SqlPlatRepository implements PlatRepositoryInterface
     {
         $this->pdo->beginTransaction();
 
+        try {
+            $isUpdate = ($plat->getId() !== null && $plat->getId() != 0);
 
-        if ($plat->getId() != 0) {
-            $sql = "UPDATE plat SET(plat_nom = :plat_nom, type_plat = :type_plat, photo = :photo) WHERE plat_id= :plat_id";
-        }
-        $sql = "INSERT INTO plat (plat_nom, type_plat, photo) VALUES ( :plat_nom, :type_plat, :photo)";
-        $stmt = $this->pdo->prepare($sql);
-
-        $params = [
-            'plat_nom' => $plat->getNom(),
-            'type_plat' => $plat->getTypePlat()->value,
-            'photo' => $plat->getPhoto()
-        ];
-
-        if ($plat->getId() != \null) {
-            $params['plat_id'] = $plat->getId();
-        }
-
-        $stmt->execute($params);
-
-        $platId = $this->pdo->lastInsertId();
-
-        $arrayAlergene = $plat->getAlergenes();
-
-        if (!empty($arrayAlergene)) {
-            $sqlJoint = "INSERT INTO plat_alergene (plat_id, alergene_id) VALUES (:plat_id, :alergene_id)";
-            $stmtJoint = $this->pdo->prepare($sqlJoint);
-
-            foreach ($arrayAlergene as $alergeneId) {
-                $stmtJoint->execute([
-                    ':plat_id' => $platId,
-                    ':alergene_id' => (int) $alergeneId // Sécurisation du type entier
-                ]);
+            if ($isUpdate) {
+                $sql = "UPDATE plat SET plat_nom = :plat_nom, type_plat = :type_plat, photo = :photo WHERE plat_id = :plat_id";
+            } else {
+                $sql = "INSERT INTO plat (plat_nom, type_plat, photo) VALUES (:plat_nom, :type_plat, :photo)";
             }
+
+            $stmt = $this->pdo->prepare($sql);
+
+            // Liaison explicite de chaque paramètre
+            $stmt->bindValue(':plat_nom', $plat->getNom(), PDO::PARAM_STR);
+            $stmt->bindValue(':type_plat', $plat->getTypePlat()->value, PDO::PARAM_STR);
+            $stmt->bindValue(':photo', $plat->getPhoto(), PDO::PARAM_LOB); // Flux ou ressource géré par PDO
+
+            if ($isUpdate) {
+                $stmt->bindValue(':plat_id', $plat->getId(), PDO::PARAM_INT);
+            }
+
+            $stmt->execute();
+
+            $platId = $isUpdate ? $plat->getId() : (int)$this->pdo->lastInsertId();
+
+            // Gestion de la table de liaison des allergènes
+            $arrayAlergene = $plat->getAlergenes();
+
+            if ($isUpdate) {
+                $stmtDel = $this->pdo->prepare("DELETE FROM plat_alergene WHERE plat_id = :plat_id");
+                $stmtDel->execute([':plat_id' => $platId]);
+            }
+
+            if (!empty($arrayAlergene)) {
+                $sqlJoint = "INSERT INTO plat_alergene (plat_id, alergene_id) VALUES (:plat_id, :alergene_id)";
+                $stmtJoint = $this->pdo->prepare($sqlJoint);
+
+                foreach ($arrayAlergene as $alergeneId) {
+                    $stmtJoint->execute([
+                        ':plat_id' => $platId,
+                        ':alergene_id' => (int) $alergeneId
+                    ]);
+                }
+            }
+
+            $this->pdo->commit();
+            return $platId;
+        } catch (\Exception $e) {
+            $this->pdo->rollBack();
+            throw $e;
         }
-        $this->pdo->commit();
-        return $platId;
     }
 
 

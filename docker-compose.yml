@@ -19,6 +19,7 @@ services:
     volumes:
       - ./backend:/var/www/html
       - /var/www/html/vendor
+      - ./backend/php.ini:/usr/local/etc/php/conf.d/custom.ini
     environment:
       DB_HOST: ${DB_HOST}
       DB_PORT: ${DB_PORT:-3306}
