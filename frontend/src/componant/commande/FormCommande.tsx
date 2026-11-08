@@ -110,8 +110,10 @@ export default function FormCommande() {
           nb_perso_min: menuData['nb_perso_min'],
           description: menuData['descritption'],
           quantite_restante: menuData['quantite_restante'],
+          regime_id: menuData['regimeId'],
           regime_nom: menuData['regime_nom'],
           theme_nom: menuData['theme_nom'],
+          theme_id: menuData['theme_id'],
           plats_details: menuData['plats_details']
             ? menuData['plats_details']
             : [],
