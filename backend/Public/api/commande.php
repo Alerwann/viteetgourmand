@@ -44,7 +44,7 @@ $user = $userRepo->findById($userId);
 
 
 $commandeRepo = new SqlCommandeRepository($pdo);
-$controller = new CommandeController($commandeRepo, $mailer, $userRepo);
+$controller = new CommandeController($commandeRepo, $mailer, $user);
 
 $method = $_SERVER['REQUEST_METHOD'];
 

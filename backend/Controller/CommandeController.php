@@ -5,9 +5,9 @@ namespace App\Controller;
 use App\Entity\Commande;
 use App\Entity\PrestationDetail;
 use App\Entity\AdressePostale;
+use App\Entity\Utilisateur;
 use App\Enum\StatusCommande;
 use App\Repository\Commande\CommandeRepositoryInterface;
-use App\Repository\Users\UserRepositoryInterface;
 use App\Services\MailerService;
 
 
@@ -15,13 +15,14 @@ class CommandeController
 {
     private CommandeRepositoryInterface $commandeRepo;
     private MailerService $mailer;
-    private UserRepositoryInterface $userRepo;
+    private Utilisateur $user;
 
-    public function __construct(CommandeRepositoryInterface $commandeRepo, MailerService $mailer, UserRepositoryInterface $userRepo)
+
+    public function __construct(CommandeRepositoryInterface $commandeRepo, MailerService $mailer, Utilisateur $user)
     {
         $this->commandeRepo = $commandeRepo;
         $this->mailer = $mailer;
-        $this->userRepo = $userRepo;
+        $this->user = $user;
     }
 
     private function createArray(Commande $commande): array
@@ -222,13 +223,10 @@ class CommandeController
             $this->commandeRepo->save($commande);
 
             try {
-                $user = $this->userRepo->findById($data['utilisateur_id']);
-                if (!isset($user)) {
-                    return;
-                }
-                $email = $user->getEmail();
-                $nom = $user->getNom();
-                $prenom = $user->getPrenom();
+
+                $email = $this->user->getEmail();
+                $nom = $this->user->getNom();
+                $prenom = $this->user->getPrenom();
                 $refCommande = $commande->getCommandeRef();
 
                 $this->mailer->confirmationCommande(toEmail: $email, refCommande: $refCommande, prenom: $prenom, nom: $nom,);
