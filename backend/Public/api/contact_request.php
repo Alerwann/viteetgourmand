@@ -1,7 +1,5 @@
 <?php
-require_once __DIR__ . '/../../vendor/autoload.php';
 
-require_once __DIR__ . '/../../config/db_init.php';
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 
 
@@ -19,6 +17,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit();
 }
+require_once __DIR__ . '/../../vendor/autoload.php';
+
+require_once __DIR__ . '/../../config/db_init.php';
 
 $controller = new ContactRequestcontroller($pdo);
 

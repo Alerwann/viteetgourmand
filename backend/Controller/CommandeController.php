@@ -7,15 +7,21 @@ use App\Entity\PrestationDetail;
 use App\Entity\AdressePostale;
 use App\Enum\StatusCommande;
 use App\Repository\Commande\CommandeRepositoryInterface;
+use App\Repository\Users\UserRepositoryInterface;
+use App\Services\MailerService;
 
 
 class CommandeController
 {
     private CommandeRepositoryInterface $commandeRepo;
+    private MailerService $mailer;
+    private UserRepositoryInterface $userRepo;
 
-    public function __construct(CommandeRepositoryInterface $commandeRepo)
+    public function __construct(CommandeRepositoryInterface $commandeRepo, MailerService $mailer, UserRepositoryInterface $userRepo)
     {
         $this->commandeRepo = $commandeRepo;
+        $this->mailer = $mailer;
+        $this->userRepo = $userRepo;
     }
 
     private function createArray(Commande $commande): array
@@ -214,6 +220,21 @@ class CommandeController
             );
 
             $this->commandeRepo->save($commande);
+
+            try {
+                $user = $this->userRepo->findById($data['utilisateur_id']);
+                if (!isset($user)) {
+                    return;
+                }
+                $email = $user->getEmail();
+                $nom = $user->getNom();
+                $prenom = $user->getPrenom();
+                $refCommande = $commande->getCommandeRef();
+
+                $this->mailer->confirmationCommande(toEmail: $email, refCommande: $refCommande, prenom: $prenom, nom: $nom,);
+            } catch (\Exception $mailException) {
+                error_log("Erreur envoi mail de bienvenue : " . $mailException->getMessage());
+            }
 
             http_response_code(201);
             echo json_encode(["message" => "Commande enregistrée avec succès."]);

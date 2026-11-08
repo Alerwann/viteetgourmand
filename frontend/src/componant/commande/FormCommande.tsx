@@ -222,7 +222,7 @@ export default function FormCommande() {
       console.error('Erreur lors de la soumission :', error);
     }
 
-    setcommande(initialeCommande);
+    // setcommande(initialeCommande);
   };
 
   const handlePageChange = async () => {
