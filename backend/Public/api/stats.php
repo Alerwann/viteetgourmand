@@ -23,10 +23,15 @@ header('Content-Type: application/json');
 
 require __DIR__ . '/../../vendor/autoload.php';
 
+
+
 use MongoDB\Client as MongoClient;
 
 try {
-    $mongoUri = getenv('MONGO_URI') ?: 'mongodb+srv://alerwann411_db_user:4bit8fGglQfuSjZr@cluster0.ht7ylsp.mongodb.net/';
+    $mongoUri = getenv('MONGO_URI');
+
+
+
 
     $options = [
         'tls' => true,
@@ -37,13 +42,30 @@ try {
 
 
 
-    $mongoClient = new MongoClient($mongoUri);
+    // $mongoClient = new MongoClient($mongoUri);
     $collection = $mongoClient->selectDatabase('vite_gourmand')->selectCollection('commande');
 
 
     $filterMenuId = isset($_GET['menuId']) && $_GET['menuId'] !== '' ? (int) $_GET['menuId'] : null;
-    $startDate   = isset($_GET['startDate']) && $_GET['startDate'] !== '' ? $_GET['startDate'] . 'T00:00:00Z' : null;
-    $endDate     = isset($_GET['endDate']) && $_GET['endDate'] !== '' ? $_GET['endDate'] . 'T23:59:59Z' : null;
+    $startDate = isset($_GET['startDate']) && $_GET['startDate'] !== '' ? $_GET['startDate'] . ' 00:00:00' : null;
+    $endDate   = isset($_GET['endDate']) && $_GET['endDate'] !== '' ? $_GET['endDate'] . ' 23:59:59' : null;
+
+    $matchConditions = [];
+
+    if ($filterMenuId !== null) {
+        $matchConditions['menuId'] = $filterMenuId;
+    }
+
+    if ($startDate && $endDate) {
+        $matchConditions['createdAt'] = [
+            '$gte' => $startDate,
+            '$lte' => $endDate
+        ];
+    } elseif ($startDate) {
+        $matchConditions['createdAt'] = ['$gte' => $startDate];
+    } elseif ($endDate) {
+        $matchConditions['createdAt'] = ['$lte' => $endDate];
+    }
 
     // Construction dynamique du filtre global ($match)
     $matchConditions = [];

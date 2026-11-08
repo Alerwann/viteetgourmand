@@ -27,6 +27,7 @@ services:
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
       MONGO_HOST: mongodb
+      MONGO_URI: ${MONGO_URI}
       MAIL_HOST: mailpit
       MAIL_PORT: 1025
     networks:

@@ -18,17 +18,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 header('Content-Type: application/json');
-require __DIR__ . '/../../scripts/run_sync_internal.php';
+
 
 try {
+    require __DIR__ . '/../../scripts/runSync.php';
     echo json_encode([
         'success' => true,
         'message' => 'Synchronisation effectuée avec succès.'
     ]);
 } catch (\Exception $e) {
     http_response_code(500);
+    header('Content-Type: application/json');
     echo json_encode([
         'success' => false,
-        'error' => $e->getMessage()
+        'error' => $e->getMessage(),
+        'trace' => $e->getTraceAsString()
     ]);
+    exit;
 }
