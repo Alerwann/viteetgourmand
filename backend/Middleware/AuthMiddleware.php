@@ -13,13 +13,14 @@ class AuthMiddleware
         $this->authService = $authService;
     }
 
+
     public function handle(): int
     {
-        // Récupération des headers de la requête
+
         $headers = array_change_key_case(getallheaders(), CASE_LOWER);
         $authHeader = $headers['authorization'] ?? '';
 
-        // Vérification du format "Bearer <token>"
+
         if (!preg_match('/Bearer\s(\S+)/', $authHeader, $matches)) {
             http_response_code(401);
             echo json_encode(["error" => "Token manquant ou format invalide."]);

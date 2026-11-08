@@ -39,7 +39,9 @@ $authService = new AuthService($userRepo, $authRepo, $mailer);
 
 
 $authMiddleware = new AuthMiddleware($authService);
+
 $userId = $authMiddleware->handle();
+var_dump($userId);
 $user = $userRepo->findById($userId);
 
 
