@@ -18,8 +18,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 require_once __DIR__ . '/../../vendor/autoload.php';
-
 require_once __DIR__ . '/../../config/db_init.php';
+
+use App\Repository\Users\SqlUserRepository;
+use App\Repository\Auth\SqlAuthRepository;
+use App\Repository\Commande\SqlCommandeRepository;
+use App\Controller\CommandeController;
+use App\Services\MailerService;
+use App\Services\AuthService;
+use App\Middleware\AuthMiddleware;
 
 $userRepo = new SqlUserRepository($pdo);
 $authRepo = new SqlAuthRepository($pdo);

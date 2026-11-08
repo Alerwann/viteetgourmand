@@ -66,6 +66,8 @@ export default function FormCommande() {
 
         const userId = responseCommande.data.id;
 
+        console.log(userId);
+
         const responseUser = await api.get(`api/utilisateur.php?id=${userId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
