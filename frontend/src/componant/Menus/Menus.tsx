@@ -14,42 +14,51 @@ export default function Menus_composant() {
 
   const [minPrice, setMinPrice] = useState<string>('');
   const [maxPrice, setMaxPrice] = useState<string>('');
-  const [selectedTheme, setSelectedTheme] = useState<string>('all');
-  const [selectedDiet, setSelectedDiet] = useState<string>('all');
+  const [selectedTheme, setSelectedTheme] = useState<number>(-1);
+  const [selectedDiet, setSelectedDiet] = useState<number>(-1);
   const [minGuests, setMinGuests] = useState<string>('');
+
+  const [isLoading, setIsloading] = useState<boolean>(false);
 
   useEffect(() => {
     document.title = 'Menus | Vite & Gourmand';
   }, []);
 
   useEffect(() => {
-    api
-      .get('api/menus.php')
-      .then((res) => setAllMenus(res.data))
-      .catch((err) => console.error('Erreur fetch menus:', err));
+    setIsloading(true);
+    try {
+      api
+        .get('api/menus.php')
+        .then((res) => setAllMenus(res.data))
+        .catch((err) => console.error('Erreur fetch menus:', err));
 
-    api
-      .get('api/theme.php')
-      .then((res) => setAllTheme(res.data))
-      .catch((err) => console.error('Erreur fetch theme:', err));
+      api
+        .get('api/theme.php')
+        .then((res) => setAllTheme(res.data))
+        .catch((err) => console.error('Erreur fetch theme:', err));
 
-    api
-      .get('api/regime.php')
-      .then((res) => setAllRegime(res.data))
-      .catch((err) => console.error('Erreur fetch regime:', err));
+      api
+        .get('api/regime.php')
+        .then((res) => setAllRegime(res.data))
+        .catch((err) => console.error('Erreur fetch regime:', err));
+    } catch (error) {
+      console.log('erreure de chargement', error);
+    } finally {
+      setIsloading(false);
+    }
   }, []);
 
   const filteredMenus = useMemo(() => {
+    if (!Array.isArray(allMenus)) return [];
+
     return allMenus.filter((menu) => {
       const price = menu.menu_prix;
       const guests = menu.nb_perso_min;
 
       if (minPrice !== '' && price < Number(minPrice)) return false;
       if (maxPrice !== '' && price > Number(maxPrice)) return false;
-      if (selectedTheme !== 'all' && menu.theme_nom !== selectedTheme)
-        return false;
-      if (selectedDiet !== 'all' && menu.regime_nom !== selectedDiet)
-        return false;
+      if (selectedTheme !== -1 && menu.theme_id !== selectedTheme) return false;
+      if (selectedDiet !== -1 && menu.regime_id !== selectedDiet) return false;
       if (minGuests !== '' && guests < Number(minGuests)) return false;
 
       return true;
@@ -59,16 +68,16 @@ export default function Menus_composant() {
   const resetFilters = () => {
     setMinPrice('');
     setMaxPrice('');
-    setSelectedTheme('all');
-    setSelectedDiet('all');
+    setSelectedTheme(-1);
+    setSelectedDiet(-1);
     setMinGuests('');
   };
 
   const hasActiveFilters =
     minPrice ||
     maxPrice ||
-    selectedTheme !== 'all' ||
-    selectedDiet !== 'all' ||
+    selectedTheme !== -1 ||
+    selectedDiet !== -1 ||
     minGuests;
 
   return (
@@ -130,12 +139,12 @@ export default function Menus_composant() {
             {/* Thème */}
             <select
               value={selectedTheme}
-              onChange={(e) => setSelectedTheme(e.target.value)}
+              onChange={(e) => setSelectedTheme(parseInt(e.target.value))}
               className="bg-[#FDFBF7] border border-[#EFECE6] p-3 rounded-xl text-sm text-[#2C2C2C] focus:outline-none focus:border-[#D95D39] transition-all"
             >
-              <option value="all">Tous les thèmes</option>
+              <option value={-1}>Tous les thèmes</option>
               {allTheme.map((theme) => (
-                <option key={theme.theme_id} value={theme.theme_nom}>
+                <option key={theme.theme_id} value={theme.theme_id}>
                   {theme.theme_nom}
                 </option>
               ))}
@@ -144,12 +153,12 @@ export default function Menus_composant() {
             {/* Régime */}
             <select
               value={selectedDiet}
-              onChange={(e) => setSelectedDiet(e.target.value)}
+              onChange={(e) => setSelectedDiet(parseInt(e.target.value))}
               className="bg-[#FDFBF7] border border-[#EFECE6] p-3 rounded-xl text-sm text-[#2C2C2C] focus:outline-none focus:border-[#D95D39] transition-all"
             >
-              <option value="all">Tous les régimes</option>
+              <option value={-1}>Tous les régimes</option>
               {allRegime.map((regime) => (
-                <option key={regime.regime_id} value={regime.regime_nom}>
+                <option key={regime.regime_id} value={regime.regime_id}>
                   {regime.regime_nom}
                 </option>
               ))}

@@ -31,8 +31,8 @@ class MenuController
                     'description' => $menu->getDescription(),
                     'quantite_restante' => $menu->getQuantite(),
                     'plat_id ' => $menu->getPlatId(),
-                    'regime_nom' => $menu->getRegimeNom(),
-                    'theme_nom' => $menu->getThemeNom(),
+                    'regime_id' => $menu->getRegimeId(),
+                    'theme_id' => $menu->getThemeId(),
                     'note_particuliere' => $menu->getNoteParticuliere(),
                     'plats_details' => $menu->getPlatsDetails()
                 ];
