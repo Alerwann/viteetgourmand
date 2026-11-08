@@ -28,6 +28,8 @@ export default function MenuCreateFor() {
     quantite_restante: 0,
     regime_id: -1,
     theme_id: -1,
+    regime_nom: '',
+    theme_nom: '',
     note_particuliere: '',
     plats_details: [],
   });
@@ -136,7 +138,9 @@ export default function MenuCreateFor() {
         description: '',
         quantite_restante: 0,
         regime_id: -1,
+        regime_nom: '',
         theme_id: -1,
+        theme_nom: '',
         note_particuliere: '',
         plats_details: [],
       });
