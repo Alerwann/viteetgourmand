@@ -3,7 +3,7 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import RootLayout from './RootLayout';
 import { AuthProvider } from './context/AuthContext';
-import { ProtectedRoute } from './componant/protectedroute';
+import { ProtectedRoute } from './componant/ProtectedRoute';
 import Accueil_coposant from './componant/accueil/Accueil';
 import DashboardLayout from './componant/dashboard/DashboardLayout';
 import Contact_composant from './componant/contact/contact';
