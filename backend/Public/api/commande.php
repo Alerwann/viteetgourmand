@@ -32,9 +32,11 @@ use App\Services\MailerService;
 use App\Services\AuthService;
 use App\Middleware\AuthMiddleware;
 
+
 $userRepo = new SqlUserRepository($pdo);
 $authRepo = new SqlAuthRepository($pdo);
-$mailer = new MailerService();
+$resend = Resend::client(getenv('API_RESEND'));
+$mailer = new MailerService($resend);
 $authService = new AuthService($userRepo, $authRepo, $mailer);
 
 

@@ -35,7 +35,9 @@ use App\Controller\UtilisateurController;
 $authRepo = new SqlAuthRepository($pdo);
 $userRepository = new SqlUserRepository($pdo);
 
-$mailerService = new MailerService();
+$resend = Resend::client(getenv('API_RESEND'));
+$mailerService = new MailerService($resend);
+
 $authService = new AuthService($userRepository, $authRepo, $mailerService);
 
 $controller = new UtilisateurController($userRepository, $authService, $mailerService);

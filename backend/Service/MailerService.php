@@ -4,13 +4,18 @@ namespace App\Services;
 
 
 
-require_once __DIR__ . '/../vendor/autoload.php';
 
-use Resend\Resend;
 
 
 class MailerService
 {
+    private mixed $resend;
+
+    public function __construct(mixed $resend)
+    {
+        $this->resend = $resend;
+    }
+
 
     // private function createMailer(): PHPMailer
     // {
@@ -83,10 +88,10 @@ class MailerService
 
             // $mail->send();
 
-            $mail = Resend::client(\getenv('API_RESEND'));
-            $mail->emails->send([
+
+            $this->resend->emails->send([
                 'from' => 'onboarding@resend.dev',
-                'to' => $toEmail,
+                'to' => 'alerwann411@gmail.com',
                 'subject' => 'Confirmation de votre commande',
                 'html' => "Bonjour $nom $prenom,<br><br>Merci pour votre commande $refCommande.<br>Vous avez la possibilité de la modifier tant qu'elle est en statut acceptée.<br><br>L'équipe."
             ]);

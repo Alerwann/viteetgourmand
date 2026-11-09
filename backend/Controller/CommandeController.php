@@ -231,7 +231,7 @@ class CommandeController
 
                 $this->mailer->confirmationCommande(toEmail: $email, refCommande: $refCommande, prenom: $prenom, nom: $nom,);
             } catch (\Exception $mailException) {
-                error_log("Erreur envoi mail de bienvenue : " . $mailException->getMessage());
+                error_log("Erreur envoi mail de commande : " . $mailException->getMessage());
             }
 
             http_response_code(201);

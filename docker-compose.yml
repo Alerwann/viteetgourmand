@@ -30,6 +30,7 @@ services:
       MONGO_URI: ${MONGO_URI}
       MAIL_HOST: mailpit
       MAIL_PORT: 1025
+      API_RESEND: ${API_RESEND}
     networks:
       - app-network
 

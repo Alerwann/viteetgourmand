@@ -116,7 +116,7 @@ class AuthService
         }
 
         $resetLink = "http://localhost:5173/reinit/" . $token;
-        $this->mailer->sendPasswordResetEmail($user->getEmail(), $resetLink);
+        // $this->mailer->sendPasswordResetEmail($user->getEmail(), $resetLink);
 
         return $token;
     }
