@@ -1,7 +1,7 @@
 /** @format */
 
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { initCommande, type Commande } from '../../interfaces/commande';
 import {
   initUtilisateurAuth,
@@ -37,7 +37,7 @@ export default function FormCommande() {
   const [menuChoose, setMenuChoose] = useState<MenuDetail>();
   const [utilisateur, setUtilisateur] =
     useState<utilisateurAuth>(initUtilisateurAuth);
-
+  const location = useLocation();
   const initialeCommande = initCommande(
     menuChoose?.nb_perso_min,
     menu_id,
@@ -51,8 +51,14 @@ export default function FormCommande() {
   });
 
   useEffect(() => {
+    const token = localStorage.getItem('token');
     if (!token) {
-      navigate('/connect', { state: { from: `/commande/${menu_id}` } });
+      sessionStorage.setItem(
+        'redirect_after_login',
+        location.pathname + location.search,
+      );
+
+      navigate('/connect', { replace: true });
       return;
     }
 

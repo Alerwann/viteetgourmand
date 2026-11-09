@@ -37,7 +37,7 @@ export default function Connect_composant() {
     setIdentConnexion({ ...identConnexion, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
 
@@ -50,8 +50,16 @@ export default function Connect_composant() {
       const response = await api.post('api/auth.php', preload);
       setShowError(false);
       const data = response.data;
-      const redirectTo = location.state?.from ?? '/';
+
       localStorage.setItem('token', data.token);
+
+      const redirectTo =
+        location.state?.from ??
+        sessionStorage.getItem('redirect_after_login') ??
+        '/';
+
+      sessionStorage.removeItem('redirect_after_login');
+
       navigate(redirectTo, { replace: true });
     } catch (error: any) {
       console.error('Erreur lors de la soumission :', error);
