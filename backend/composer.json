@@ -3,7 +3,8 @@
   "description": "Backend PHP pour mon application",
   "require": {
     "mongodb/mongodb": "^2.5",
-    "phpmailer/phpmailer": "^7.2"
+    "phpmailer/phpmailer": "^7.2",
+    "resend/resend-php": "^1.18"
   },
   "autoload": {
     "psr-4": {
