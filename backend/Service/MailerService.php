@@ -4,10 +4,9 @@ namespace App\Services;
 
 
 
+require_once __DIR__ . '/../vendor/autoload.php';
+
 use Resend\Resend;
-use Resend\Exceptions\ErrorException;
-
-
 
 
 class MailerService
