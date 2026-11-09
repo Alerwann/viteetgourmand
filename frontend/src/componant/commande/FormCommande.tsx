@@ -1,12 +1,9 @@
 /** @format */
 
 import { useEffect, useState } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { initCommande, type Commande } from '../../interfaces/commande';
-import {
-  initUtilisateurAuth,
-  type utilisateurAuth,
-} from '../../interfaces/utilisateur';
+import type { utilisateurAuth } from '../../interfaces/utilisateur';
 import FormStyle from '../global/styles/Formulaire/FormStyle';
 import FormIdentity from './FormIdentity';
 import FormMenuCommmande from './FormMenuCommande';
@@ -21,23 +18,26 @@ import VerifCommande from './VerifCommande';
 import createREfCommande from '../../utils/create_ref_commande';
 import TitleCommandeSection from '../global/styles/title_commande_section';
 import api from '../../services/api';
+import { useAuth } from '../../context/AuthContext'; // <--- 1. Importe le useAuth
 
 export default function FormCommande() {
   const { menuid } = useParams();
-  const token = localStorage.getItem('token');
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    document.title = 'Commande | Vite & Gourmand';
-  }, []);
+  const { user, isAuthenticated, isLoading: authLoading } = useAuth(); // <--- 2. Récupère l'utilisateur du context
 
   const menu_id = menuid ? parseInt(menuid) : -1;
   const [pageIndex, setPageIndex] = useState<number>(0);
   const [menuChoose, setMenuChoose] = useState<MenuDetail>();
-  const [utilisateur, setUtilisateur] =
-    useState<utilisateurAuth>(initUtilisateurAuth);
-  const location = useLocation();
+  const [loadingMenu, setLoadingMenu] = useState<boolean>(true);
+
+  const [utilisateur, setUtilisateur] = useState<utilisateurAuth>({
+    utilisateur_id: 0,
+    email: '',
+    prenom: '',
+    nom: '',
+    telephone: '',
+  });
+
   const initialeCommande = initCommande(
     menuChoose?.nb_perso_min,
     menu_id,
@@ -51,62 +51,29 @@ export default function FormCommande() {
   });
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      sessionStorage.setItem(
-        'redirect_after_login',
-        location.pathname + location.search,
-      );
+    document.title = 'Commande | Vite & Gourmand';
+  }, []);
 
+  // 3. Synchronise l'utilisateur du context vers l'état local du formulaire
+  useEffect(() => {
+    if (!authLoading && !isAuthenticated) {
       navigate('/connect', { replace: true });
       return;
     }
 
-    const fetchUserData = async () => {
-      try {
-        const responseCommande = await api.get('api/commande.php', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+    if (user) {
+      setUtilisateur({
+        utilisateur_id: user.id,
+        email: user.email,
+        prenom: user.prenom,
+        nom: user.nom,
+        telephone: user.telephone || '',
+      });
+    }
+  }, [user, isAuthenticated, authLoading, navigate]);
 
-        const userId = responseCommande.data.id;
-
-        console.log(userId);
-
-        const responseUser = await api.get(`api/utilisateur.php?id=${userId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        const userData = responseUser.data;
-
-        setUtilisateur({
-          utilisateur_id: userData.utilisateur_id,
-          email: userData.email,
-          prenom: userData.prenom,
-          nom: userData.nom,
-          telephone: userData.telephone,
-        });
-      } catch (error: any) {
-        console.error('Erreur:', error);
-
-        if (error.response && error.response.status === 401) {
-          localStorage.removeItem('token');
-          window.location.href = '/connect';
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUserData();
-  }, [token, navigate, menu_id]);
-
+  // 4. Fetch du menu
   useEffect(() => {
-    setLoading(true);
-
     const fetchMenu = async () => {
       try {
         const response = await api.get(`api/menus.php?id=${menu_id}`);
@@ -132,13 +99,15 @@ export default function FormCommande() {
           nombre_personne: menuData['nb_perso_min'],
         }));
       } catch (err: any) {
-        console.error('Erreur fetch:', err);
+        console.error('Erreur fetch menu:', err);
       } finally {
-        setLoading(false);
+        setLoadingMenu(false);
       }
     };
 
-    fetchMenu();
+    if (menu_id !== -1) {
+      fetchMenu();
+    }
   }, [menu_id]);
 
   const testPrestaKo =
@@ -189,7 +158,7 @@ export default function FormCommande() {
     }
   };
 
-  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
@@ -220,15 +189,11 @@ export default function FormCommande() {
 
       const response = await api.post('api/commande.php', playLoad);
 
-      const data = response.data;
-
-      console.log('Commande passée avec succès :', data);
-      alert('Commande crée');
+      console.log('Commande passée avec succès :', response.data);
+      alert('Commande créée avec succès !');
     } catch (error) {
       console.error('Erreur lors de la soumission :', error);
     }
-
-    // setcommande(initialeCommande);
   };
 
   const handlePageChange = async () => {
@@ -246,24 +211,21 @@ export default function FormCommande() {
         );
         if (GetCoord !== undefined) {
           setResulGetCoor(GetCoord);
-          console.log(GetCoord.fraisDePort);
         }
       }
     }
     if (pageIndex < 2) {
-      const indexAct = pageIndex;
-      setPageIndex(indexAct + 1);
+      setPageIndex((prev) => prev + 1);
     }
   };
 
   const handleBackPage = () => {
     if (pageIndex > 0) {
-      const indexAct = pageIndex;
-      setPageIndex(indexAct - 1);
+      setPageIndex((prev) => prev - 1);
     }
   };
 
-  if (loading) {
+  if (authLoading || loadingMenu) {
     return <Loading />;
   }
 

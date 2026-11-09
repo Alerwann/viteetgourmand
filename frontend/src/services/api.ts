@@ -4,10 +4,11 @@ import axios from 'axios';
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
+  // À garder uniquement si PHP a besoin de recevoir des cookies (CORS)
   withCredentials: true,
 });
 
-// 1. Intercepteur de requête : Ajoute automatiquement le token JWT s'il existe
+// 1. Intercepteur de requête : Ajout du token
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
@@ -19,13 +20,17 @@ api.interceptors.request.use(
   (error) => Promise.reject(error),
 );
 
-// 2. Intercepteur de réponse : Gère la déconnexion globale si le token expire (401)
+// 2. Intercepteur de réponse : Gestion centralisée du 401
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response && error.response.status === 401) {
+      // Nettoyage
       localStorage.removeItem('token');
-      window.location.href = '/connect';
+
+      // Alternative propre au window.location :
+      // Redirection via React Router si géré globalement, ou événement personnalisé
+      window.dispatchEvent(new Event('auth:unauthorized'));
     }
     return Promise.reject(error);
   },

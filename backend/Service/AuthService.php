@@ -6,6 +6,7 @@ use App\Repository\Users\UserRepositoryInterface;
 use App\Repository\Auth\AuthRepositoryInterface;
 use App\Services\MailerService;
 
+
 class AuthService
 {
     private UserRepositoryInterface $userRepo;
@@ -88,9 +89,23 @@ class AuthService
             return ["success" => false, "error" => "ACCOUNT_INACTIVE", "code" => 403];
         }
 
+
+
         $token = $this->calcul_token($user->getUtilisateurID());
 
-        return ["success" => true, "token" => $token, "code" => 200];
+
+        return [
+            "success" => true,
+            "token" => $token,
+            "user" => [
+                "id" => $user->getUtilisateurID(),
+                "email" => $user->getEmail(),
+                "prenom" => $user->getPrenom(),
+                "nom" => $user->getNom(),
+                "role" => $user->getRoleNom()
+            ],
+            "code" => 200
+        ];
     }
 
     public function create_user_token(string $email): string

@@ -10,10 +10,12 @@ import { InputStyle } from '../global/styles/Formulaire/InputStyle';
 import FormStyle from '../global/styles/Formulaire/FormStyle';
 import Loading from '../global/loading/Loading';
 import api from '../../services/api';
+import { useAuth } from '../../context/AuthContext';
 
 export default function Connect_composant() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { login } = useAuth();
 
   const [identConnexion, setIdentConnexion] = useState<IdentConnexion>({
     email: '',
@@ -49,12 +51,16 @@ export default function Connect_composant() {
     try {
       const response = await api.post('api/auth.php', preload);
       setShowError(false);
-      const data = response.data;
+      const { token, user } = response.data;
 
-      localStorage.setItem('token', data.token);
+      // Note : Assure-toi que ton endpoint PHP 'api/auth.php' renvoie
+      // à la fois { token: "...", user: { id, email, role, ... } }
+
+      // 3. Met à jour le Context React ET le localStorage en même temps
+      login(token, user);
 
       const redirectTo =
-        location.state?.from ??
+        location.state?.from?.pathname ?? // .pathname pour être sûr d'avoir l'URL propre
         sessionStorage.getItem('redirect_after_login') ??
         '/';
 

@@ -19,7 +19,11 @@ class SqlUserRepository implements UserRepositoryInterface
 
     public function findById(int $id): ?Utilisateur
     {
-        $stmt = $this->db->prepare("SELECT * FROM utilisateur WHERE utilisateur_id = :id");
+        $stmt = $this->db->prepare("SELECT u.*, r.role_nom 
+            FROM utilisateur u
+            JOIN role r ON u.role_id = r.role_id
+            WHERE u.utilisateur_id = :id");
+
         $stmt->execute(['id' => $id]);
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -28,7 +32,11 @@ class SqlUserRepository implements UserRepositoryInterface
 
     public function findByEmail(string $email): ?Utilisateur
     {
-        $stmt = $this->db->prepare("SELECT * FROM utilisateur WHERE email = :email");
+        $stmt = $this->db->prepare("SELECT u.*, r.role_nom 
+            FROM utilisateur u
+            JOIN role r ON u.role_id = r.role_id 
+            WHERE u.email = :email");
+
         $stmt->execute(['email' => $email]);
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -69,6 +77,7 @@ class SqlUserRepository implements UserRepositoryInterface
         }
 
         $params = [
+
             ':email' => $utilisateur->getEmail(),
             ':password' => $utilisateur->getPasswordHash(),
             ':prenom' => $utilisateur->getPrenom(),
@@ -102,11 +111,11 @@ class SqlUserRepository implements UserRepositoryInterface
             street: $data['street'],
             ville: $data['ville'],
             pays: $data['pays'],
-            numero_rue: (int)$data['numero_rue'] ?? null,
-            code_postal: (int)$data['code_postal'] ?? null
+            numero_rue: isset($data['numero_rue']) ? (int)$data['numero_rue'] : null,
+            code_postal: isset($data['code_postal']) ? (int)$data['code_postal'] : null
         );
 
-        return Utilisateur::fromDataBase(
+        $utilisateur = Utilisateur::fromDataBase(
             email: $data['email'],
             password: $data['password'],
             prenom: $data['prenom'],
@@ -115,7 +124,14 @@ class SqlUserRepository implements UserRepositoryInterface
             adresse_postale: $adresse,
             is_actif: (bool)$data['is_actif'],
             role_id: (int)$data['role_id'],
-            utilisateur_id: (int)$data['utilisateur_id'] ?? null
+            utilisateur_id: (int)$data['utilisateur_id']
         );
+
+
+        if (isset($data['role_nom'])) {
+            $utilisateur->setRoleNom($data['role_nom']);
+        }
+
+        return $utilisateur;
     }
 }

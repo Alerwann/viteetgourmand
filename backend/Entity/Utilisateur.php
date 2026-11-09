@@ -16,11 +16,12 @@ class Utilisateur
     private AdressePostale $adresse_postale;
     private bool $is_actif;
     private int $role_id;
+    private ?string $role_nom;
 
 
     // constructeurs 
     // Général
-    private function __construct(string $email, string $password, string $prenom, string $nom, string $telephone, AdressePostale $adresse_postale, bool $is_actif, int $role_id, ?int $utilisateur_id = null)
+    private function __construct(string $email, string $password, string $prenom, string $nom, string $telephone, AdressePostale $adresse_postale, bool $is_actif, int $role_id, ?string $role_nom = \null, ?int $utilisateur_id = null)
     {
         $this->email = $email;
         $this->password = $password;
@@ -31,11 +32,22 @@ class Utilisateur
         $this->is_actif = $is_actif;
         $this->role_id = $role_id;
         $this->utilisateur_id = $utilisateur_id;
+        $this->role_nom = $role_nom;
     }
 
     //Si nouveau
-    public static function register(string $email, string $password, string $prenom, string $nom, string $telephone, AdressePostale $adresse_postale, bool $is_actif, int $role_id, ?int $utilisateur_id = null): self
-    {
+    public static function register(
+        string $email,
+        string $password,
+        string $prenom,
+        string $nom,
+        string $telephone,
+        AdressePostale $adresse_postale,
+        bool $is_actif,
+        int $role_id,
+        ?string $role_nom = \null,
+        ?int $utilisateur_id = null
+    ): self {
         if (strlen($password) < 8) {
             throw new \InvalidArgumentException("Le mot de passe doit faire au moins 8 caractères.");
         }
@@ -43,15 +55,25 @@ class Utilisateur
         $hashPassword = password_hash($password, PASSWORD_DEFAULT);
 
 
-        return new self($email, $hashPassword, $prenom, $nom, $telephone, $adresse_postale, $is_actif, $role_id, $utilisateur_id);
+        return new self($email, $hashPassword, $prenom, $nom, $telephone, $adresse_postale, $is_actif, $role_id, $role_nom, $utilisateur_id);
     }
 
     //Si déjà présent
-    public static function fromDataBase(string $email, string $password, string $prenom, string $nom, string $telephone, AdressePostale $adresse_postale, bool $is_actif, int $role_id, ?int $utilisateur_id = null): self
-    {
+    public static function fromDataBase(
+        string $email,
+        string $password,
+        string $prenom,
+        string $nom,
+        string $telephone,
+        AdressePostale $adresse_postale,
+        bool $is_actif,
+        int $role_id,
+        ?string $role_nom = \null,
+        ?int $utilisateur_id = null
+    ): self {
 
 
-        return new self($email, $password, $prenom, $nom, $telephone, $adresse_postale, $is_actif, $role_id, $utilisateur_id);
+        return new self($email, $password, $prenom, $nom, $telephone, $adresse_postale, $is_actif, $role_id, $role_nom, $utilisateur_id);
     }
 
 
@@ -175,6 +197,16 @@ class Utilisateur
         $this->adresse_postale = $address;
     }
 
+
+    public function getRolenom(): string
+    {
+        return $this->role_nom;
+    }
+
+    public function setRolenom(string $role_nom): void
+    {
+        $this->role_nom = $role_nom;
+    }
     public function toArray(): array
     {
         return [
@@ -185,7 +217,8 @@ class Utilisateur
             "telephone" => $this->telephone,
             "is_actif" => $this->is_actif,
             "role_id" => $this->role_id,
-            "adresse_postale" => $this->adresse_postale->toArray()
+            "adresse_postale" => $this->adresse_postale->toArray(),
+            "role_nom" => $this->role_nom,
         ];
     }
 
