@@ -229,7 +229,7 @@ class CommandeController
                 $prenom = $this->user->getPrenom();
                 $refCommande = $commande->getCommandeRef();
 
-                $this->mailer->confirmationCommande(toEmail: $email, refCommande: $refCommande, prenom: $prenom, nom: $nom,);
+                $this->mailer->confirmationCommande(refCommande: $refCommande, prenom: $prenom, nom: $nom,);
             } catch (\Exception $mailException) {
                 error_log("Erreur envoi mail de commande : " . $mailException->getMessage());
             }

@@ -2,15 +2,18 @@
 
 namespace App\Controller;
 
+use App\Services\MailerService;
 use PDO;
 
 class ContactRequestcontroller
 {
     private PDO $pdo;
+    private MailerService $mailer;
 
-    public function __construct(PDO $pdo)
+    public function __construct(PDO $pdo, MailerService $mailer)
     {
         $this->pdo = $pdo;
+        $this->mailer = $mailer;
     }
 
     public function postRequest(): void
@@ -18,11 +21,12 @@ class ContactRequestcontroller
 
         $data = json_decode(file_get_contents("php://input"), true);
 
-        $menu_nom = trim($data['menu_nom'] ?? '');
+
         $description = trim($data['description'] ?? '');
         $email = trim($data['email'] ?? '');
+        $title = trim($data['title']);
 
-        if (empty($menu_nom) || empty($description) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        if (empty($description) || empty($title) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
             http_response_code(400);
             echo json_encode(["error" => "Données invalides."]);
             exit;
@@ -30,17 +34,10 @@ class ContactRequestcontroller
 
         try {
             // Utilisation de la connexion injectée via le constructeur
-            $stmt = $this->pdo->prepare("INSERT INTO contact_request (menu_nom, description, email) VALUES (?, ?, ?)");
-            $stmt->execute([$menu_nom, $description, $email]);
+            $stmt = $this->pdo->prepare("INSERT INTO contact_request (title, description, email) VALUES (?, ?, ?)");
+            $stmt->execute([$title, $description, $email]);
 
-            $to = "alerwann411@gmail.com";
-            $subject = "Nouveau contact : " . htmlspecialchars($menu_nom);
-            $body = "Message de : $email\n\nDescription :\n$description";
-            $headers = "From: noreply@tudomaine.com\r\n" .
-                "Reply-To: " . $email . "\r\n" .
-                "X-Mailer: PHP/" . phpversion();
-
-            mail($to, $subject, $body, $headers);
+            $this->mailer->contactRequest($description, $email, $title);
 
             http_response_code(201);
             echo json_encode(["success" => "Message envoyé avec succès."]);

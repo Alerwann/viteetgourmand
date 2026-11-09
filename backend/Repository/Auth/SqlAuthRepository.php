@@ -26,7 +26,7 @@ class SqlAuthRepository implements AuthRepositoryInterface
 
         $tentative = $this->HydrateToken($stmt);
 
-        return $tentative[0] ? $tentative[0] : [];
+        return $tentative;
     }
 
     #[Override]
@@ -62,9 +62,9 @@ class SqlAuthRepository implements AuthRepositoryInterface
 
 
 
-    private function HydrateToken(PDOStatement $stmt): array
+    private function HydrateToken(PDOStatement $stmt): ?ResetData
     {
-        $resetDatas = [];
+
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $resetData = new ResetData(
                 token: $row['token'],
@@ -73,9 +73,7 @@ class SqlAuthRepository implements AuthRepositoryInterface
                 token_id: $row['token_id'],
 
             );
-
-            $resetDatas[] = $resetData;
         }
-        return $resetDatas;
+        return $resetData;
     }
 }

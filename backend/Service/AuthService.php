@@ -97,7 +97,7 @@ class AuthService
     {
         $user = $this->userRepo->findByEmail($email);
         if ($user == null) {
-            return "";
+            return "hello";
         }
 
         $userId = $user->getUtilisateurId();
@@ -116,7 +116,7 @@ class AuthService
         }
 
         $resetLink = "http://localhost:5173/reinit/" . $token;
-        // $this->mailer->sendPasswordResetEmail($user->getEmail(), $resetLink);
+        $this->mailer->sendPasswordResetEmail($resetLink);
 
         return $token;
     }

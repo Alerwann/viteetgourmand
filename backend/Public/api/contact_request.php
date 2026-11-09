@@ -21,8 +21,15 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 
 require_once __DIR__ . '/../../config/db_init.php';
 
-$controller = new ContactRequestcontroller($pdo);
+use App\Services\MailerService;
+use App\Controller\ContactRequestcontroller;
 
+
+
+
+$resend = Resend::client(getenv('API_RESEND'));
+$mailer = new MailerService($resend);
+$controller = new ContactRequestcontroller($pdo, $mailer);
 $method = $_SERVER['REQUEST_METHOD'];
 
 switch ($method) {
