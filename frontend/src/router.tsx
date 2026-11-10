@@ -18,6 +18,7 @@ import PlatCreateForm from './componant/dashboard/Plat_Create_Form';
 import MenuCreateFor from './componant/dashboard/Menu_Create_Form';
 import DashboardStats from './componant/dashboard/DashBoardStat';
 import Unauthorized from './componant/global/UnAuthorizen';
+import GestionEmploye from './componant/dashboard/EmployeCreate';
 
 const router = createBrowserRouter([
   {
@@ -58,6 +59,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute allowedRoles={['admin']}>
             <DashboardStats />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'GestionEmploye/',
+        element: (
+          <ProtectedRoute allowedRoles={['admin']}>
+            <GestionEmploye />
           </ProtectedRoute>
         ),
       },

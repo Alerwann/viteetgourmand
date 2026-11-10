@@ -48,6 +48,9 @@ switch ($method) {
     case 'GET':
         if (isset($_GET['id'])) {
             $controller->getOneById();
+        }
+        if (isset($_GET['notUser'])) {
+            $controller->getAllNotUser();
         } else {
             $controller->getAllUtilisateurs();
         }

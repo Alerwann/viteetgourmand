@@ -54,16 +54,15 @@ export default function CreateCompte() {
       'code_postal',
       'pays',
     ];
-
     if (adresseFields.includes(name)) {
       setUtilisateur((prev) => ({
         ...prev,
         adresse_postale: {
-          ...prev.adresse_postale,
+          ...(prev.adresse_postale || {}),
           [name]: ['numero_rue', 'code_postal'].includes(name)
             ? Number(value)
             : value,
-        },
+        } as NonNullable<utilisateur['adresse_postale']>,
       }));
     } else {
       setUtilisateur((prev) => ({
@@ -73,7 +72,7 @@ export default function CreateCompte() {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
 
@@ -90,11 +89,11 @@ export default function CreateCompte() {
       nom: utilisateur.nom,
       telephone: utilisateur.telephone,
       adresse_postale: {
-        numero_rue: utilisateur.adresse_postale.numero_rue,
-        street: utilisateur.adresse_postale.street,
-        ville: utilisateur.adresse_postale.ville,
-        code_postal: utilisateur.adresse_postale.code_postal,
-        pays: utilisateur.adresse_postale.pays,
+        numero_rue: utilisateur.adresse_postale?.numero_rue,
+        street: utilisateur.adresse_postale?.street,
+        ville: utilisateur.adresse_postale?.ville,
+        code_postal: utilisateur.adresse_postale?.code_postal,
+        pays: utilisateur.adresse_postale?.pays,
       },
       is_actif: true,
       role_id: 2,
@@ -230,7 +229,7 @@ export default function CreateCompte() {
           type="number"
           name="numero_rue"
           id="numero_rue"
-          value={utilisateur.adresse_postale.numero_rue}
+          value={utilisateur.adresse_postale?.numero_rue}
           onChange={handleChange}
           required
         />
@@ -240,7 +239,7 @@ export default function CreateCompte() {
           type="text"
           name="street"
           id="street"
-          value={utilisateur.adresse_postale.street}
+          value={utilisateur.adresse_postale?.street}
           onChange={handleChange}
           required
         />
@@ -250,7 +249,7 @@ export default function CreateCompte() {
           type="number"
           name="code_postal"
           id="code_postal"
-          value={utilisateur.adresse_postale.code_postal}
+          value={utilisateur.adresse_postale?.code_postal}
           min={10000}
           max={99999}
           onChange={handleChange}
@@ -262,7 +261,7 @@ export default function CreateCompte() {
           type="text"
           name="ville"
           id="ville"
-          value={utilisateur.adresse_postale.ville}
+          value={utilisateur.adresse_postale?.ville}
           onChange={handleChange}
           required
         />
@@ -272,7 +271,7 @@ export default function CreateCompte() {
           type="text"
           name="pays"
           id="pays"
-          value={utilisateur.adresse_postale.pays}
+          value={utilisateur.adresse_postale?.pays}
           onChange={handleChange}
           required
         />

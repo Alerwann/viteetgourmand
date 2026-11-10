@@ -13,7 +13,7 @@ class Utilisateur
     private string $prenom;
     private string $nom;
     private string $telephone;
-    private AdressePostale $adresse_postale;
+    private ?AdressePostale $adresse_postale;
     private bool $is_actif;
     private int $role_id;
     private ?string $role_nom;
@@ -21,8 +21,18 @@ class Utilisateur
 
     // constructeurs 
     // Général
-    private function __construct(string $email, string $password, string $prenom, string $nom, string $telephone, AdressePostale $adresse_postale, bool $is_actif, int $role_id, ?string $role_nom = \null, ?int $utilisateur_id = null)
-    {
+    private function __construct(
+        string $email,
+        string $password,
+        string $prenom,
+        string $nom,
+        string $telephone,
+        bool $is_actif,
+        int $role_id,
+        ?AdressePostale $adresse_postale = \null,
+        ?string $role_nom = \null,
+        ?int $utilisateur_id = null
+    ) {
         $this->email = $email;
         $this->password = $password;
         $this->prenom = $prenom;
@@ -42,7 +52,7 @@ class Utilisateur
         string $prenom,
         string $nom,
         string $telephone,
-        AdressePostale $adresse_postale,
+        ?AdressePostale $adresse_postale,
         bool $is_actif,
         int $role_id,
         ?string $role_nom = \null,
@@ -55,7 +65,7 @@ class Utilisateur
         $hashPassword = password_hash($password, PASSWORD_DEFAULT);
 
 
-        return new self($email, $hashPassword, $prenom, $nom, $telephone, $adresse_postale, $is_actif, $role_id, $role_nom, $utilisateur_id);
+        return new self($email, $hashPassword, $prenom, $nom, $telephone,  $is_actif, $role_id, $adresse_postale, $role_nom, $utilisateur_id);
     }
 
     //Si déjà présent
@@ -65,7 +75,7 @@ class Utilisateur
         string $prenom,
         string $nom,
         string $telephone,
-        AdressePostale $adresse_postale,
+        ?AdressePostale $adresse_postale,
         bool $is_actif,
         int $role_id,
         ?string $role_nom = \null,
@@ -73,7 +83,7 @@ class Utilisateur
     ): self {
 
 
-        return new self($email, $password, $prenom, $nom, $telephone, $adresse_postale, $is_actif, $role_id, $role_nom, $utilisateur_id);
+        return new self($email, $password, $prenom, $nom, $telephone, $is_actif, $role_id, $adresse_postale, $role_nom, $utilisateur_id);
     }
 
 
@@ -221,8 +231,4 @@ class Utilisateur
             "role_nom" => $this->role_nom,
         ];
     }
-
-    // Et comme ton contrôleur a besoin du hash pour l'insertion en BDD, 
-    // on ajoute un getter spécifique (qui porte bien son nom pour ne pas le confondre avec un getPassword public classique) :
-
 }

@@ -14,10 +14,20 @@ export interface utilisateur {
   prenom: string;
   nom: string;
   telephone: string;
-  adresse_postale: adressePostale;
+  adresse_postale?: adressePostale;
   is_actif: boolean;
   role_id: number;
 }
+
+export const initUtilisateur: utilisateur = {
+  email: '',
+  prenom: 'Employe',
+  nom: 'Compte',
+  telephone: '0808080808',
+  password: '',
+  is_actif: true,
+  role_id: 3,
+};
 
 export interface utilisateurAuth {
   utilisateur_id?: number;

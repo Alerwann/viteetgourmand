@@ -4,6 +4,7 @@ namespace App\Repository\Users;
 
 use App\Entity\Utilisateur;
 use App\Entity\AdressePostale;
+use Override;
 use PDO;
 
 
@@ -46,6 +47,20 @@ class SqlUserRepository implements UserRepositoryInterface
     public function findAll(): array
     {
         $stmt = $this->db->query("SELECT * FROM utilisateur");
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $users = [];
+        foreach ($rows as $data) {
+            $users[] = $this->hydrate($data);
+        }
+
+        return $users;
+    }
+
+    #[Override]
+    public function findAllNotUser(): array
+    {
+        $stmt = $this->db->query("SELECT * FROM utilisateur WHERE role_id!=2");
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         $users = [];

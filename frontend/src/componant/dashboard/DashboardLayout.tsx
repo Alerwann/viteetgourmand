@@ -10,6 +10,7 @@ export default function DashboardLayout() {
       <CustomButton label="Ajouter un plat" to="/creatPlat" />
       <CustomButton label="Créer un nouveau menu" to="/creatMenu" />
       <CustomButton label="Accéder aux statistiques" to="/resultDashboard" />
+      <CustomButton label="Gestion des employés" to="/GestionEmploye" />
     </div>
   );
 }

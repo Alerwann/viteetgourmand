@@ -78,6 +78,34 @@ class UtilisateurController
         }
     }
 
+    public function getAllNotUser(): void
+    {
+        try {
+            $listUtilisateurs = $this->userRepository->findAllNotUser();
+
+            $data = array_map(function ($user) {
+                return [
+                    'utilisateur_id' => $user->getUtilisateurID(),
+                    'email' => $user->getEmail(),
+                    'prenom' => $user->getPrenom(),
+                    'nom' => $user->getNom(),
+                    'telephone' => $user->getTel(),
+                    'adresse' => $user->getAdressePostal(),
+                    'is_actif' => $user->getIsActif(),
+                    'role_id' => $user->getRoleId(),
+
+                ];
+            }, $listUtilisateurs);
+
+            http_response_code(200);
+            header('Content-Type: application/json');
+            echo json_encode($data);
+        } catch (\Exception $e) {
+            http_response_code(500);
+            echo json_encode(["message" => "Erreur : " . $e->getMessage()]);
+        }
+    }
+
     public function createUtilisateur(): void
     {
         $data = json_decode(file_get_contents("php://input"), true);
