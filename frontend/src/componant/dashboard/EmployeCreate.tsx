@@ -104,7 +104,9 @@ export default function GestionEmploye() {
   if (isLoading) <Loading />;
   return (
     <div>
-      <h2>Formulaire de gestion d'employé</h2>
+      <h2 className="text-3xl font-serif font-extrabold text-[#2C2C2C] tracking-tight text-center mt-8">
+        Formulaire de gestion d'employé
+      </h2>
 
       <FormStyle onSubmit={handleSubmit}>
         <FieldsetStyle legend="Liste des employés">
