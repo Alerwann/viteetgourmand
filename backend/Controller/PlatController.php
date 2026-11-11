@@ -73,58 +73,49 @@ class PlatController
 
     public function save()
     {
-
-        $plat_nom = $_POST['plat_nom'];
-        $type_plat = $_POST['type_plat'];
-        $alergenes = json_decode($_POST['alergenes'], true);
-        $plat_id = $_POST['plat_id'] ?? \null;
+        $plat_nom = $_POST['plat_nom'] ?? null;
+        $type_plat = $_POST['type_plat'] ?? null;
+        $alergenes = isset($_POST['alergenes']) ? json_decode($_POST['alergenes'], true) : [];
+        $plat_id = !empty($_POST['plat_id']) ? (int)$_POST['plat_id'] : null;
 
         $typeEnum = TypePlat::tryFrom($type_plat);
-
-
         if ($typeEnum === null) {
-            throw new \InvalidArgumentException("Statut invalide : " . $type_plat);
+            http_response_code(400);
+            echo json_encode(["message" => "Statut invalide : " . $type_plat]);
+            exit;
         }
 
-        if (!$plat_nom || !$type_plat || !isset($_FILES['photo'])) {
+        if (!$plat_nom || !$type_plat) {
             http_response_code(400);
-            echo json_encode(["message" => "Données incomplètes (nom, type, photo)."]);
-            exit; // Arrête l'exécution ici
+            echo json_encode(["message" => "Données incomplètes (nom, type)."]);
+            exit;
         }
 
-        $fileTmpPath = $_FILES['photo']['tmp_name'];
-
-        if ($_FILES['photo']['error'] !== UPLOAD_ERR_OK) {
-            $errorCode = $_FILES['photo']['error'];
+        // Gestion de la photo au niveau du contrôleur
+        $imageData = null;
+        if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
+            $imageData = file_get_contents($_FILES['photo']['tmp_name']);
+        } elseif ($plat_id === null) {
+            // Photo obligatoire uniquement à la création
             http_response_code(400);
-            echo json_encode([
-                "message" => "Erreur lors du chargement du fichier.",
-                "code" => $errorCode
-            ]);
-            exit; // Arrête l'exécution ici
+            echo json_encode(["message" => "La photo est obligatoire pour la création."]);
+            exit;
         }
 
         try {
-            $fp = fopen($fileTmpPath, 'rb');
-
-
-            $imageData = fread($fp, filesize($fileTmpPath));
-            fclose($fp);
-
             $plat = new Plat(
                 plat_id: $plat_id,
                 plat_nom: $plat_nom,
                 type_plat: $typeEnum,
-                photo: $imageData,
+                photo: $imageData, // Soit le binaire de la nouvelle photo, soit null
                 alergenes: $alergenes
             );
 
             $id = $this->platRepo->save($plat);
 
-
             http_response_code(201);
             echo json_encode([
-                "message" => "Plat créé avec succès !",
+                "message" => "Plat enregistré avec succès !",
                 "plat_id" => $id
             ]);
             exit;

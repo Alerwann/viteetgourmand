@@ -75,19 +75,26 @@ class SqlPlatRepository implements PlatRepositoryInterface
 
         try {
             $isUpdate = ($plat->getId() !== null && $plat->getId() != 0);
+            $photoBinary = $plat->getPhoto(); // Récupéré directement de l'objet Plat
 
             if ($isUpdate) {
-                $sql = "UPDATE plat SET plat_nom = :plat_nom, type_plat = :type_plat, photo = :photo WHERE plat_id = :plat_id";
+                if ($photoBinary !== null) {
+                    $sql = "UPDATE plat SET plat_nom = :plat_nom, type_plat = :type_plat, photo = :photo WHERE plat_id = :plat_id";
+                } else {
+                    $sql = "UPDATE plat SET plat_nom = :plat_nom, type_plat = :type_plat WHERE plat_id = :plat_id";
+                }
             } else {
                 $sql = "INSERT INTO plat (plat_nom, type_plat, photo) VALUES (:plat_nom, :type_plat, :photo)";
             }
 
             $stmt = $this->pdo->prepare($sql);
 
-            // Liaison explicite de chaque paramètre
             $stmt->bindValue(':plat_nom', $plat->getNom(), PDO::PARAM_STR);
             $stmt->bindValue(':type_plat', $plat->getTypePlat()->value, PDO::PARAM_STR);
-            $stmt->bindValue(':photo', $plat->getPhoto(), PDO::PARAM_LOB); // Flux ou ressource géré par PDO
+
+            if (!$isUpdate || $photoBinary !== null) {
+                $stmt->bindValue(':photo', $photoBinary, PDO::PARAM_LOB);
+            }
 
             if ($isUpdate) {
                 $stmt->bindValue(':plat_id', $plat->getId(), PDO::PARAM_INT);
@@ -100,21 +107,19 @@ class SqlPlatRepository implements PlatRepositoryInterface
             // Gestion de la table de liaison des allergènes
             $arrayAlergene = $plat->getAlergenes();
 
-            if ($isUpdate) {
-                $stmtDel = $this->pdo->prepare("DELETE FROM plat_alergene WHERE plat_id = :plat_id");
-                $stmtDel->execute([':plat_id' => $platId]);
-            }
-
-
+            // On supprime toujours les anciens pour les remplacer proprement
+            $stmtDel = $this->pdo->prepare("DELETE FROM plat_alergene WHERE plat_id = :plat_id");
+            $stmtDel->execute([':plat_id' => $platId]);
 
             if (!empty($arrayAlergene)) {
                 $sqlJoint = "INSERT INTO plat_alergene (plat_id, alergene_id) VALUES (:plat_id, :alergene_id)";
                 $stmtJoint = $this->pdo->prepare($sqlJoint);
 
                 foreach ($arrayAlergene as $alergene) {
+                    $alergeneId = is_array($alergene) ? $alergene['alergene_id'] : $alergene;
                     $stmtJoint->execute([
                         ':plat_id' => $platId,
-                        ':alergene_id' => (int) $alergene['alergene_id']
+                        ':alergene_id' => (int) $alergeneId
                     ]);
                 }
             }
