@@ -115,9 +115,8 @@ export default function PlatCreateForm() {
       formData.append('alergenes', JSON.stringify(arrayAllergene));
       formData.append('plat_nom', plat.plat_nom);
       formData.append('type_plat', plat.type_plat);
-      if (plat.photo) {
-        formData.append('photo', plat.photo);
-      }
+      formData.append('photo', plat.photo);
+
       if (plat.plat_id) {
         formData.append('plat_id', plat.plat_id.toString());
       }
