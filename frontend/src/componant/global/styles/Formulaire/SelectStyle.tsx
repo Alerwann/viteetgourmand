@@ -15,7 +15,7 @@ interface SelectStyleProps extends React.ComponentPropsWithoutRef<'select'> {
 export function SelectStyle({
   label,
   id,
-  options,
+  options = [],
   defaultOptionText = '-- Sélectionner --',
   ...props
 }: SelectStyleProps) {

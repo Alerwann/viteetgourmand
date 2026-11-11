@@ -11,8 +11,8 @@ import FormStyle from '../global/styles/Formulaire/FormStyle';
 import { InputStyle } from '../global/styles/Formulaire/InputStyle';
 import Loading from '../global/loading/Loading';
 import api from '../../services/api';
-
-const inputAsset = 'bg-white border-2 p-2';
+import { SelectStyle } from '../global/styles/Formulaire/SelectStyle';
+import { TextAreaStyle } from '../global/styles/Formulaire/textAreaStyle';
 
 export default function MenuCreateFor() {
   const [array_plats, setArrayPlats] = useState<Plat[]>([]);
@@ -74,7 +74,24 @@ export default function MenuCreateFor() {
     >,
   ) => {
     const { name, value } = e.target;
+    let theme_nom = null;
+    let theme_id = null;
+    let regime_nom = null;
+    let regime_id = null;
 
+    console.log(name, value);
+    console.log(array_theme);
+
+    if (name === 'theme_id') {
+      theme_nom = array_theme[Number(value)].theme_nom;
+      theme_id = array_theme[Number(value)].theme_id;
+      console.log(theme_nom);
+    }
+
+    if (name === 'regime_id') {
+      regime_nom = array_regime[Number(value)].regime_nom;
+      regime_id = array_regime[Number(value)].regime_id;
+    }
     setMenuData((prev) => ({
       ...prev,
       [name]: [
@@ -82,10 +99,13 @@ export default function MenuCreateFor() {
         'menu_prix',
         'quantite_restante',
         'regime_id',
-        'theme_id',
       ].includes(name)
         ? Number(value)
         : value,
+      'theme_nom': theme_nom ?? menuData.theme_nom,
+      'theme_id': theme_id ?? menuData.theme_id,
+      'regime_id': regime_id ?? menuData.regime_id,
+      regime_nom: regime_nom ?? menuData.regime_nom,
     }));
   };
 
@@ -116,6 +136,8 @@ export default function MenuCreateFor() {
       menu_nom: menuData.menu_nom,
       theme_id: menuData.theme_id,
       regime_id: menuData.regime_id,
+      theme_nom: menuData.theme_nom,
+      regime_nom: menuData.regime_nom,
       description: menuData.description,
       nb_perso_min: menuData.nb_perso_min,
       menu_prix: menuData.menu_prix,
@@ -164,87 +186,66 @@ export default function MenuCreateFor() {
           id="menu_nom"
           value={menuData.menu_nom}
           onChange={handleChange}
-          className={inputAsset}
           required
         />
 
-        <label htmlFor="theme_id">Quel est le thème du menu :</label>
-        <select
+        <SelectStyle
+          label={'Thème du menu'}
+          id={'theme'}
           name="theme_id"
-          id="theme_nom"
-          className={inputAsset}
+          options={array_theme.map((theme, index) => ({
+            value: index,
+            label: theme.theme_nom,
+          }))}
+          defaultValue={'-- Sélectionner le thème --'}
           onChange={handleChange}
-          value={menuData.theme_id}
           required
-        >
-          <option value="-1">-- Sélectionner le thème --</option>
-          {array_theme.map((theme) => (
-            <option value={theme.theme_id} key={theme.theme_id}>
-              {theme.theme_nom}
-            </option>
-          ))}
-        </select>
-        <label htmlFor="regime_id">Quel est le régime du menu :</label>
-        <select
-          name="regime_id"
-          id="regime_nom"
-          className={inputAsset}
-          onChange={handleChange}
-          value={menuData.regime_id}
-          required
-        >
-          <option value="-1">-- Sélectionner le régime --</option>
-          {array_regime.map((regime) => (
-            <option value={regime.regime_id} key={regime.regime_id}>
-              {regime.regime_nom}
-            </option>
-          ))}
-        </select>
+        ></SelectStyle>
 
-        <label htmlFor="description">Description du menu</label>
-        <textarea
-          name="description"
-          id="description"
-          rows={5}
-          cols={50}
-          className={inputAsset}
+        <SelectStyle
+          label={'Régime du menu'}
+          id={'regime'}
+          name="regime_id"
+          options={array_regime.map((regime, index) => ({
+            value: index,
+            label: regime.regime_nom,
+          }))}
+          defaultValue={'-- Sélectionner le thème --'}
+          onChange={handleChange}
+          required
+        ></SelectStyle>
+
+        <TextAreaStyle
+          label={'Description du menu'}
+          id={'description'}
           onChange={handleChange}
           value={menuData.description}
-          required
-        ></textarea>
-
-        <label htmlFor="note_particuliere">Informations supplémentaires</label>
-        <textarea
-          name="note_particuliere"
+        />
+        <TextAreaStyle
+          label="Note particulière"
           id="note_particuliere"
-          rows={5}
-          cols={50}
-          className={inputAsset}
           value={menuData.note_particuliere}
           onChange={handleChange}
-        ></textarea>
+        />
       </FieldsetStyle>
 
       <FieldsetStyle legend="Choix de plats">
         {DishType.map((typeDish) => {
           return (
-            <div key={typeDish} className="grid grid-cols-2 gap-4">
-              <label htmlFor={typeDish}>Nom de {typeDish.toLowerCase()}</label>
-              <select
-                name={typeDish}
+            <div key={typeDish.valueOf()} className="grid grid-cols-1">
+              <SelectStyle
+                label={typeDish}
                 id={typeDish}
-                className={inputAsset}
+                name={typeDish}
+                options={
+                  listPlatsByType[typeDish]?.map((plat) => ({
+                    value: plat.plat_id,
+                    label: plat.plat_nom,
+                  })) || []
+                }
+                defaultOptionText={`--- Sélectionner un(e) ${typeDish.toLowerCase()} ---`}
                 onChange={(e) => handlePlatChange(typeDish, e.target.value)}
-              >
-                <option value="">
-                  --- Sélectionner un(e) {typeDish.toLowerCase()} ---
-                </option>
-                {listPlatsByType[typeDish]?.map((plat) => (
-                  <option value={plat.plat_id} key={plat.plat_id}>
-                    {plat.plat_nom}
-                  </option>
-                ))}
-              </select>
+              />
             </div>
           );
         })}
@@ -268,7 +269,6 @@ export default function MenuCreateFor() {
           name="menu_prix"
           id="menu_prix"
           min={0}
-          className={inputAsset}
           onChange={handleChange}
           value={menuData.menu_prix}
           required
@@ -280,7 +280,6 @@ export default function MenuCreateFor() {
           name="quantite_restante"
           id="quantite_restante"
           min={0}
-          className={inputAsset}
           onChange={handleChange}
           value={menuData.quantite_restante}
           required

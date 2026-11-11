@@ -17,7 +17,7 @@ export function InputStyle({
     <div className="contents">
       <label
         htmlFor={id}
-        className="text-xl font-medium text-[#2C2C2C] font-sans"
+        className="text-xl font-medium text-[#2C2C2C] font-sans text-center"
       >
         {label}
       </label>
