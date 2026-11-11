@@ -9,7 +9,7 @@ export default function DashboardLayout() {
       <div className="grid grid-cols-3 w-full m-5 text-center ">
         <div className="flex flex-col gap-4 px-8">
           <h3>Gestion des menus</h3>
-          <CustomButton label="Ajouter un plat" to="/creatPlat" />
+          <CustomButton label="Gestion des plats" to="/creatPlat" />
           <CustomButton label="Créer un nouveau menu" to="/creatMenu" />
         </div>
         <div className="flex flex-col gap-4 px-8">

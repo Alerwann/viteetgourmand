@@ -239,7 +239,7 @@ export default function MenuCreateFor() {
                 name={typeDish}
                 options={
                   listPlatsByType[typeDish]?.map((plat) => ({
-                    value: plat.plat_id,
+                    value: plat.plat_id!,
                     label: plat.plat_nom,
                   })) || []
                 }
