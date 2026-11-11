@@ -105,14 +105,16 @@ class SqlPlatRepository implements PlatRepositoryInterface
                 $stmtDel->execute([':plat_id' => $platId]);
             }
 
+
+
             if (!empty($arrayAlergene)) {
                 $sqlJoint = "INSERT INTO plat_alergene (plat_id, alergene_id) VALUES (:plat_id, :alergene_id)";
                 $stmtJoint = $this->pdo->prepare($sqlJoint);
 
-                foreach ($arrayAlergene as $alergeneId) {
+                foreach ($arrayAlergene as $alergene) {
                     $stmtJoint->execute([
                         ':plat_id' => $platId,
-                        ':alergene_id' => (int) $alergeneId
+                        ':alergene_id' => (int) $alergene['alergene_id']
                     ]);
                 }
             }
@@ -153,8 +155,21 @@ class SqlPlatRepository implements PlatRepositoryInterface
 
             if ($alergeneId !== null) {
                 $alergenesList = &$platsData[$platId]['alergenes'];
-                if (!in_array($row['alergene_nom'], $alergenesList)) {
-                    $alergenesList[] = $row['alergene_nom'];
+
+                // Vérifie si l'allergène n'est pas déjà présent par son ID
+                $exists = false;
+                foreach ($alergenesList as $existingAlergene) {
+                    if ($existingAlergene['alergene_id'] === $alergeneId) {
+                        $exists = true;
+                        break;
+                    }
+                }
+
+                if (!$exists) {
+                    $alergenesList[] = [
+                        "alergene_id" => $alergeneId,
+                        "alergene_nom" => $row['alergene_nom']
+                    ];
                 }
             }
         }
