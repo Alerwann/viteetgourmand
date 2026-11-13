@@ -26,23 +26,27 @@ class SqlCommandeRepository implements CommandeRepositoryInterface
     public function getAll(): array
     {
 
-        $sql = "SELECT commande_id,
-                        commande_ref, 
-                        commande_date, 
-                        prestation_date, 
-                        prestation_heure, 
-                        numero_rue, 
-                        street, 
-                        code_postal, 
-                        ville, 
-                        pays,
-                        nombre_personne, 
-                        livraison_prix, 
-                        commande_status, 
-                        pret_materiel, 
-                        restitution_materiel, 
-                        utilisateur_id, 
-                        menu_id FROM commande";
+        $sql = "SELECT c.commande_id,
+               c.commande_ref, 
+               c.commande_date, 
+               c.prestation_date, 
+               c.prestation_heure, 
+               c.numero_rue, 
+               c.street, 
+               c.code_postal, 
+               c.ville, 
+               c.pays,
+               c.nombre_personne, 
+               c.livraison_prix, 
+               c.commande_status, 
+               c.pret_materiel, 
+               c.restitution_materiel, 
+               c.utilisateur_id, 
+               c.menu_id,
+               u.nom AS utilisateur_nom,
+               u.prenom AS utilisateur_prenom
+        FROM commande c
+        JOIN utilisateur u ON c.utilisateur_id = u.utilisateur_id";
 
         $stmt = $this->pdo->query($sql);
 
@@ -52,23 +56,27 @@ class SqlCommandeRepository implements CommandeRepositoryInterface
     #[Override]
     public function getOne(int $commande_id): ?Commande
     {
-        $sql = "SELECT commande_id,
-                        commande_ref, 
-                        commande_date, 
-                        prestation_date, 
-                        prestation_heure, 
-                        numero_rue, 
-                        street, 
-                        code_postal, 
-                        ville, 
-                        pays,
-                        nombre_personne, 
-                        livraison_prix, 
-                        commande_status, 
-                        pret_materiel, 
-                        restitution_materiel, 
-                        utilisateur_id, 
-                        menu_id FROM commande
+        $sql = "SELECT c.commande_id,
+               c.commande_ref, 
+               c.commande_date, 
+               c.prestation_date, 
+               c.prestation_heure, 
+               c.numero_rue, 
+               c.street, 
+               c.code_postal, 
+               c.ville, 
+               c.pays,
+               c.nombre_personne, 
+               c.livraison_prix, 
+               c.commande_status, 
+               c.pret_materiel, 
+               c.restitution_materiel, 
+               c.utilisateur_id, 
+               c.menu_id,
+               u.nom AS utilisateur_nom,
+               u.prenom AS utilisateur_prenom
+        FROM commande c
+        JOIN utilisateur u ON c.utilisateur_id = u.utilisateur_id
                         WHERE commande_id = ?";
 
         $stmt = $this->pdo->prepare($sql);
@@ -215,6 +223,7 @@ class SqlCommandeRepository implements CommandeRepositoryInterface
                 pays: $row['pays'],
                 numero_rue: $row['numero_rue'],
                 code_postal: $row['code_postal']
+
             );
 
             $prestaDetail = new PrestationDetail(
@@ -235,6 +244,8 @@ class SqlCommandeRepository implements CommandeRepositoryInterface
                 commande_status: StatusCommande::from($row['commande_status']),
                 commande_id: $row['commande_id'],
                 commande_date: $row['commande_date'],
+                utilisateur_nom: $row['utilisateur_nom'],
+                utilisateur_prenom: $row['utilisateur_prenom']
 
             );
 

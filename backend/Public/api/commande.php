@@ -6,7 +6,7 @@ $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 if ($origin === 'https://viteetgourmand.vercel.app' || preg_match('/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/', $origin)) {
     header("Access-Control-Allow-Origin: " . $origin);
     header("Access-Control-Allow-Credentials: true");
-    header("Access-Control-Allow-Methods: GET, POST,DELETE, OPTIONS");
+    header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
     header("Access-Control-Allow-Headers: Content-Type, Authorization");
 }
 
@@ -17,7 +17,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit();
 }
-
 
 require_once __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '/../../config/db_init.php';
@@ -47,6 +46,7 @@ $authMiddleware = new AuthMiddleware($authService);
 $userId = $authMiddleware->handle();
 
 $user = $userRepo->findById($userId);
+$userRole = $user->getRoleId();
 
 
 $commandeRepo = new SqlCommandeRepository($pdo);
@@ -54,13 +54,16 @@ $controller = new CommandeController($commandeRepo, $mailer, $user);
 
 $method = $_SERVER['REQUEST_METHOD'];
 
+
+
 switch ($method) {
     case 'GET':
         if (isset($_GET['utilisateur'])) {
             $controller->getOneByUtilisateurId();
         } else if (isset($_GET['id'])) {
+
             $controller->getOne();
-        } else if ($user->getRoleId() == 1) {
+        } else if ($user->getRoleId() === 1) {
             $controller->getAll();
         } else {
             http_response_code(200);

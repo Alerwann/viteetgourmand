@@ -15,11 +15,13 @@ class Commande implements JsonSerializable
     private int $nombre_personne;
     private int $menu_id;
     private int $utilisateur_id;
+    private ?string $utilisateur_nom;
+    private ?string $utilisateur_prenom;
     private PrestationDetail $commande_presta;
     private StatusCommande $commande_status;
 
 
-    public function __construct(string $commande_ref, int $nombre_personne, int $menu_id, int $utilisateur_id, PrestationDetail $commande_presta, StatusCommande $commande_status, ?int $commande_id = \null, ?string $commande_date = \null)
+    public function __construct(string $commande_ref, int $nombre_personne, int $menu_id, int $utilisateur_id, PrestationDetail $commande_presta, StatusCommande $commande_status, ?int $commande_id = \null, ?string $commande_date = \null, ?string $utilisateur_nom = "", ?string $utilisateur_prenom)
     {
         $this->commande_id = $commande_id;
         $this->commande_ref = $commande_ref;
@@ -27,6 +29,8 @@ class Commande implements JsonSerializable
         $this->nombre_personne = $nombre_personne;
         $this->menu_id = $menu_id;
         $this->utilisateur_id = $utilisateur_id;
+        $this->utilisateur_nom = $utilisateur_nom;
+        $this->utilisateur_prenom = $utilisateur_prenom;
         $this->commande_presta = $commande_presta;
         $this->commande_status = $commande_status;
     }
@@ -63,6 +67,14 @@ class Commande implements JsonSerializable
     {
         return $this->commande_status;
     }
+    public function getUtilisateurNom(): ?string
+    {
+        return $this->utilisateur_nom;
+    }
+    public function getUtilisateurPrenom(): ?string
+    {
+        return $this->utilisateur_prenom;
+    }
 
     #[Override]
     public function jsonSerialize(): mixed
@@ -75,7 +87,9 @@ class Commande implements JsonSerializable
             "menu_id" => $this->menu_id,
             "utilisateur_id" => $this->utilisateur_id,
             "commande_presta" => $this->commande_presta,
-            "commande_status" => $this->commande_status
+            "commande_status" => $this->commande_status,
+            "utilisateur_nom"=>$this->utilisateur_nom,
+            "utilisateur_prenom"=>$this->utilisateur_prenom
         ];
     }
 }

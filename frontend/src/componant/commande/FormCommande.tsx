@@ -18,12 +18,12 @@ import VerifCommande from './VerifCommande';
 import createREfCommande from '../../utils/create_ref_commande';
 import TitleCommandeSection from '../global/styles/title_commande_section';
 import api from '../../services/api';
-import { useAuth } from '../../context/AuthContext'; // <--- 1. Importe le useAuth
+import { useAuth } from '../../context/AuthContext';
 
 export default function FormCommande() {
   const { menuid } = useParams();
   const navigate = useNavigate();
-  const { user, isAuthenticated, isLoading: authLoading } = useAuth(); // <--- 2. Récupère l'utilisateur du context
+  const { user, isAuthenticated, isLoading: authLoading } = useAuth();
 
   const menu_id = menuid ? parseInt(menuid) : -1;
   const [pageIndex, setPageIndex] = useState<number>(0);

@@ -11,22 +11,23 @@ export interface CommandePresta {
   restitution_materiel: boolean;
 }
 export interface StatusCommande {
-  création: string;
-  accepte: string;
-  preparation: string;
-  livraison: string;
-  livre: string;
-  attenteMateriel: string;
-  termine: string;
+  'validée': string;
+  'acceptée': string;
+  'en preparation': string;
+  'en cours de livraison': string;
+  'livrée': string;
+  'en attente de retour de matériel': string;
+  'terminée': string;
 }
 
 export const statusCommande = [
-  'accepte',
-  'preparation',
-  'livraison',
-  'livre',
-  'attente_materiel',
-  'ternmine',
+  'validée',
+  'acceptée',
+  'en preparation',
+  'en cours de livraison',
+  'livrée',
+  'en attente de retour de matériel',
+  'terminée',
 ] as const;
 
 export type statusCommande = (typeof statusCommande)[number];
@@ -67,6 +68,46 @@ export function initCommande(
       pret_materiel: false,
       restitution_materiel: false,
     },
-    commande_status: 'accepte',
+    commande_status: 'acceptée',
+  };
+}
+
+export interface GetCommande {
+  commande_id?: number;
+  commande_ref: string;
+  commande_date: string;
+  nombre_personne: number;
+  menu_id: number;
+  utilisateur_id: number;
+  commande_presta: CommandePresta;
+  commande_status: statusCommande;
+  utilisateur_nom: string;
+  utilisateur_prenom: string;
+}
+
+export function initGetCommande(): GetCommande {
+  return {
+    commande_ref: '',
+    commande_date: new Date().toISOString(),
+    nombre_personne: 0,
+    menu_id: 0,
+    utilisateur_id: -1,
+    utilisateur_nom: '',
+    utilisateur_prenom: '',
+    commande_presta: {
+      prestation_date: '',
+      prestation_heure: '',
+      prestation_adresse: {
+        numero_rue: 0,
+        street: '',
+        ville: '',
+        code_postal: 0,
+        pays: 'France',
+      },
+      livraison_prix: 0,
+      pret_materiel: false,
+      restitution_materiel: false,
+    },
+    commande_status: 'acceptée',
   };
 }

@@ -36,6 +36,8 @@ class CommandeController
             'nombre_personne' => $commande->getNombrePersonne(),
             'menu_id' => $commande->getMenuId(),
             'utilisateur_id' => $commande->getUtilisateurId(),
+            'utilisateur_nom' => $commande->getUtilisateurNom(),
+            'utilisateur_prenom' => $commande->getUtilisateurPrenom(),
             'commande_status' => $commande->getStatus(),
             'commande_date' => $commande->getCommandeDate(),
             'commande_presta' => $presta ? [
@@ -52,6 +54,7 @@ class CommandeController
                     'pays' => $adresse->getPays(),
                 ] : null
             ] : null
+
         ];
     }
 
@@ -214,6 +217,8 @@ class CommandeController
                 nombre_personne: $data['nombre_personne'],
                 menu_id: $data['menu_id'],
                 utilisateur_id: $data['utilisateur_id'],
+                utilisateur_nom: $data['utilisateur_nom'],
+                utilisateur_prenom: $data['utilisateur_prenom'],
                 commande_presta: $presta_Detail,
                 commande_status: StatusCommande::from($data['commande_status']),
                 commande_id: $data['commande_id'] ?? null,

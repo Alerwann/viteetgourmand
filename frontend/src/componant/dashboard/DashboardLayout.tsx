@@ -14,6 +14,7 @@ export default function DashboardLayout() {
         </div>
         <div className="flex flex-col gap-4 px-8">
           <h3>Gestion des commandes</h3>
+          <CustomButton label="Ensemble des commandes" to="/Commandes" />
         </div>
         <div className="flex flex-col gap-4 px-8">
           <h3>Gestion Administrateur</h3>

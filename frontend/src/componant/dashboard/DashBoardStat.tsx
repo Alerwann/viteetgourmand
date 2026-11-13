@@ -54,7 +54,6 @@ export default function DashboardStats() {
   const handleSyncAndFetch = async () => {
     setLoading(true);
     try {
-      // 1. Déclencher la synchronisation MySQL -> MongoDB via Axios
       await api.get('api/sync.php');
 
       const params: Record<string, string> = {};

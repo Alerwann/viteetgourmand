@@ -19,6 +19,8 @@ import MenuCreateFor from './componant/dashboard/Menu_Create_Form';
 import DashboardStats from './componant/dashboard/DashBoardStat';
 import Unauthorized from './componant/global/UnAuthorizen';
 import GestionEmploye from './componant/dashboard/EmployeCreate';
+import GestionCommande from './componant/dashboard/GestionCommande';
+import ModifCommande from './componant/dashboard/ModifCommande';
 
 const router = createBrowserRouter([
   {
@@ -35,6 +37,7 @@ const router = createBrowserRouter([
       { path: 'reinit', element: <ReinitPassword /> },
       { path: 'reinit/:token', element: <ReinitPassword /> },
       { path: 'unauthorized', element: <Unauthorized /> },
+
       // 2. Uniquement si connecté (pas de rôle spécifique requis)
       {
         path: 'commande/:menuid',
@@ -93,6 +96,24 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute allowedRoles={['admin', 'employé']}>
             <DashboardLayout />
+          </ProtectedRoute>
+        ),
+      },
+
+      {
+        path: 'commandes',
+        element: (
+          <ProtectedRoute allowedRoles={['admin', 'employé']}>
+            <GestionCommande />
+          </ProtectedRoute>
+        ),
+      },
+
+      {
+        path: 'Commandes/:id',
+        element: (
+          <ProtectedRoute allowedRoles={['admin', 'employé']}>
+            <ModifCommande />
           </ProtectedRoute>
         ),
       },
