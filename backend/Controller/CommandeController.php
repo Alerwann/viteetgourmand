@@ -32,21 +32,22 @@ class CommandeController
 
         return [
             'commande_id' => $commande->getCommandeId(),
+            'commande_date' => $commande->getCommandeDate(),
             'commande_ref' => $commande->getCommandeRef(),
             'nombre_personne' => $commande->getNombrePersonne(),
             'menu_id' => $commande->getMenuId(),
+            'menu_nom' => $commande->getMenuNom(),
             'utilisateur_id' => $commande->getUtilisateurId(),
             'utilisateur_nom' => $commande->getUtilisateurNom(),
             'utilisateur_prenom' => $commande->getUtilisateurPrenom(),
             'commande_status' => $commande->getStatus(),
-            'commande_date' => $commande->getCommandeDate(),
             'commande_presta' => $presta ? [
                 'prestation_date' => $presta->getPrestationDate(),
                 'prestation_heure' => $presta->getPrestationHeure(),
                 'livraison_prix' => $presta->getLivraisonPrix(),
                 'pret_materiel' => $presta->getPretMateriel(),
                 'restitution_materiel' => $presta->getRestitutionMateriel(),
-                'adresse' => $adresse ? [
+                'prestation_adresse' => $adresse ? [
                     'numero_rue' => $adresse->getNumRue(),
                     'street' => $adresse->getStreet(),
                     'code_postal' => $adresse->getCodePostal(),
@@ -139,7 +140,7 @@ class CommandeController
             return;
         }
 
-        // 1. Clés obligatoires à la racine
+
         $requiredRootKeys = [
             'commande_ref',
             'nombre_personne',
@@ -157,7 +158,6 @@ class CommandeController
             }
         }
 
-        // 2. Clés obligatoires dans commande_presta
         $presta = $data['commande_presta'];
         $requiredPrestaKeys = [
             'prestation_date',
@@ -195,6 +195,8 @@ class CommandeController
         }
 
         try {
+            $commandeId = $data['commande_id'] ?? \null;
+
             $prestation_adresse = new AdressePostale(
                 street: $adresse['street'],
                 ville: $adresse['ville'],
@@ -216,28 +218,31 @@ class CommandeController
                 commande_ref: $data['commande_ref'],
                 nombre_personne: $data['nombre_personne'],
                 menu_id: $data['menu_id'],
+                menu_nom: $data['menu_nom'],
                 utilisateur_id: $data['utilisateur_id'],
                 utilisateur_nom: $data['utilisateur_nom'],
                 utilisateur_prenom: $data['utilisateur_prenom'],
                 commande_presta: $presta_Detail,
                 commande_status: StatusCommande::from($data['commande_status']),
-                commande_id: $data['commande_id'] ?? null,
-                commande_date: $data['commande_date'] ?? null
+                commande_id: $commandeId,
+                commande_date: $data['commande_date']
             );
 
             $this->commandeRepo->save($commande);
+            if ($commandeId === \null) {
+                try {
 
-            try {
+                    $email = $this->user->getEmail();
+                    $nom = $this->user->getNom();
+                    $prenom = $this->user->getPrenom();
+                    $refCommande = $commande->getCommandeRef();
 
-                $email = $this->user->getEmail();
-                $nom = $this->user->getNom();
-                $prenom = $this->user->getPrenom();
-                $refCommande = $commande->getCommandeRef();
-
-                $this->mailer->confirmationCommande(refCommande: $refCommande, prenom: $prenom, nom: $nom,);
-            } catch (\Exception $mailException) {
-                error_log("Erreur envoi mail de commande : " . $mailException->getMessage());
+                    $this->mailer->confirmationCommande(refCommande: $refCommande, prenom: $prenom, nom: $nom,);
+                } catch (\Exception $mailException) {
+                    error_log("Erreur envoi mail de commande : " . $mailException->getMessage());
+                }
             }
+
 
             http_response_code(201);
             echo json_encode(["message" => "Commande enregistrée avec succès."]);

@@ -43,9 +43,11 @@ class SqlCommandeRepository implements CommandeRepositoryInterface
                c.restitution_materiel, 
                c.utilisateur_id, 
                c.menu_id,
+               m.menu_nom AS menu_nom,
                u.nom AS utilisateur_nom,
                u.prenom AS utilisateur_prenom
         FROM commande c
+        JOIN menu m ON c.menu_id =m.menu_id
         JOIN utilisateur u ON c.utilisateur_id = u.utilisateur_id";
 
         $stmt = $this->pdo->query($sql);
@@ -57,27 +59,29 @@ class SqlCommandeRepository implements CommandeRepositoryInterface
     public function getOne(int $commande_id): ?Commande
     {
         $sql = "SELECT c.commande_id,
-               c.commande_ref, 
-               c.commande_date, 
-               c.prestation_date, 
-               c.prestation_heure, 
-               c.numero_rue, 
-               c.street, 
-               c.code_postal, 
-               c.ville, 
-               c.pays,
-               c.nombre_personne, 
-               c.livraison_prix, 
-               c.commande_status, 
-               c.pret_materiel, 
-               c.restitution_materiel, 
-               c.utilisateur_id, 
-               c.menu_id,
-               u.nom AS utilisateur_nom,
-               u.prenom AS utilisateur_prenom
+            c.commande_ref, 
+            c.commande_date, 
+            c.prestation_date, 
+            c.prestation_heure, 
+            c.numero_rue, 
+            c.street, 
+            c.code_postal, 
+            c.ville, 
+            c.pays,
+            c.nombre_personne, 
+            c.livraison_prix, 
+            c.commande_status, 
+            c.pret_materiel, 
+            c.restitution_materiel, 
+            c.utilisateur_id, 
+            c.menu_id,
+            m.menu_nom AS menu_nom,
+            u.nom AS utilisateur_nom,
+            u.prenom AS utilisateur_prenom
         FROM commande c
+        JOIN menu m ON c.menu_id =m.menu_id
         JOIN utilisateur u ON c.utilisateur_id = u.utilisateur_id
-                        WHERE commande_id = ?";
+        WHERE commande_id = ?";
 
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([$commande_id]);
@@ -239,6 +243,7 @@ class SqlCommandeRepository implements CommandeRepositoryInterface
                 commande_ref: $row['commande_ref'],
                 nombre_personne: $row['nombre_personne'],
                 menu_id: $row['menu_id'],
+                menu_nom: $row['menu_nom'],
                 utilisateur_id: $row['utilisateur_id'],
                 commande_presta: $prestaDetail,
                 commande_status: StatusCommande::from($row['commande_status']),

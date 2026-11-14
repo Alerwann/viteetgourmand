@@ -83,6 +83,7 @@ export interface GetCommande {
   commande_status: statusCommande;
   utilisateur_nom: string;
   utilisateur_prenom: string;
+  menu_nom: string;
 }
 
 export function initGetCommande(): GetCommande {
@@ -91,6 +92,7 @@ export function initGetCommande(): GetCommande {
     commande_date: new Date().toISOString(),
     nombre_personne: 0,
     menu_id: 0,
+    menu_nom: '',
     utilisateur_id: -1,
     utilisateur_nom: '',
     utilisateur_prenom: '',
@@ -98,7 +100,7 @@ export function initGetCommande(): GetCommande {
       prestation_date: '',
       prestation_heure: '',
       prestation_adresse: {
-        numero_rue: 0,
+        numero_rue: 5,
         street: '',
         ville: '',
         code_postal: 0,

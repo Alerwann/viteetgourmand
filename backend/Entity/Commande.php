@@ -14,6 +14,7 @@ class Commande implements JsonSerializable
     private ?string $commande_date;
     private int $nombre_personne;
     private int $menu_id;
+    private ?string $menu_nom;
     private int $utilisateur_id;
     private ?string $utilisateur_nom;
     private ?string $utilisateur_prenom;
@@ -21,13 +22,14 @@ class Commande implements JsonSerializable
     private StatusCommande $commande_status;
 
 
-    public function __construct(string $commande_ref, int $nombre_personne, int $menu_id, int $utilisateur_id, PrestationDetail $commande_presta, StatusCommande $commande_status, ?int $commande_id = \null, ?string $commande_date = \null, ?string $utilisateur_nom = "", ?string $utilisateur_prenom)
+    public function __construct(string $commande_ref, int $nombre_personne, int $menu_id, int $utilisateur_id, PrestationDetail $commande_presta, StatusCommande $commande_status, ?int $commande_id, ?string $commande_date, ?string $utilisateur_nom, ?string $utilisateur_prenom, ?string $menu_nom)
     {
         $this->commande_id = $commande_id;
         $this->commande_ref = $commande_ref;
         $this->commande_date = $commande_date;
         $this->nombre_personne = $nombre_personne;
         $this->menu_id = $menu_id;
+        $this->menu_nom = $menu_nom;
         $this->utilisateur_id = $utilisateur_id;
         $this->utilisateur_nom = $utilisateur_nom;
         $this->utilisateur_prenom = $utilisateur_prenom;
@@ -76,6 +78,11 @@ class Commande implements JsonSerializable
         return $this->utilisateur_prenom;
     }
 
+    public function getMenuNom(): ?string
+    {
+        return $this->menu_nom;
+    }
+
     #[Override]
     public function jsonSerialize(): mixed
     {
@@ -88,8 +95,8 @@ class Commande implements JsonSerializable
             "utilisateur_id" => $this->utilisateur_id,
             "commande_presta" => $this->commande_presta,
             "commande_status" => $this->commande_status,
-            "utilisateur_nom"=>$this->utilisateur_nom,
-            "utilisateur_prenom"=>$this->utilisateur_prenom
+            "utilisateur_nom" => $this->utilisateur_nom,
+            "utilisateur_prenom" => $this->utilisateur_prenom
         ];
     }
 }
