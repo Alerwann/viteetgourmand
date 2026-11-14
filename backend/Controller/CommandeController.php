@@ -229,18 +229,21 @@ class CommandeController
             );
 
             $this->commandeRepo->save($commande);
+            $email = $this->user->getEmail();
+            $nom = $this->user->getNom();
+            $prenom = $this->user->getPrenom();
+            $refCommande = $commande->getCommandeRef();
+            $commandeStatus = ($commande->getStatus());
+
+
             if ($commandeId === \null) {
                 try {
-
-                    $email = $this->user->getEmail();
-                    $nom = $this->user->getNom();
-                    $prenom = $this->user->getPrenom();
-                    $refCommande = $commande->getCommandeRef();
-
                     $this->mailer->confirmationCommande(refCommande: $refCommande, prenom: $prenom, nom: $nom,);
                 } catch (\Exception $mailException) {
                     error_log("Erreur envoi mail de commande : " . $mailException->getMessage());
                 }
+            } else if ($commande->getStatus() === StatusCommande::Termine) {
+                $this->mailer->sendDemandeAvis($nom, $prenom);
             }
 
 

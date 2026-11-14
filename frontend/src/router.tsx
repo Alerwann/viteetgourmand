@@ -21,6 +21,7 @@ import Unauthorized from './componant/global/UnAuthorizen';
 import GestionEmploye from './componant/dashboard/EmployeCreate';
 import GestionCommande from './componant/dashboard/GestionCommande';
 import ModifCommande from './componant/dashboard/ModifCommande';
+import PolitiqueConfidentialite from './componant/RGPD/PolitiqueConfidentialite';
 
 const router = createBrowserRouter([
   {
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
       { path: 'reinit', element: <ReinitPassword /> },
       { path: 'reinit/:token', element: <ReinitPassword /> },
       { path: 'unauthorized', element: <Unauthorized /> },
+      {
+        path: 'politique_confidentialite',
+        element: <PolitiqueConfidentialite />,
+      },
 
       // 2. Uniquement si connecté (pas de rôle spécifique requis)
       {

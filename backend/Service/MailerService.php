@@ -67,4 +67,18 @@ class MailerService
             throw new \Exception("L'e-mail de confirmation n'a pas pu être envoyé : {$e->getMessage()}");
         }
     }
+
+    public function sendDemandeAvis(string $nom, string $prenom): void
+    {
+        try {
+            $this->resend->emails->send([
+                'from' => 'onboarding@resend.dev',
+                'to' => 'alerwann411@gmail.com',
+                'subject' => 'Vite & Gourmand aimerai votre retour',
+                'html' => "Bonjour $prenom $nom,<br><br>Vous avez pu bénificier de nos services. Nous espèrons que vous avez été satisfait.<br>Dans votre espace personnel vous pouvez maintenant noter la prestation.<br><br>L'équipe."
+            ]);
+        } catch (Exception $e) {
+            throw new \Exception("L'e-mail de bienvenue n'a pas pu être envoyé : {$e->getMessage()}");
+        }
+    }
 }

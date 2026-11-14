@@ -45,7 +45,7 @@ export default function ModifCommande() {
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    saveCommande(setIsLoading, commande);
+    await saveCommande(setIsLoading, commande);
   };
 
   if (isLoading) return <Loading />;
