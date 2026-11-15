@@ -4,7 +4,10 @@ import CustomButton from '../global/styles/button_global';
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import type { utilisateur } from '../../interfaces/utilisateur';
+import {
+  initUtilisateur,
+  type utilisateur,
+} from '../../interfaces/utilisateur';
 import FormStyle from '../global/styles/Formulaire/FormStyle';
 import { FieldsetStyle } from '../global/styles/Formulaire/FieldsetStyle';
 import { InputStyle } from '../global/styles/Formulaire/InputStyle';
@@ -16,22 +19,7 @@ export default function CreateCompte() {
   const { login } = useAuth();
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [utilisateur, setUtilisateur] = useState<utilisateur>({
-    email: '',
-    password: '',
-    prenom: '',
-    nom: '',
-    telephone: '',
-    adresse_postale: {
-      numero_rue: 0,
-      street: '',
-      ville: '',
-      code_postal: 10000,
-      pays: '',
-    },
-    is_actif: false,
-    role_id: 2,
-  });
+  const [utilisateur, setUtilisateur] = useState<utilisateur>(initUtilisateur);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -121,22 +109,7 @@ export default function CreateCompte() {
 
       navigate(redirectTo, { replace: true });
 
-      setUtilisateur({
-        email: '',
-        password: '',
-        prenom: '',
-        nom: '',
-        telephone: '',
-        adresse_postale: {
-          numero_rue: 0,
-          street: '',
-          ville: '',
-          code_postal: 10000,
-          pays: '',
-        },
-        is_actif: false,
-        role_id: 2,
-      });
+      setUtilisateur(initUtilisateur);
     } catch (error: any) {
       console.error('Erreur lors de la soumission :', error);
     } finally {
