@@ -60,7 +60,7 @@ export default function Connect_composant() {
       login(token, user);
 
       const redirectTo =
-        location.state?.from?.pathname ?? // .pathname pour être sûr d'avoir l'URL propre
+        location.state?.from?.pathname ??
         sessionStorage.getItem('redirect_after_login') ??
         '/';
 

@@ -2,6 +2,7 @@
 
 import CustomButton from '../global/styles/button_global';
 import { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import type { utilisateur } from '../../interfaces/utilisateur';
 import FormStyle from '../global/styles/Formulaire/FormStyle';
@@ -31,6 +32,9 @@ export default function CreateCompte() {
     is_actif: false,
     role_id: 2,
   });
+
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const pwd = utilisateur.password;
   const hasMinLength = pwd.length >= 10;
@@ -108,6 +112,14 @@ export default function CreateCompte() {
 
       console.log('Utilisateur créé avec succès :', response.data);
       alert('Votre compte a été créé avec succès');
+      const redirectTo =
+        location.state?.from?.pathname ??
+        sessionStorage.getItem('redirect_after_login') ??
+        '/';
+
+      sessionStorage.removeItem('redirect_after_login');
+
+      navigate(redirectTo, { replace: true });
 
       setUtilisateur({
         email: '',
