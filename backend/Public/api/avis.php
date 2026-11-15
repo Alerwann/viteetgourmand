@@ -42,8 +42,13 @@ switch ($method) {
         break;
 
     case 'POST':
-        $controller->createAvis();
-        break;
+        if (isset($_GET['avisId'])) {
+            $controller->updateAvis();
+            break;
+        } else {
+            $controller->createAvis();
+            break;
+        }
 
     default:
 

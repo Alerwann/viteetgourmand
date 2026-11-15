@@ -47,7 +47,7 @@ export default function ListAvisComposant() {
     setIsLoading(true);
 
     api
-      .get('api/avis.php?status=publie')
+      .get('api/avis.php?status=publié')
       .then((res) => setListAvis(res.data))
       .catch((err) => console.error('Erreur fetch avis:', err))
       .finally(() => setIsLoading(false));

@@ -95,4 +95,27 @@ class AvisController
             echo json_encode(["message" => "Erreur : " . $e->getMessage()]);
         }
     }
+
+    public function updateAvis(): void
+    {
+        $avisId = $_GET['avisId'];
+        $status = $_GET['status'];
+        $statusEnum = StatusAvis::tryFrom($status);
+
+        if ($statusEnum === null) {
+            throw new \InvalidArgumentException("Statut invalide : " . $status);
+        }
+
+        try {
+            $this->avisRepo->updateStatus($avisId, $status);
+            http_response_code(201);
+            echo json_encode([
+                "message" => "Avis modifié avec succès !",
+                "id" => $avisId
+            ]);
+        } catch (\Exception $e) {
+            http_response_code(500);
+            echo json_encode(["message" => "Erreur : " . $e->getMessage()]);
+        }
+    }
 }

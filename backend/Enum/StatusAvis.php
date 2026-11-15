@@ -4,7 +4,7 @@ namespace App\Enum;
 
 enum StatusAvis: string
 {
-    case Cree = 'cree';
-    case Refuse = 'non_valide';
-    case Publie = 'publie';
+    case Cree = 'créé';
+    case Refuse = 'refusé';
+    case Publie = 'publié';
 }

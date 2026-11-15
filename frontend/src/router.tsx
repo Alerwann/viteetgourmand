@@ -22,6 +22,7 @@ import GestionEmploye from './componant/dashboard/EmployeCreate';
 import GestionCommande from './componant/dashboard/GestionCommande';
 import ModifCommande from './componant/dashboard/ModifCommande';
 import PolitiqueConfidentialite from './componant/RGPD/PolitiqueConfidentialite';
+import GestionAvis from './componant/dashboard/GestionAvis';
 
 const router = createBrowserRouter([
   {
@@ -119,6 +120,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute allowedRoles={['admin', 'employé']}>
             <ModifCommande />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'avis',
+        element: (
+          <ProtectedRoute allowedRoles={['admin', 'employé']}>
+            <GestionAvis />
           </ProtectedRoute>
         ),
       },

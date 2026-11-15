@@ -11,5 +11,6 @@ interface AvisRepositoryInterface
     public function findLastAvis(int $quantity): ?array;
     public function findByStatus(StatusAvis $status): ?array;
     public function save(Avis $utilisateur): int;
+    public function updateStatus(int $statusAvis, string $status): void;
     public function delete(int $id): void;
 }

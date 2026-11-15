@@ -12,10 +12,11 @@ class Avis
     private string $description;
     private int $commande_id;
     private StatusAvis $status;
-    public ?string $created_at = null;
+    private ?string $created_at = null;
+    private ?string $commande_ref;
 
 
-    public function __construct(string $description, int $commande_id, StatusAvis $status, int $note, ?int $avis_id = null, ?string $created_at = null)
+    public function __construct(string $description, int $commande_id, StatusAvis $status, int $note, ?int $avis_id = null, ?string $created_at, ?string $commande_ref)
     {
         $this->avis_id = $avis_id;
         $this->description = $description;
@@ -23,6 +24,7 @@ class Avis
         $this->commande_id = $commande_id;
         $this->status = $status;
         $this->created_at = $created_at;
+        $this->commande_ref = $commande_ref;
     }
 
     // GET/SET avisId
@@ -31,10 +33,6 @@ class Avis
         return $this->avis_id;
     }
 
-    public function setAvisId(int $avis_id): void
-    {
-        $this->avis_id = $avis_id;
-    }
 
     // GET/SET description
     public function getDescription(): string
@@ -42,20 +40,12 @@ class Avis
         return $this->description;
     }
 
-    public function setDescription(string $description): void
-    {
-        $this->description = $description;
-    }
+
 
     // GET/SET commandeId
     public function getCommandeId(): int
     {
         return $this->commande_id;
-    }
-
-    public function setCommandeId(int $commande_id): void
-    {
-        $this->commande_id = $commande_id;
     }
 
 
@@ -66,10 +56,7 @@ class Avis
         return $this->status;
     }
 
-    public function setStatus(StatusAvis $status): void
-    {
-        $this->status = $status;
-    }
+
 
     // GET/SET note
     public function getNote(): int
@@ -77,10 +64,6 @@ class Avis
         return $this->note;
     }
 
-    public function setNote(int $note): void
-    {
-        $this->note = $note;
-    }
 
     // GET/SET CreateAt
     public function getCreateAt(): string
@@ -88,9 +71,9 @@ class Avis
         return $this->created_at;
     }
 
-    public function setCreateAt(string $date): void
+    public function getCommandeRef(): string
     {
-        $this->created_at = $date;
+        return $this->commande_ref;
     }
 
 
@@ -104,7 +87,8 @@ class Avis
             "commande_id" => $this->commande_id,
             "status" => $this->status,
             "note" => $this->note,
-            "created_at" => $this->created_at
+            "created_at" => $this->created_at,
+            "commande_ref" => $this->commande_ref,
         ];
     }
 }
