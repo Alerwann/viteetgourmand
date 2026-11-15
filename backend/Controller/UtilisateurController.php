@@ -148,10 +148,10 @@ class UtilisateurController
                 error_log("Erreur envoi mail de bienvenue : " . $mailException->getMessage());
             }
 
-            http_response_code(201);
-            echo json_encode([
-                "message" => "Utilisateur créé avec succès !"
-            ]);
+            $result = $this->authService->login($data['email'], $data['password']);
+
+            http_response_code($result['code']);
+            echo json_encode($result);
         } catch (\InvalidArgumentException $e) {
             http_response_code(400);
             echo json_encode(["message" => $e->getMessage()]);

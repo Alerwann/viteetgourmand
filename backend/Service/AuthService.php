@@ -108,12 +108,21 @@ class AuthService
         ];
     }
 
+    public function newUser(int $userId): array
+    {
+        $token = $this->calcul_token($userId);
+        return [
+            "success" => true,
+            "token" => $token,
+
+            "code" => 200
+        ];
+    }
+
     public function create_user_token(string $email): string
     {
         $user = $this->userRepo->findByEmail($email);
-        if ($user == null) {
-            return "hello";
-        }
+
 
         $userId = $user->getUtilisateurId();
         $resetData = $this->authRepo->getOne($email);
@@ -130,6 +139,7 @@ class AuthService
             $this->authRepo->create($userId, $token);
         }
 
+        // a modifier pour la prod
         $resetLink = "http://localhost:5173/reinit/" . $token;
         $this->mailer->sendPasswordResetEmail($resetLink);
 

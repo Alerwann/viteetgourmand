@@ -9,8 +9,10 @@ import { FieldsetStyle } from '../global/styles/Formulaire/FieldsetStyle';
 import { InputStyle } from '../global/styles/Formulaire/InputStyle';
 import Loading from '../global/loading/Loading';
 import api from '../../services/api';
+import { useAuth } from '../../context/AuthContext';
 
 export default function CreateCompte() {
+  const { login } = useAuth();
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [utilisateur, setUtilisateur] = useState<utilisateur>({
@@ -101,6 +103,9 @@ export default function CreateCompte() {
 
     try {
       const response = await api.post('api/utilisateur.php', preload);
+      const { token, user } = response.data;
+      login(token, user);
+
       console.log('Utilisateur créé avec succès :', response.data);
       alert('Votre compte a été créé avec succès');
 
