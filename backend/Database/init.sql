@@ -13,4 +13,5 @@ SOURCE /docker-entrypoint-initdb.d/database/tables/commande.sql;
 SOURCE /docker-entrypoint-initdb.d/database/tables/avis.sql;
 SOURCE /docker-entrypoint-initdb.d/database/tables/contact_request.sql;
 SOURCE /docker-entrypoint-initdb.d/database/tables/password_reset_token.sql;
+SOURCE /docker-entrypoint-initdb.d/database/tables/modif_commande.sql;
 SOURCE /docker-entrypoint-initdb.d/database/default_values.sql;

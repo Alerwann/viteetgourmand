@@ -24,16 +24,19 @@ require_once __DIR__ . '/../../config/db_init.php';
 use App\Repository\Users\SqlUserRepository;
 use App\Repository\Auth\SqlAuthRepository;
 use App\Repository\Commande\SqlCommandeRepository;
+use App\Repository\ModifCommande\SqlModifCommandeRepository;
 
 use App\Controller\CommandeController;
 
 use App\Services\MailerService;
 use App\Services\AuthService;
+use App\Services\OrderManager;
 use App\Middleware\AuthMiddleware;
 
 
 $userRepo = new SqlUserRepository($pdo);
 $authRepo = new SqlAuthRepository($pdo);
+
 
 $resend = Resend::client(getenv('API_RESEND'));
 $mailer = new MailerService($resend);
@@ -50,7 +53,9 @@ $userRole = $user->getRoleId();
 
 
 $commandeRepo = new SqlCommandeRepository($pdo);
-$controller = new CommandeController($commandeRepo, $mailer, $user);
+$modifRepos = new SqlModifCommandeRepository($pdo);
+$orderManager = new OrderManager(commandeRepo: $commandeRepo, modifRepo: $modifRepos);
+$controller = new CommandeController($commandeRepo, $mailer, $user, $orderManager);
 
 $method = $_SERVER['REQUEST_METHOD'];
 

@@ -113,3 +113,15 @@ export function initGetCommande(): GetCommande {
     commande_status: 'acceptée',
   };
 }
+
+export interface ModifCommande {
+  modif_description: string;
+  modif_contact: string;
+}
+
+export function initModifCommande(): ModifCommande {
+  return {
+    modif_description: '',
+    modif_contact: '',
+  };
+}

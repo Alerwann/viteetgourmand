@@ -328,3 +328,10 @@ INSERT INTO avis (note, description, status, commande_id) VALUES
 (5, 'Absolument parfait ! Rien à redire, c''était un sans-faute pour notre événement.', 'publié', 8),
 (1, 'Catastrophique : erreur dans le menu livré et aucune réponse du service client.', 'refusé', 9),
 (4, 'Très satisfaisant, les saveurs étaient authentiques et bien maîtrisées. À refaire !', 'publié', 10);
+
+
+-- Modif commande
+
+INSERT INTO modif_commande (modif_contact,modif_description,commande_id) VALUES
+('tel', 'Ajout d''une part à la commande', 15),
+('mail', 'Changement de l''entrée pour Gougère', 3);

@@ -1,7 +1,7 @@
 /** @format */
 
 import api from './api';
-import type { GetCommande } from '../interfaces/commande';
+import type { GetCommande, ModifCommande } from '../interfaces/commande';
 import createREfCommande from '../utils/create_ref_commande';
 import { getShippingForAddress } from '../utils/distance_calcul';
 
@@ -39,6 +39,7 @@ export const getOne = async <T>(
 export const saveCommande = async (
   setLoading: (isLoading: boolean) => void,
   commande: GetCommande,
+  modif?: ModifCommande,
 ) => {
   setLoading(true);
 
@@ -70,6 +71,10 @@ export const saveCommande = async (
       restitution_materiel: commande.commande_presta.restitution_materiel,
     },
     commande_status: commande.commande_status,
+    modif_contact: modif?.modif_contact ? modif.modif_contact : null,
+    modif_description: modif?.modif_description
+      ? modif.modif_description
+      : null,
   };
 
   try {

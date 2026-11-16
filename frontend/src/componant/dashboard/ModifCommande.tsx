@@ -4,8 +4,10 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import {
   initGetCommande,
+  type ModifCommande,
   statusCommande,
   type GetCommande,
+  initModifCommande,
 } from '../../interfaces/commande';
 
 import Loading from '../global/loading/Loading';
@@ -21,11 +23,14 @@ import {
 } from '../../services/commande_service';
 import CustomButton from '../global/styles/button_global';
 import { InputCheckbox } from '../global/styles/Formulaire/inputCheckbox';
+import { TextAreaStyle } from '../global/styles/Formulaire/textAreaStyle';
 
 export default function ModifCommande() {
   const { id } = useParams();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [commande, setCommande] = useState<GetCommande>(initGetCommande);
+  const [commande, setCommande] = useState<GetCommande>(initGetCommande());
+  const [modifInfo, setModifInfo] =
+    useState<ModifCommande>(initModifCommande());
 
   useEffect(() => {
     getOne(setCommande, setIsLoading, Number(id));
@@ -42,16 +47,46 @@ export default function ModifCommande() {
     updateCommandeField(name, fieldValue, setCommande);
   };
 
+  const handleModifChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement | HTMLSelectElement>,
+  ) => {
+    const { name, value } = e.target;
+    setModifInfo((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    await saveCommande(setIsLoading, commande);
+    await saveCommande(setIsLoading, commande, modifInfo);
   };
 
   if (isLoading) return <Loading />;
 
   return (
     <FormStyle onSubmit={handleSubmit} title="Commande">
+      <FieldsetStyle legend="Raison">
+        <SelectStyle
+          label={'Moyen de contact'}
+          value={modifInfo.modif_contact}
+          name="modif_contact"
+          id={'modif_contact'}
+          options={[
+            { value: 'téléphone', label: 'Téléphone' },
+            { value: 'mail', label: 'Mail' },
+          ]}
+          onChange={handleModifChange}
+        />
+        <TextAreaStyle
+          label={'Motif'}
+          id={'modif_description'}
+          name="modif_description"
+          value={modifInfo.modif_description}
+          onChange={handleModifChange}
+        />
+      </FieldsetStyle>
       <FieldsetStyle legend="Commande">
         <InputStyle
           label="Référence"

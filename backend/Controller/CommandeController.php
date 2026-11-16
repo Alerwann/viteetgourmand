@@ -9,6 +9,7 @@ use App\Entity\Utilisateur;
 use App\Enum\StatusCommande;
 use App\Repository\Commande\CommandeRepositoryInterface;
 use App\Services\MailerService;
+use App\Services\OrderManager;
 
 
 class CommandeController
@@ -16,13 +17,15 @@ class CommandeController
     private CommandeRepositoryInterface $commandeRepo;
     private MailerService $mailer;
     private Utilisateur $user;
+    private OrderManager $orderManager;
 
 
-    public function __construct(CommandeRepositoryInterface $commandeRepo, MailerService $mailer, Utilisateur $user)
+    public function __construct(CommandeRepositoryInterface $commandeRepo, MailerService $mailer, Utilisateur $user, OrderManager $orderManager)
     {
         $this->commandeRepo = $commandeRepo;
         $this->mailer = $mailer;
         $this->user = $user;
+        $this->orderManager = $orderManager;
     }
 
     private function createArray(Commande $commande): array
@@ -148,6 +151,7 @@ class CommandeController
             'utilisateur_id',
             'commande_status',
             'commande_presta'
+
         ];
 
         foreach ($requiredRootKeys as $key) {
@@ -228,7 +232,11 @@ class CommandeController
                 commande_date: $data['commande_date']
             );
 
-            $this->commandeRepo->save($commande);
+            $modifDescription = $data['modif_description'] ?? null;
+            $modifContact = $data['modif_contact'] ?? null;
+
+            $this->orderManager->saveOrder($commande, $modifDescription, $modifContact);
+
             $email = $this->user->getEmail();
             $nom = $this->user->getNom();
             $prenom = $this->user->getPrenom();
@@ -242,9 +250,10 @@ class CommandeController
                 } catch (\Exception $mailException) {
                     error_log("Erreur envoi mail de commande : " . $mailException->getMessage());
                 }
-            } else if ($commande->getStatus() === StatusCommande::Termine) {
+            } else if ($commandeStatus === StatusCommande::Termine) {
                 $this->mailer->sendDemandeAvis($nom, $prenom);
             }
+
 
 
             http_response_code(201);

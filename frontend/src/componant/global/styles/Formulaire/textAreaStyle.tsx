@@ -15,7 +15,7 @@ export function TextAreaStyle({
     <div className="contents">
       <label
         htmlFor={id}
-        className="text-xl font-medium text-[#2C2C2C] font-sans"
+        className="text-xl text-center font-medium text-[#2C2C2C] font-sans"
       >
         {label}
       </label>
