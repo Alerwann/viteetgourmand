@@ -99,12 +99,19 @@ export default function FormIdentity() {
   return (
     <FormStyle onSubmit={handleSubmit}>
       <FieldsetStyle legend="Identité">
-        <InputStyle label="Nom" id="nom" name="nom" value={utilisateur.nom} />
+        <InputStyle
+          label="Nom"
+          id="nom"
+          name="nom"
+          value={utilisateur.nom}
+          onChange={handleChangeForm}
+        />
         <InputStyle
           label="Prénom"
           id="prénom"
           name="prenom"
           value={utilisateur.prenom}
+          onChange={handleChangeForm}
         />
         <AdresseForm
           adresse_postale={utilisateur.adresse_postale!}
@@ -115,6 +122,7 @@ export default function FormIdentity() {
           id="email"
           value={utilisateur.email}
           type="email"
+          onChange={handleChangeForm}
         />
         <InputStyle
           label="Telephone"
@@ -122,6 +130,7 @@ export default function FormIdentity() {
           value={utilisateur.telephone}
           type="tel"
           pattern="0[1-9](?:[0-9]{2}){4}"
+          onChange={handleChangeForm}
         />
       </FieldsetStyle>
       <CustomButton label="Modifier" />
