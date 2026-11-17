@@ -3,9 +3,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useAuth } from '../../context/AuthContext';
 import Loading from '../global/loading/Loading';
-
-import IdentityComposant from '../footer/Identity_Composant';
 import FormIdentity from './modifIdentite';
+import CommandeList from './commandeList';
 
 export default function AccueilProfil() {
   const { user, isLoading, isAuthenticated } = useAuth();
@@ -33,6 +32,7 @@ export default function AccueilProfil() {
   return (
     <div className="flex flex-row">
       <FormIdentity />
+      <CommandeList />
     </div>
   );
 }
