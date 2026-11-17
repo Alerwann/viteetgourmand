@@ -40,8 +40,16 @@ export const saveCommande = async (
   setLoading: (isLoading: boolean) => void,
   commande: GetCommande,
   modif?: ModifCommande,
+  annul?: boolean,
 ) => {
+  let commandeStatus = '';
   setLoading(true);
+
+  if (annul) {
+    commandeStatus = 'annulée';
+  } else {
+    commandeStatus = commande.commande_status;
+  }
 
   const frais_livraison = await getShippingForAddress(
     commande.commande_presta.prestation_adresse,
@@ -70,7 +78,7 @@ export const saveCommande = async (
       pret_materiel: commande.commande_presta.pret_materiel,
       restitution_materiel: commande.commande_presta.restitution_materiel,
     },
-    commande_status: commande.commande_status,
+    commande_status: commandeStatus,
     modif_contact: modif?.modif_contact ? modif.modif_contact : null,
     modif_description: modif?.modif_description
       ? modif.modif_description

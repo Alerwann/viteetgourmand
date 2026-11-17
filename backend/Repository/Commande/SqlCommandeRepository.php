@@ -134,7 +134,7 @@ class SqlCommandeRepository implements CommandeRepositoryInterface
         if ($commande->getCommandeId() === null) {
             $sql = "INSERT INTO commande (
                             commande_ref, 
-                            commande_date, 
+                            
                             prestation_date, 
                             prestation_heure,
                             numero_rue,
@@ -151,7 +151,7 @@ class SqlCommandeRepository implements CommandeRepositoryInterface
                             menu_id
                         ) VALUES ( 
                             :commande_ref, 
-                            :commande_date, 
+                            
                             :prestation_date, 
                             :prestation_heure,
                             :numero_rue,
@@ -170,7 +170,7 @@ class SqlCommandeRepository implements CommandeRepositoryInterface
         } else {
             $sql = "UPDATE commande SET
                             commande_ref = :commande_ref, 
-                            commande_date = :commande_date, 
+                            
                             prestation_date = :prestation_date, 
                             prestation_heure = :prestation_heure,
                             numero_rue = :numero_rue,
@@ -190,7 +190,7 @@ class SqlCommandeRepository implements CommandeRepositoryInterface
 
         $params = [
             ':commande_ref' => $commande->getCommandeRef(),
-            ':commande_date' => $commande->getCommandeDate(),
+
             ':prestation_date' => $prestation_detail->getPrestationDate(),
             ':prestation_heure' => $prestation_detail->getPrestationHeure(),
             ':numero_rue' => $prestation_adresse->getNumRue(),

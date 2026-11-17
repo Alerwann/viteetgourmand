@@ -117,11 +117,13 @@ class CommandeController
         }
 
         try {
-            $commande = $this->commandeRepo->getByUtilisateurId($utilisateur_id);
-            if ($commande == \null) {
+            $commandes = $this->commandeRepo->getByUtilisateurId($utilisateur_id);
+            if ($commandes == \null) {
                 $data = [];
             } else {
-                $data = $commande;
+                $data = \array_map(function ($commande) {
+                    return $this->createArray($commande);
+                }, $commandes);
             }
 
             http_response_code(200);

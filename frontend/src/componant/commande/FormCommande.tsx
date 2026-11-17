@@ -185,7 +185,7 @@ export default function FormCommande() {
           pret_materiel: false,
           restitution_materiel: false,
         },
-        commande_status: 'acceptée',
+        commande_status: 'validée',
       };
 
       const response = await api.post('api/commande.php', playLoad);

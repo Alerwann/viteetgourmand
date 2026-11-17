@@ -5,6 +5,7 @@ namespace App\Enum;
 enum StatusCommande: string
 {
     case Valide = 'validée';
+    case Annule = 'annulée';
     case Accepte = 'acceptée';
     case Preparation = 'en preparation';
     case Livraison = 'en cours de livraison';

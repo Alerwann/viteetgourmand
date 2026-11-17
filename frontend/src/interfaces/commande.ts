@@ -12,6 +12,7 @@ export interface CommandePresta {
 }
 export interface StatusCommande {
   'validée': string;
+  'annulée': string;
   'acceptée': string;
   'en preparation': string;
   'en cours de livraison': string;
@@ -22,6 +23,7 @@ export interface StatusCommande {
 
 export const statusCommande = [
   'validée',
+  'annulée',
   'acceptée',
   'en preparation',
   'en cours de livraison',
