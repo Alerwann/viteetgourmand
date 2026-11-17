@@ -15,7 +15,7 @@ import { useAuth } from '../../context/AuthContext';
 export default function Connect_composant() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { login } = useAuth();
+  const { login, isAuthenticated } = useAuth();
 
   const [identConnexion, setIdentConnexion] = useState<IdentConnexion>({
     email: '',
@@ -33,7 +33,10 @@ export default function Connect_composant() {
 
   useEffect(() => {
     document.title = 'Connexion | Vite & Gourmand';
-  }, []);
+    if (isAuthenticated) {
+      navigate('/monProfil', { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIdentConnexion({ ...identConnexion, [e.target.name]: e.target.value });

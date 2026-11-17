@@ -45,7 +45,7 @@ export default function Navigation_composant() {
         list-none transition-all
       `}
       >
-        {['accueil', 'menus', 'connect', 'contact', 'dashboard'].map((type) => (
+        {['accueil', 'menus', 'connect', 'contact'].map((type) => (
           <li key={type}>
             <a
               onClick={() => handleClick(type)}
