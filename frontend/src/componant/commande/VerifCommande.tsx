@@ -24,7 +24,10 @@ export default function VerifCommande({
     nbParts: nbPars,
     nbPersonnemin: menuData.nb_perso_min,
     fraisLivraison: coutLivraison,
+    totalMenu: totalMenu,
   });
+
+  console.log('totale commande', totalCommande);
 
   // Extraction unique des allergènes pour éviter les doublons avec un Set
   const allAllergens = Array.from(

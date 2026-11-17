@@ -20,7 +20,9 @@ export default function CommandeList() {
     } else {
       api
         .get(`api/commande.php?utilisateur=${user.id}`)
-        .then((res) => setCommandes(res.data))
+        .then((res) => {
+          setCommandes(res.data);
+        })
         .catch((err) =>
           console.error('Erreure de chargement des commandes', err),
         );
@@ -29,14 +31,18 @@ export default function CommandeList() {
     setLoading(false);
   }, []);
 
+  console.log(commandes.length);
   if (loading) return <Loading />;
+
+  //   if (commandes.length === 0) return <div>Pas de commande</div>;
 
   return (
     <div>
       Liste des commandes
-      {commandes.map((commande) => {
-        return <p>{commande.commande_ref}</p>;
-      })}
+      {commandes.length > 0 &&
+        commandes.map((commande) => {
+          return <p>{commande.menu_id}</p>;
+        })}
     </div>
   );
 }

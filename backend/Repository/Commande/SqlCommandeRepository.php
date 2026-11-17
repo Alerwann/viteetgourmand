@@ -91,32 +91,38 @@ class SqlCommandeRepository implements CommandeRepositoryInterface
     }
 
     #[Override]
-    public function getByUtilisateurId(int $utilisateur_id): ?Commande
+    public function getByUtilisateurId(int $utilisateur_id): array
     {
-        $sql = "SELECT commande_id,
-                        commande_ref, 
-                        commande_date, 
-                        prestation_date, 
-                        prestation_heure, 
-                        numero_rue, 
-                        street, 
-                        code_postal, 
-                        ville, 
-                        pays,
-                        nombre_personne, 
-                        livraison_prix, 
-                        commande_status,
-                        pret_materiel, 
-                        restitution_materiel, 
-                        utilisateur_id, 
-                        menu_id FROM commande
-                        WHERE utilisateur_id = ?";
+        $sql = "SELECT c.commande_id,
+                        c.commande_ref, 
+                        c.commande_date, 
+                        c.prestation_date, 
+                        c.prestation_heure, 
+                        c.numero_rue, 
+                        c.street, 
+                        c.code_postal, 
+                        c.ville, 
+                        c.pays,
+                        c.nombre_personne, 
+                        c.livraison_prix, 
+                        c.commande_status, 
+                        c.pret_materiel, 
+                        c.restitution_materiel, 
+                        c.utilisateur_id, 
+                        c.menu_id,
+                        m.menu_nom AS menu_nom,
+                        u.nom AS utilisateur_nom,
+                        u.prenom AS utilisateur_prenom
+                    FROM commande c
+                    JOIN menu m ON c.menu_id =m.menu_id
+                    JOIN utilisateur u ON c.utilisateur_id = u.utilisateur_id
+                    WHERE c.utilisateur_id = ?";
 
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([$utilisateur_id]);
 
         $tab = $this->hydrateCommande($stmt);
-        return $tab[0] ?? null;
+        return $tab;
     }
 
     #[Override]

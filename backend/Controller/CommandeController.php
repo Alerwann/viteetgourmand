@@ -119,11 +119,10 @@ class CommandeController
         try {
             $commande = $this->commandeRepo->getByUtilisateurId($utilisateur_id);
             if ($commande == \null) {
-                http_response_code(400);
-                echo json_encode(["message" => "Commande inconnue."]);
-                return;
+                $data = [];
+            } else {
+                $data = $commande;
             }
-            $data = $this->createArray($commande);
 
             http_response_code(200);
             echo json_encode($data);
@@ -222,14 +221,14 @@ class CommandeController
                 commande_ref: $data['commande_ref'],
                 nombre_personne: $data['nombre_personne'],
                 menu_id: $data['menu_id'],
-                menu_nom: $data['menu_nom'],
+                menu_nom: $data['menu_nom'] ?? \null,
                 utilisateur_id: $data['utilisateur_id'],
-                utilisateur_nom: $data['utilisateur_nom'],
-                utilisateur_prenom: $data['utilisateur_prenom'],
+                utilisateur_nom: $data['utilisateur_nom'] ?? \null,
+                utilisateur_prenom: $data['utilisateur_prenom'] ?? \null,
                 commande_presta: $presta_Detail,
                 commande_status: StatusCommande::from($data['commande_status']),
                 commande_id: $commandeId,
-                commande_date: $data['commande_date']
+                commande_date: $data['commande_date'] ?? \null
             );
 
             $modifDescription = $data['modif_description'] ?? null;
@@ -258,6 +257,7 @@ class CommandeController
 
             http_response_code(201);
             echo json_encode(["message" => "Commande enregistrée avec succès."]);
+            exit;
         } catch (\Throwable $e) {
             http_response_code(500);
             echo json_encode(["message" => "Erreur serveur : " . $e->getMessage()]);

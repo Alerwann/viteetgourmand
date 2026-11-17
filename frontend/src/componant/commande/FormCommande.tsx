@@ -175,6 +175,7 @@ export default function FormCommande() {
         commande_ref: commandeREf,
         nombre_personne: commande.nombre_personne,
         menu_id: menu_id,
+
         utilisateur_id: utilisateur.utilisateur_id ?? -1,
         commande_presta: {
           prestation_date: commande.commande_presta.prestation_date,
@@ -184,7 +185,7 @@ export default function FormCommande() {
           pret_materiel: false,
           restitution_materiel: false,
         },
-        commande_status: 'accepte',
+        commande_status: 'acceptée',
       };
 
       const response = await api.post('api/commande.php', playLoad);
