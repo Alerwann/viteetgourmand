@@ -23,6 +23,7 @@ import GestionCommande from './componant/dashboard/GestionCommande';
 import ModifCommande from './componant/dashboard/ModifCommande';
 import PolitiqueConfidentialite from './componant/RGPD/PolitiqueConfidentialite';
 import GestionAvis from './componant/dashboard/GestionAvis';
+import AccueilProfil from './componant/profilclient/accueilProfil';
 
 const router = createBrowserRouter([
   {
@@ -50,6 +51,15 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <FormCommande />
+          </ProtectedRoute>
+        ),
+      },
+
+      {
+        path: 'monProfil',
+        element: (
+          <ProtectedRoute>
+            <AccueilProfil />
           </ProtectedRoute>
         ),
       },

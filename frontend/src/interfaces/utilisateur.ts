@@ -27,6 +27,13 @@ export const initUtilisateur: utilisateur = {
   password: '',
   is_actif: true,
   role_id: 3,
+  adresse_postale: {
+    numero_rue: 0,
+    street: '',
+    ville: '',
+    code_postal: 0,
+    pays: '',
+  },
 };
 
 export interface utilisateurAuth {
