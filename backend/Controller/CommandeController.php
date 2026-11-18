@@ -81,29 +81,54 @@ class CommandeController
 
     public function getOne(): void
     {
+
         if (!isset($_GET['id'])) {
             http_response_code(400);
             echo json_encode(["message" => "Données incomplètes."]);
             return;
         } else {
-            $id = $_GET['id'];
+            $id = (int) $_GET['id'];
         }
 
-        try {
-            $commande = $this->commandeRepo->getOne($id);
-            if ($commande == \null) {
-                http_response_code(400);
-                echo json_encode(["message" => "Commande inconnue."]);
-                return;
+
+        if (isset($_GET['modif']) && $_GET['modif'] === 'true') {
+
+            try {
+                $commandeMod = $this->orderManager->getOneWithModif((int) $id, 'true');
+                $commande = $commandeMod->getCommande();
+                $modif = $commandeMod->getModifs();
+
+
+                if ($commande == \null) {
+                    http_response_code(400);
+                    echo json_encode(["message" => "Commande inconnue."]);
+                    return;
+                }
+                $dataCommande = $this->createArray($commande);
+
+                http_response_code(200);
+                echo json_encode(["commande" => $dataCommande, "modif" => $modif]);
+            } catch (\Exception $e) {
+                http_response_code(500);
+                echo json_encode(["message" => "Erreur : " . $e->getMessage()]);
             }
-            $data = $this->createArray($commande);
-
-            http_response_code(200);
-            echo json_encode($data);
-        } catch (\Exception $e) {
-            http_response_code(500);
-            echo json_encode(["message" => "Erreur : " . $e->getMessage()]);
         }
+
+        // try {
+        //     $commande = $this->commandeRepo->getOne($id);
+        //     if ($commande == \null) {
+        //         http_response_code(400);
+        //         echo json_encode(["message" => "Commande inconnue."]);
+        //         return;
+        //     }
+        //     $data = $this->createArray($commande);
+
+        //     http_response_code(200);
+        //     echo json_encode($data);
+        // } catch (\Exception $e) {
+        //     http_response_code(500);
+        //     echo json_encode(["message" => "Erreur : " . $e->getMessage()]);
+        // }
     }
 
     public function getOneByUtilisateurId(): void

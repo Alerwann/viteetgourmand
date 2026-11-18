@@ -33,9 +33,6 @@ export default function Connect_composant() {
 
   useEffect(() => {
     document.title = 'Connexion | Vite & Gourmand';
-    if (isAuthenticated) {
-      navigate('/monProfil', { replace: true });
-    }
   }, [isAuthenticated, navigate]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,10 +53,6 @@ export default function Connect_composant() {
       setShowError(false);
       const { token, user } = response.data;
 
-      // Note : Assure-toi que ton endpoint PHP 'api/auth.php' renvoie
-      // à la fois { token: "...", user: { id, email, role, ... } }
-
-      // 3. Met à jour le Context React ET le localStorage en même temps
       login(token, user);
 
       const redirectTo =

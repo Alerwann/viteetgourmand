@@ -7,6 +7,7 @@ import api from '../../services/api';
 import Loading from '../global/loading/Loading';
 import TitleCommandeSection from '../global/styles/title_commande_section';
 import { saveCommande } from '../../services/commande_service';
+import { Link } from 'react-router-dom';
 
 const thStyle = 'border-2 px-10 py-8';
 
@@ -63,15 +64,15 @@ export default function CommandeList() {
   if (loading) return <Loading />;
 
   return (
-    <div className=" bg-white p-8 rounded-2xl shadow-sm  px-6 py-12 border border-[#EFECE6] justify-center">
-      <table className="border-collapse border-4 border-black p-4 text-center">
+    <div className=" bg-white  rounded-2xl shadow-sm  px-6 py-12 border border-[#EFECE6] ">
+      <table className="border-collapse border-4 border-black p-4 text-center w-full justify-center">
         <caption className="mb-8">
           <TitleCommandeSection title="Liste des commandes" />
         </caption>
         <thead>
           <tr>
             <th className={thStyle}>Référence</th>
-            <th className={thStyle}>Date de commande</th>
+
             <th className={thStyle}>Date de livraison</th>
             <th className={thStyle}>Status</th>
             <th className={thStyle}>Actions</th>
@@ -80,8 +81,15 @@ export default function CommandeList() {
         <tbody>
           {commandes.map((commande) => (
             <tr key={commande.commande_ref}>
-              <td className={thStyle}>{commande.commande_ref}</td>
-              <td className={thStyle}>{commande.commande_date}</td>
+              <td className={thStyle}>
+                <Link
+                  to={`suiviCommande/${commande.commande_id}`}
+                  className="underline underline-offset-2  px-4 py-2 rounded text-blue-500"
+                >
+                  {commande.commande_ref}
+                </Link>
+              </td>
+
               <td className={thStyle}>
                 {commande.commande_presta.prestation_date}
               </td>

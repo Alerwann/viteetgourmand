@@ -24,6 +24,7 @@ import ModifCommande from './componant/dashboard/ModifCommande';
 import PolitiqueConfidentialite from './componant/RGPD/PolitiqueConfidentialite';
 import GestionAvis from './componant/dashboard/GestionAvis';
 import AccueilProfil from './componant/profilclient/accueilProfil';
+import SuiviCommande from './componant/profilclient/SuiviCommande';
 
 const router = createBrowserRouter([
   {
@@ -60,6 +61,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <AccueilProfil />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'monProfil/suiviCommande/:commandeId',
+        element: (
+          <ProtectedRoute>
+            <SuiviCommande />
           </ProtectedRoute>
         ),
       },

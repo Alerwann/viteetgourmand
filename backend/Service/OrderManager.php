@@ -3,9 +3,11 @@
 namespace App\Services;
 
 use App\Entity\Commande;
+use App\Entity\commandewithmodif;
 use App\Entity\ModifCommande;
 use App\Repository\Commande\CommandeRepositoryInterface;
 use App\Repository\ModifCommande\ModifCommandeRepositoryInterface;
+
 
 class OrderManager
 {
@@ -30,12 +32,26 @@ class OrderManager
                 modif_contact: $modifContact ?? 'Système',
                 modif_description: $modifDescription,
                 commande_id: $commande->getCommandeId(),
-                utilisateur_id: $commande->getUtilisateurId(),
                 modif_id: \null,
                 modif_date: \null
             );
 
             $this->modifRepo->save($modif);
         }
+    }
+
+    public function getOneWithModif(int $commandeId, string $modif = 'false'): CommandeWithModif
+    {
+        $commande = $this->commandeRepo->getOne($commandeId);
+
+        if ($modif) {
+            $modif = $this->modifRepo->getByCommandeId($commandeId);
+        }
+
+        $commandeWithModif = new commandewithmodif(
+            commande: $commande,
+            modifs: $modif
+        );
+        return $commandeWithModif;
     }
 }

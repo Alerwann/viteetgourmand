@@ -30,7 +30,7 @@ export default function AccueilProfil() {
   if (loading) return <Loading />;
 
   return (
-    <div className="flex flex-row m-10">
+    <div className="flex flex-col 2xl:flex-row m-10">
       <FormIdentity />
       <CommandeList />
     </div>

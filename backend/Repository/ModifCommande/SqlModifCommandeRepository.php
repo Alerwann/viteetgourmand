@@ -21,34 +21,32 @@ class SqlModifCommandeRepository implements ModifCommandeRepositoryInterface
     #[Override]
     public function getAll(): array
     {
-        $sql = "SELECT mc.modif_id ,
-        mc.modif_contact, 
-        mc.modif_description ,
-        mc.commande_id , 
-        mc.modif_date,
-        c.utilisateur_id as utilisateur_id
-        FROM modif_commande mc
-        JOIN commande c ON mc.commande_id=c.commande_id";
+        $sql = "SELECT modif_id ,
+        modif_contact, 
+        modif_description ,
+        commande_id , 
+        modif_date,
+        FROM modif_commande";
 
         $stmt = $this->pdo->query($sql);
         return $this->hydrateModif($stmt);
     }
 
     #[Override]
-    public function getByUserId(int $utilisateurId): array
+    public function getByCommandeId(int $commandeId): array
     {
         $sql = "SELECT mc.modif_id ,
         mc.modif_contact, 
         mc.modif_description ,
         mc.commande_id , 
         mc.modif_date,
-        c.utilisateur_id as utilisateur_id
+        c.commande_id as commande_id
         FROM modif_commande mc
         JOIN commande c ON mc.commande_id=c.commande_id
-        WHERE c.utilisateur_id =:utilisateur_id";
+        WHERE c.commande_id =:commande_id";
 
         $stmt = $this->pdo->prepare($sql);
-        $stmt->bindValue(':utilisateur_id', $utilisateurId, PDO::PARAM_INT);
+        $stmt->bindValue(':commande_id', $commandeId, PDO::PARAM_INT);
         $stmt->execute();
 
         $result = $this->hydrateModif($stmt);
@@ -80,7 +78,7 @@ class SqlModifCommandeRepository implements ModifCommandeRepositoryInterface
                 modif_description: $row['modif_description'],
                 modif_date: $row['modif_date'],
                 commande_id: $row['commande_id'],
-                utilisateur_id: $row['utilisateur_id']
+
             );
             $modifCommande[] = $modifCommandeObj;
         }
