@@ -19,22 +19,6 @@ export default function ListAvisComposant() {
     setCurrentIndex((prev) => Math.min(prev + 1, maxIndex));
   };
 
-  useEffect(() => {
-    const updateItemsVisible = () => {
-      if (window.innerWidth < 768) {
-        setItemsVisible(1);
-      } else if (window.innerWidth < 1280) {
-        setItemsVisible(2);
-      } else {
-        setItemsVisible(3);
-      }
-    };
-
-    updateItemsVisible();
-    window.addEventListener('resize', updateItemsVisible);
-    return () => window.removeEventListener('resize', updateItemsVisible);
-  }, []);
-
   const maxIndex = Math.max(0, listeAvis.length - itemsVisible);
 
   useEffect(() => {
@@ -49,8 +33,22 @@ export default function ListAvisComposant() {
     api
       .get('api/avis.php?status=publié')
       .then((res) => setListAvis(res.data))
-      .catch((err) => console.error('Erreur fetch avis:', err))
-      .finally(() => setIsLoading(false));
+      .catch((err) => console.error('Erreur fetch avis:', err));
+
+    const updateItemsVisible = () => {
+      if (window.innerWidth < 768) {
+        setItemsVisible(1);
+      } else if (window.innerWidth < 1280) {
+        setItemsVisible(2);
+      } else {
+        setItemsVisible(3);
+      }
+    };
+
+    updateItemsVisible();
+    window.addEventListener('resize', updateItemsVisible);
+    setIsLoading(false);
+    return () => window.removeEventListener('resize', updateItemsVisible);
   }, []);
 
   if (isLoading) {
