@@ -9,7 +9,6 @@ import TableModifCommande from './TableModifCommande';
 import formatDate from '../../utils/trad_date';
 import { formatAdresse } from '../../utils/forma_adresse';
 
-const thStyle = 'border-2 px-10 py-8';
 export default function SuiviCommande() {
   const { commandeId } = useParams();
   const [commandeModif, setCommandeModif] = useState<CommandeModifications>();
