@@ -33,6 +33,9 @@ export default function Connect_composant() {
 
   useEffect(() => {
     document.title = 'Connexion | Vite & Gourmand';
+    if (isAuthenticated) {
+      navigate('/monProfil', { replace: true });
+    }
   }, [isAuthenticated, navigate]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

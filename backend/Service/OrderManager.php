@@ -3,7 +3,8 @@
 namespace App\Services;
 
 use App\Entity\Commande;
-use App\Entity\commandewithmodif;
+use App\Entity\CommandeWithModif;
+
 use App\Entity\ModifCommande;
 use App\Repository\Commande\CommandeRepositoryInterface;
 use App\Repository\ModifCommande\ModifCommandeRepositoryInterface;
@@ -48,7 +49,7 @@ class OrderManager
             $modif = $this->modifRepo->getByCommandeId($commandeId);
         }
 
-        $commandeWithModif = new commandewithmodif(
+        $commandeWithModif = new CommandeWithModif(
             commande: $commande,
             modifs: $modif
         );

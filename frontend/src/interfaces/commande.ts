@@ -119,11 +119,13 @@ export function initGetCommande(): GetCommande {
 export interface ModifCommande {
   modif_description: string;
   modif_contact: string;
+  modif_date: string;
 }
 
 export function initModifCommande(): ModifCommande {
   return {
     modif_description: '',
     modif_contact: '',
+    modif_date: '',
   };
 }
