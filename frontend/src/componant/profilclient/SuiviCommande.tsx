@@ -41,11 +41,8 @@ export default function SuiviCommande() {
       {commandeModif?.modif && (
         <div>
           <section>
-            {commandeModif?.modif.length >= 0 && (
-              <TableModifCommande
-                commande={commandeModif.commande}
-                modif={commandeModif.modif}
-              />
+            {commandeModif?.modif.length > 0 && (
+              <TableModifCommande modif={commandeModif.modif} />
             )}
           </section>
         </div>
