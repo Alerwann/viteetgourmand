@@ -2,16 +2,12 @@
 
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import {
-  type GetCommande,
-  type ModifCommande,
-} from '../../interfaces/commande';
+import { type GetCommande } from '../../interfaces/commande';
 import api from '../../services/api';
 import Loading from '../global/loading/Loading';
 import TitleCommandeSection from '../global/styles/title_commande_section';
 import { saveCommande } from '../../services/commande_service';
 import { Link } from 'react-router-dom';
-import type { CommandeModifications } from '../../interfaces/commandeModif';
 
 const thStyle = 'border-2 px-10 py-8';
 
